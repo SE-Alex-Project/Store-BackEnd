@@ -1,4 +1,4 @@
 package Software.storeBackEnd.controller;
 
-public class ProductAPI {
+public class CustomerController {
 }

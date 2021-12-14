@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
-public class UserAPI extends Authentication {
+public class UserController extends Authentication {
 
     /*log in json format
     {
