@@ -8,23 +8,29 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class userAPI {
 
-    /*sign in json format
+    /*log in json format
     {
     "email":user email,
     "password": user hashed password
     }
      */
     @PostMapping("/logIn")
-    public String logIn(@RequestBody JSONObject signInJson){
-        System.out.println(signInJson.get("password"));
+    public String logIn(@RequestBody JSONObject logInJson){
+        System.out.println(logInJson.get("password"));
         return "true";
     }
+    /*sign up json format
+    {
+    "email":user email
+    "name": user name
+    "password": user hashed password
+    }
+     */
 
     @PostMapping("/signUp")
-    public String signUp(@RequestBody JSONObject signInJson){
+    public String signUp(@RequestBody JSONObject signUpJson){
         return "valid";
     }
-
 
 
 
