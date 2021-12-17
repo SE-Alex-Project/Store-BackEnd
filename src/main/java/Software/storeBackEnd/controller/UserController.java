@@ -37,6 +37,12 @@ public class UserController extends Authentication {
         return "valid";
     }
 
+
+    @PostMapping("/logOut")
+    public void logOut (@RequestBody String userToken){
+
+    }
+
     /*
     modify info json format
     {
