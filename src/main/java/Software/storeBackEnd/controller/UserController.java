@@ -2,9 +2,13 @@ package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.UserDataBase;
 import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+
+import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 @CrossOrigin
 @RestController
@@ -81,8 +85,12 @@ public class UserController extends Authentication {
     return json object same as signup object
      */
     @GetMapping("/info")
-    public JSONObject userInfo(@RequestBody String userToken){
-        return null;
+    public JSONObject userInfo(@RequestBody String userToken) throws ParseException {
+        String userEmail = getUser(userToken);
+        if (userEmail == null)
+            return null;
+            //return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"email:\"Invalid Operation Log In Again}");
+        return userDataBase.getUserInfo(userEmail);
     }
 
 

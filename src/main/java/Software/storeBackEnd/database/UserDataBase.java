@@ -1,8 +1,14 @@
 package Software.storeBackEnd.database;
 
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
+
+import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 public class UserDataBase {
 
@@ -27,11 +33,22 @@ public class UserDataBase {
     }
 
     public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
-        System.out.println(data.get("last-name"));
-//        try {
-//            dataBase.stmt.executeQuery("UPDATE CUSTOMER SET ");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            dataBase.stmt.executeQuery("UPDATE CUSTOMER SET password = '"+data.get("password")+ "' ,fname = '"+data.get("first-name")+
+					"' ,lname = '"+ data.get("last-name") + "' WHERE email = '" + UserEmail+"'");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+	public JSONObject getUserInfo(String UserEmail){
+		try {
+			ResultSet resultSet = dataBase.stmt.executeQuery("SELECT fname , lname , email FROM CUSTOMER WHERE email = '" + UserEmail+"'");
+			return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"first-name\":" +resultSet.getString("fname") + ",\"last-name\":"
+					+resultSet.getString("lname")+",\"email\":"+ resultSet.getString("email")+"}");
+		} catch (SQLException | ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
