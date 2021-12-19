@@ -95,5 +95,4 @@ public class UserController extends Authentication {
         return userDataBase.getUserInfo(userEmail);
     }
 
-
 }
