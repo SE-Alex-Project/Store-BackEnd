@@ -1,7 +1,7 @@
 package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.UserDataBase;
-import net.minidev.json.JSONObject;
+import org.json.*;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
