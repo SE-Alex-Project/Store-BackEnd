@@ -7,8 +7,8 @@ import java.sql.Statement;
 public class DataBase {
 
     Statement stmt;
-
-    public DataBase(){
+    private static DataBase instance = null;
+    private DataBase(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection(
@@ -19,6 +19,12 @@ public class DataBase {
             System.out.println(e.getMessage());
         }
     }
+    public DataBase getInstance(){
+        if (instance==null)
+            instance = new DataBase();
+        return instance;
+    }
+
 
 
 
