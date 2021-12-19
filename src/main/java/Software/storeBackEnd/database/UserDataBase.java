@@ -1,9 +1,8 @@
 package Software.storeBackEnd.database;
 
-import net.minidev.json.JSONObject;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 
 public class UserDataBase {
 
@@ -27,8 +26,8 @@ public class UserDataBase {
     	return false;
     }
 
-    public void modifyUserinfo(String UserEmail, JSONObject data) {
-        System.out.println(data.getAsString("last-name"));
+    public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
+        System.out.println(data.get("last-name"));
 //        try {
 //            dataBase.stmt.executeQuery("UPDATE CUSTOMER SET ");
 //        } catch (SQLException e) {

@@ -1,8 +1,10 @@
 package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.UserDataBase;
-import org.json.*;
+import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedHashMap;
 
 @CrossOrigin
 @RestController
@@ -66,10 +68,10 @@ public class UserController extends Authentication {
      */
     @PostMapping("/modifyInfo")
     public String modifyInfo(@RequestBody JSONObject modifyJson){
-//        String userEmail = getUser(modifyJson.getAsString("id"));
-//        if (userEmail == null)
-//            return "Invalid Operation Log In Again";
-        userDataBase.modifyUserinfo(modifyJson.getAsString("id"), (JSONObject) modifyJson.get("data"));
+        String userEmail = getUser(modifyJson.getAsString("id"));
+        if (userEmail == null)
+            return "Invalid Operation Log In Again";
+        userDataBase.modifyUserinfo(userEmail, (LinkedHashMap) modifyJson.get("data"));
         return "valid";
     }
 
