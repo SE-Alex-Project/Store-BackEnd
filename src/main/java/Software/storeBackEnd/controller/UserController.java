@@ -2,7 +2,6 @@ package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.UserDataBase;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -84,7 +83,7 @@ public class UserController extends Authentication {
     return json object same as signup object
      */
     @GetMapping("/info")
-    public JSONObject userInfo(@RequestBody String userToken) throws ParseException {
+    public JSONObject userInfo(@RequestBody String userToken){
         String userEmail = getUser(userToken);
         if (userEmail == null)
             return null;
