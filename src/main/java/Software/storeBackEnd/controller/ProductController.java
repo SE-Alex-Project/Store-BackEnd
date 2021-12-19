@@ -1,12 +1,12 @@
 package Software.storeBackEnd.controller;
 
+import Software.storeBackEnd.authentication.Authentication;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-
     /*product json format
    {
    "name": product name,
