@@ -15,7 +15,6 @@ public class ProductController {
    "images": [product image 1 (main image), product image 2 , product image 3]
    }
     */
-
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product){
         //System.out.println(logInJson.get("password"));
