@@ -2,13 +2,10 @@ package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.UserDataBase;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
-
-import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 @CrossOrigin
 @RestController
