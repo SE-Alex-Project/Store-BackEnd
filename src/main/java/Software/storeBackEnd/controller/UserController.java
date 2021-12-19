@@ -1,7 +1,6 @@
 package Software.storeBackEnd.controller;
-
 import Software.storeBackEnd.authentication.Authentication;
-import Software.storeBackEnd.database.DataBase;
+import Software.storeBackEnd.database.UserDataBase;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController extends Authentication {
+
+    private final UserDataBase userDataBase = new UserDataBase();
+
 
     /*log in json format
     {
@@ -19,8 +21,7 @@ public class UserController extends Authentication {
 
     @PostMapping("/logIn")
     public String logIn(@RequestBody JSONObject logInJson){
-        DataBase data = DataBase.getInstance();
-        boolean exist = data.existUser((String)logInJson.get("email"), (String) logInJson.get("password"));
+        boolean exist = userDataBase.existUser((String)logInJson.get("email"), (String) logInJson.get("password"));
         
         return "true";
     }
@@ -62,7 +63,9 @@ public class UserController extends Authentication {
     }
      */
     @PostMapping("/modifyInfo")
-    public String modifyInfo(@RequestBody JSONObject signUpJson){
+    public String modifyInfo(@RequestBody JSONObject modifyJson){
+
+
         return "valid";
     }
 
