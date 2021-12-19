@@ -1,5 +1,7 @@
 package Software.storeBackEnd.database;
 
+import net.minidev.json.JSONObject;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,7 +27,12 @@ public class UserDataBase {
     	return false;
     }
 
-    public void modifyUserinfo() throws SQLException {
-        dataBase.stmt.executeQuery("");
+    public void modifyUserinfo(String UserEmail, JSONObject data) {
+        System.out.println(data.getAsString("last-name"));
+//        try {
+//            dataBase.stmt.executeQuery("UPDATE CUSTOMER SET ");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 }

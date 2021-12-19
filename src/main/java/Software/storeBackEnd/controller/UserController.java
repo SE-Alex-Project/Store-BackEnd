@@ -64,8 +64,10 @@ public class UserController extends Authentication {
      */
     @PostMapping("/modifyInfo")
     public String modifyInfo(@RequestBody JSONObject modifyJson){
-
-
+//        String userEmail = getUser(modifyJson.getAsString("id"));
+//        if (userEmail == null)
+//            return "Invalid Operation Log In Again";
+        userDataBase.modifyUserinfo(modifyJson.getAsString("id"), (JSONObject) modifyJson.get("data"));
         return "valid";
     }
 
