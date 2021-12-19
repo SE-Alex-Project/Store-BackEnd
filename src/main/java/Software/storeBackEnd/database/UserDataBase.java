@@ -12,7 +12,7 @@ public class UserDataBase {
     }
 
     public boolean existUser(String name,String password) {
-    	final String queryCheck = "SELECT userName from Customer WHERE email = '"+name+"' AND password = '"+password+"'";
+    	final String queryCheck = "SELECT userName from Customer WHERE email = '"+name+"' AND password = '"+password+"';";
     	ResultSet resultSet;
 		try {
 			resultSet = dataBase.stmt.executeQuery(queryCheck);
@@ -25,8 +25,19 @@ public class UserDataBase {
 		}
     	return false;
     }
+    public void insertUser (String email , String fname , String lname , String password) {
+    	final String queryCheck = "INSERT INTO Customer(email,password,fname,lname) VALUES ('"+email
+    			+"','"+password+"','"+fname+"','"+lname+"');";
+		try {
+			dataBase.stmt.executeQuery(queryCheck);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+    }
 
-    public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
+    @SuppressWarnings("rawtypes")
+	public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
         System.out.println(data.get("last-name"));
 //        try {
 //            dataBase.stmt.executeQuery("UPDATE CUSTOMER SET ");
