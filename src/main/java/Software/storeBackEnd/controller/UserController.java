@@ -22,8 +22,10 @@ public class UserController extends Authentication {
     @PostMapping("/logIn")
     public String logIn(@RequestBody JSONObject logInJson){
         boolean exist = userDataBase.existUser((String)logInJson.get("email"), (String) logInJson.get("password"));
-        
-        return "true";
+        if(exist) {
+        	return generateToken((String)logInJson.get("email"));
+        }
+        return "Can't do this operation.";
     }
 
 
