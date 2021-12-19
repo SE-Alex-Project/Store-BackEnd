@@ -31,6 +31,16 @@ public class UserDataBase {
 		}
     	return false;
     }
+    public void insertUser (String email , String fname , String lname , String password) {
+    	final String queryCheck = "INSERT INTO Customer(email,password,fname,lname) VALUES ('"+email
+    			+"','"+password+"','"+fname+"','"+lname+"');";
+		try {
+			dataBase.stmt.executeQuery(queryCheck);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+    }
 
     public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
         try {

@@ -46,8 +46,9 @@ public class UserController extends Authentication {
 
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
-    	
-        return "valid";
+    	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("first-name"),
+    			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
+    	return generateToken((String)signUpJson.get("email"));
     }
 
 
@@ -70,7 +71,8 @@ public class UserController extends Authentication {
         }
     }
      */
-    @PostMapping("/modifyInfo")
+    @SuppressWarnings("rawtypes")
+	@PostMapping("/modifyInfo")
     public String modifyInfo(@RequestBody JSONObject modifyJson){
         String userEmail = getUser(modifyJson.getAsString("id"));
         if (userEmail == null)
