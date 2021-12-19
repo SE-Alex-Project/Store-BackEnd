@@ -1,6 +1,7 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.Authentication;
+import Software.storeBackEnd.database.DataBase;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,9 @@ public class UserController extends Authentication {
 
     @PostMapping("/logIn")
     public String logIn(@RequestBody JSONObject logInJson){
-        System.out.println(logInJson.get("password"));
+        DataBase data = DataBase.getInstance();
+        boolean exist = data.existUser((String)logInJson.get("email"), (String) logInJson.get("password"));
+        
         return "true";
     }
 
@@ -34,6 +37,7 @@ public class UserController extends Authentication {
 
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
+    	
         return "valid";
     }
 

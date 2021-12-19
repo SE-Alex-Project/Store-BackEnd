@@ -22,22 +22,20 @@ public class DataBase {
         }
     }
     
-    public DataBase getInstance(){
+    public static DataBase getInstance(){
         if (instance==null)
             instance = new DataBase();
         return instance;
     }
     
     public boolean existUser(String name,String password) {
-    	final String queryCheck = "SELECT count(*) from messages WHERE msgid = ?";
+    	final String queryCheck = "SELECT * from Customer WHERE userName = '"+name+"' AND password = '"+password+"'";
     	ResultSet resultSet;
 		try {
 			resultSet = stmt.executeQuery(queryCheck);
-			if(resultSet.next()) {
-	    	    int count = resultSet.getInt(1);
-	    	    if(count > 0) {
-	    	    	return true;
-	    	    }
+			
+			if(resultSet.getFetchSize() > 0) {
+	    	   return true;
 	    	}
 		} catch (SQLException e) {
 			e.printStackTrace();
