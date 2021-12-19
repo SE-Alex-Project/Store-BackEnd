@@ -42,7 +42,8 @@ public class UserDataBase {
 
     }
 
-    public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
+    @SuppressWarnings("rawtypes")
+	public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
         try {
             dataBase.stmt.executeQuery("UPDATE CUSTOMER SET password = '"+data.get("password")+ "' ,fname = '"+data.get("first-name")+
 					"' ,lname = '"+ data.get("last-name") + "' WHERE email = '" + UserEmail+"'");
