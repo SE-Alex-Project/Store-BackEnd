@@ -42,9 +42,14 @@ public class UserController extends Authentication {
 
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
-    	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("first-name"),
-    			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
-    	return generateToken((String)signUpJson.get("email"));
+    	boolean exist = userDataBase.existEmail((String)signUpJson.get("email"));
+        if(!exist) {
+        	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("first-name"),
+        			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
+        	return generateToken((String)signUpJson.get("email"));
+        }
+        return "Emial is signed up before !!!";
+    	
     }
 
 

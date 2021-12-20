@@ -22,7 +22,7 @@ public class Authentication {
     	String token = UUID.randomUUID().toString().toUpperCase() 
                 + " | " 
                 + System.currentTimeMillis();
-    	ActiveUsers.put(email, token);
+    	ActiveUsers.put(token, email);
     	return token;
     }
 

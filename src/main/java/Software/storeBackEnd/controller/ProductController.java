@@ -1,6 +1,7 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.database.ProductDataBase;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,8 @@ public class ProductController {
     */
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product){
-        //System.out.println(logInJson.get("password"));
+        productDataBase.addProduct(product.getAsString("name"),product.getAsString("price"),
+        		product.getAsString("category"),product.getAsString("quantity"));
         return "true";
     }
 
@@ -38,15 +40,15 @@ public class ProductController {
         {"product" : [product 1 , product 2 , product 3]}
      */
     @GetMapping("/product_list")
-    public JSONObject getProductList(@RequestBody String list_num){
-        System.out.println(list_num);
-        return null;
+    public JSONArray getProductList(@RequestBody int page){
+        return productDataBase.getlist(page);
     }
 
     /*
     * {"product_id":[id1 ,id2 ,id3,.....]}
     * */
-    @DeleteMapping("/delete")
+    @SuppressWarnings("unchecked")
+	@DeleteMapping("/delete")
     public void deleteProduct(@RequestBody JSONObject product_ids){
         ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
         for (String s : products){

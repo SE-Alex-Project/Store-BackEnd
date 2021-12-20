@@ -31,6 +31,24 @@ public class UserDataBase {
 		}
     	return false;
     }
+    
+    
+    public boolean existEmail(String email) {
+    	final String queryCheck = "SELECT userName from Customer WHERE email = '"+email+"';";
+    	ResultSet resultSet;
+		try {
+			resultSet = dataBase.stmt.executeQuery(queryCheck);
+			
+			if(resultSet.getFetchSize() > 0) {
+	    	   return true;
+	    	}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+    }
+    
+    
     public void insertUser (String email , String fname , String lname , String password) {
     	final String queryCheck = "INSERT INTO Customer(email,password,fname,lname) VALUES ('"+email
     			+"','"+password+"','"+fname+"','"+lname+"');";
