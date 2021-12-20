@@ -1,11 +1,17 @@
 package Software.storeBackEnd.controller;
 
+import Software.storeBackEnd.database.ProductDataBase;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+
+    ProductDataBase productDataBase = new ProductDataBase();
+
     /*product json format
    {
    "name": product name,
@@ -25,8 +31,7 @@ public class ProductController {
      */
     @GetMapping("/get")
     public JSONObject getProduct(@RequestBody String product_id){
-        System.out.println(product_id);
-        return null;
+        return productDataBase.getProduct(product_id);
     }
 
     /*
@@ -42,8 +47,11 @@ public class ProductController {
     * {"product_id":[id1 ,id2 ,id3,.....]}
     * */
     @DeleteMapping("/delete")
-    public void deleteProduct(@RequestBody JSONObject product_id){
-
+    public void deleteProduct(@RequestBody JSONObject product_ids){
+        ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
+        for (String s : products){
+            productDataBase.deleteProduct(s);
+        }
     }
 
 
