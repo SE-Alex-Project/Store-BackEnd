@@ -70,6 +70,23 @@ public class ProductDataBase {
 		}
     	return null;
     }
+    
+    public JSONArray getListBycategory(int page,String category) {
+    	final String queryCheck = "SELECT * FROM PRODUCT WHERE categoryName = '"+category+"' limit 50 offset "+((page-1)*50)+";";
+    	JSONArray array = new JSONArray();
+    	ResultSet resultSet;
+		try {
+			resultSet = dataBase.stmt.executeQuery(queryCheck);
+	            while(resultSet.next())
+	            {
+                    array.add(Parser.parseProduct(resultSet));
+
+	            }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
 
     public void deleteProduct(String product_id){
         try {
