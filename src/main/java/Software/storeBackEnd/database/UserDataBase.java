@@ -22,13 +22,14 @@ public class UserDataBase {
     	ResultSet resultSet;
 		try {
 			resultSet = dataBase.stmt.executeQuery(queryCheck);
-			
+
 			if(resultSet.next()) {
 			    return true;
-			}
+			    }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("false");
     	return false;
     }
     
