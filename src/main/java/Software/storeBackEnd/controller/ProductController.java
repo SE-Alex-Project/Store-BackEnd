@@ -45,6 +45,7 @@ public class ProductController {
      */
     @GetMapping("/product_list")
     public JSONArray getProductList(@RequestBody int page){
+//        System.out.println(page);
         return productDataBase.getlist(page);
     }
 

@@ -1,5 +1,6 @@
 package Software.storeBackEnd.parser;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -34,4 +35,31 @@ public class Parser {
         }
         return null;
     }
+
+    public static JSONArray parseProductInStore(ResultSet resultSet){
+        try {
+            JSONArray stores = new JSONArray();
+            while(resultSet.next()){
+                stores.add(resultSet.getString("storeId"));
+                stores.add(resultSet.getString("quantity"));
+            }
+            return stores;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static JSONArray parseProductImage(ResultSet resultSet){
+        try {
+            JSONArray stores = new JSONArray();
+            while(resultSet.next()){
+                stores.add(resultSet.getString("URL"));
+            }
+            return stores;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

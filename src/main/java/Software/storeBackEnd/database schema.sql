@@ -34,8 +34,8 @@ CREATE TABLE Product(
 
 CREATE TABLE ProductImage(
 	productId INT,
-    URL varchar(100),
-    primary key (productId,URL),
+    url varchar(100),
+    primary key (productId,url),
     FOREIGN KEY(productId) REFERENCES Product(productId)
 );
 
@@ -49,6 +49,13 @@ CREATE TABLE ProductInCart(
     FOREIGN KEY(cartId) REFERENCES Cart(cartId)
 );
 
+CREATE TABLE Store(
+	storeId INT auto_increment not null primary key,
+    location VARCHAR(100),
+    storeName VARCHAR(30)
+);
+
+
 CREATE TABLE ProductInStore(
 	productId INT,
     storeId INT,
@@ -56,13 +63,6 @@ CREATE TABLE ProductInStore(
     PRIMARY KEY(productId, storeId),
     FOREIGN KEY(productId) REFERENCES Product(productId),
     FOREIGN KEY(storeId) REFERENCES Store(storeId)
-);
-
-CREATE TABLE Store(
-	storeId INT auto_increment not null primary key,
-    location VARCHAR(100),
-    storeName VARCHAR(30),
-    PRIMARY KEY(storeId)
 );
 
 -- CREATE TABLE Employee(

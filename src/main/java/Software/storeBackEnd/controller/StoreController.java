@@ -19,7 +19,7 @@ public class StoreController {
     /*store json format
    {
    "name": "name",
-   "location":"location",
+   "location":"location"
    }
     */
 

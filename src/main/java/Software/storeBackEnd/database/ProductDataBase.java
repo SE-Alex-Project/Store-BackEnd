@@ -16,94 +16,109 @@ import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 public class ProductDataBase {
 
     private final DataBase dataBase;
+
     public ProductDataBase() {
         dataBase = DataBase.getInstance();
     }
 
 
-    // remaining images and stores handling
-    public void addProduct(Product p){
-		try {
-			dataBase.stmt.execute("INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('"+ p.getCategory()
-                    +"','"+p.getPrice()+"','"+p.getDescription()+"','"+p.getName()+"');");
+    public void addProduct(Product p) {
+        try {
+            dataBase.stmt.execute("INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('" + p.getCategory()
+                    + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "');");
 
             ResultSet s = dataBase.stmt.executeQuery("SELECT LAST_INSERT_ID();");
             s.next();
-            System.out.println(s.getInt(1));
-            addProductStores(s.getInt(1),p.getStores());
-            addProductImages(s.getInt(1),p.getImagesURL());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-    }
-
-    private void addProductStores(int productID,ArrayList<Product.productStore> productStores) throws SQLException {
-        for (Product.productStore p : productStores){
-            dataBase.stmt.execute("INSERT INTO ProductInStore VALUES ('"+ productID
-                    +"','"+ p.getStoreID() +"','"+p.getQuantity()+"');");
+            int productId = s.getInt(1);
+            addProductStores(productId, p.getStores());
+            addProductImages(productId, p.getImagesURL());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
-    private void addProductImages(int productID,ArrayList<String> productImages) throws SQLException {
-        for (String s : productImages){
-            dataBase.stmt.execute("INSERT INTO ProductImage VALUES ('"+ productID
-                    +"','"+ s +"');");
+
+    private void addProductStores(int productID, ArrayList<Product.productStore> productStores) throws SQLException {
+        for (Product.productStore p : productStores) {
+            dataBase.stmt.execute("INSERT INTO ProductInStore VALUES ('" + productID
+                    + "','" + p.getStoreID() + "','" + p.getQuantity() + "');");
+        }
+
+    }
+
+    private void addProductImages(int productID, ArrayList<String> productImages) throws SQLException {
+        System.out.println(productImages.toString());
+        for (String s : productImages) {
+            System.out.println(s);
+            dataBase.stmt.execute("INSERT INTO ProductImage VALUES ('" + productID + "','" + s + "');");
         }
     }
 
-    public JSONObject getProduct(String product_id){
+    public JSONObject getProduct(String product_id) {
         try {
-            ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM PRODUCT WHERE productId = '" + product_id +"'");
+            ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM PRODUCT WHERE productId = '" + product_id + "'");
             resultSet.next();
-            return Parser.parseProduct(resultSet);
+            JSONObject product = Parser.parseProduct(resultSet);
+            product.put("stores", getProductStores(product_id));
+            product.put("images", getProductImages(product_id));
+            return product;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
+    private JSONArray getProductStores(String product_id) throws SQLException {
+        ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM ProductInStore WHERE productId = '" + product_id + "'");
+        return Parser.parseProductInStore(resultSet);
+    }
+
+    private JSONArray getProductImages(String product_id) throws SQLException {
+        ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM ProductImage WHERE productId = '" + product_id + "'");
+        return Parser.parseProductImage(resultSet);
+    }
+
     //select * from table order by id asc limit 50 offset 0; -- Returns rows 1-50
 
     public JSONArray getlist(int page) {
-    	final String queryCheck = "SELECT * FROM PRODUCT limit 50 offset "+((page-1)*50)+";";
-    	JSONArray array = new JSONArray();
-    	ResultSet resultSet;
-		try {
-			resultSet = dataBase.stmt.executeQuery(queryCheck);
-	            while(resultSet.next())
-	            {
-//	                array.add(  (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"name\":" +resultSet.getString("name") + ",\"price\":"
-//                    +resultSet.getString("price")+",\"category-name\":"+ resultSet.getString("category")+"}")   );
-                    array.add(Parser.parseProduct(resultSet));
-
-	            }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	return null;
-    }
-    
-    public JSONArray getListBycategory(int page,String category) {
-    	final String queryCheck = "SELECT * FROM PRODUCT WHERE categoryName = '"+category+"' limit 50 offset "+((page-1)*50)+";";
-    	JSONArray array = new JSONArray();
-    	ResultSet resultSet;
-		try {
-			resultSet = dataBase.stmt.executeQuery(queryCheck);
-	            while(resultSet.next())
-	            {
-                    array.add(Parser.parseProduct(resultSet));
-
-	            }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	return null;
-    }
-
-    public void deleteProduct(String product_id){
+        final String queryCheck = "SELECT * FROM PRODUCT limit 50 offset " + ((page - 1) * 50) + ";";
+        JSONArray array = new JSONArray();
         try {
-            dataBase.stmt.executeQuery("DELETE FROM PRODUCT WHERE product_id = '" + product_id +"'");
+            ResultSet resultSet = dataBase.stmt.executeQuery(queryCheck);
+            while (resultSet.next()) {
+                array.add(Parser.parseProduct(resultSet));
+            }
+            JSONObject product;
+            for (Object j : array) {
+                product = (JSONObject) j;
+                product.put("stores", getProductStores(product.getAsString("id")));
+                product.put("images", getProductImages(product.getAsString("id")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return array;
+    }
+
+    public JSONArray getListBycategory(int page, String category) {
+        final String queryCheck = "SELECT * FROM PRODUCT WHERE categoryName = '" + category + "' limit 50 offset " + ((page - 1) * 50) + ";";
+        JSONArray array = new JSONArray();
+        ResultSet resultSet;
+        try {
+            resultSet = dataBase.stmt.executeQuery(queryCheck);
+            while (resultSet.next()) {
+                array.add(Parser.parseProduct(resultSet));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void deleteProduct(String product_id) {
+        try {
+            dataBase.stmt.executeQuery("DELETE FROM PRODUCT WHERE product_id = '" + product_id + "'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
