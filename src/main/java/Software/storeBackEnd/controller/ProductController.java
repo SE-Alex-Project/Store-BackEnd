@@ -54,7 +54,7 @@ public class ProductController {
     {
     "page" : "1",
     "category" : "category name"
-    {
+    }
      */
     @GetMapping("/product_list_category")
     public JSONArray getCategoryList(@RequestBody JSONObject productCategory){
