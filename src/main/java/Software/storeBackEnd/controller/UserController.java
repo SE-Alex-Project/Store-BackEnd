@@ -41,7 +41,6 @@ public class UserController extends Authentication {
     "password": user hashed password
     }
      */
-
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
     	String password = (String)signUpJson.get("email");

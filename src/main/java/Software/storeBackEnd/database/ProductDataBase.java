@@ -24,7 +24,7 @@ public class ProductDataBase {
 
     public void addProduct(Product p) {
         try {
-            dataBase.stmt.execute("INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('" + p.getCategory()
+            dataBase.stmt.execute("INSERT INTO Product(categoryName,price,descripe,productName) VALUES ('" + p.getCategory()
                     + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "');");
 
             ResultSet s = dataBase.stmt.executeQuery("SELECT LAST_INSERT_ID();");
@@ -81,7 +81,7 @@ public class ProductDataBase {
     //select * from table order by id asc limit 50 offset 0; -- Returns rows 1-50
 
     public JSONArray getlist(int page) {
-        final String queryCheck = "SELECT * FROM PRODUCT limit 50 offset " + ((page - 1) * 50) + ";";
+        final String queryCheck = "SELECT * FROM Product limit 50 offset " + ((page - 1) * 50) + ";";
         JSONArray array = new JSONArray();
         try {
             ResultSet resultSet = dataBase.stmt.executeQuery(queryCheck);
@@ -101,7 +101,7 @@ public class ProductDataBase {
     }
 
     public JSONArray getListByCategory(int page, String category) {
-        final String queryCheck = "SELECT * FROM PRODUCT WHERE categoryName = '" + category + "' limit 50 offset " + ((page - 1) * 50) + ";";
+        final String queryCheck = "SELECT * FROM Product WHERE categoryName = '" + category + "' limit 50 offset " + ((page - 1) * 50) + ";";
         JSONArray array = new JSONArray();
         ResultSet resultSet;
         try {
