@@ -41,6 +41,14 @@ public class Product {
             this.Quantity = Quantity;
         }
 
+        public int getStoreID() {
+            return StoreID;
+        }
+
+        public int getQuantity() {
+            return Quantity;
+        }
+
         @Override
         public String toString() {
             return "productStore{" +
@@ -65,6 +73,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ArrayList<String> getImagesURL() {
+        return imagesURL;
+    }
+
+    public ArrayList<productStore> getStores() {
+        return stores;
     }
 
     public double getPrice() {

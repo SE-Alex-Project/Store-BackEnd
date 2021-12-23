@@ -23,20 +23,33 @@ public class ProductDataBase {
 
     // remaining images and stores handling
     public void addProduct(Product p){
-//
-//    	final String queryCheck = "INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('"+ p.getCategory()
-//    			+"','"+p.getPrice()+"','"+p.getDescription()+"','"+p.getName()+"');";
 		try {
 			dataBase.stmt.execute("INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('"+ p.getCategory()
                     +"','"+p.getPrice()+"','"+p.getDescription()+"','"+p.getName()+"');");
 
-//            ResultSet s = dataBase.stmt.executeQuery("SELECT LAST_INSERT_ID();");
-            //s.next();
-            //System.out.println(s.getInt(1));
+            ResultSet s = dataBase.stmt.executeQuery("SELECT LAST_INSERT_ID();");
+            s.next();
+            System.out.println(s.getInt(1));
+            addProductStores(s.getInt(1),p.getStores());
+            addProductImages(s.getInt(1),p.getImagesURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
+    }
+
+    private void addProductStores(int productID,ArrayList<Product.productStore> productStores) throws SQLException {
+        for (Product.productStore p : productStores){
+            dataBase.stmt.execute("INSERT INTO ProductInStore VALUES ('"+ productID
+                    +"','"+ p.getStoreID() +"','"+p.getQuantity()+"');");
+        }
+
+    }
+    private void addProductImages(int productID,ArrayList<String> productImages) throws SQLException {
+        for (String s : productImages){
+            dataBase.stmt.execute("INSERT INTO ProductImage VALUES ('"+ productID
+                    +"','"+ s +"');");
+        }
     }
 
     public JSONObject getProduct(String product_id){

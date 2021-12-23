@@ -26,15 +26,15 @@ CREATE TABLE Product(
 );
 
 
-CREATE TABLE Images(
-	imageId INT auto_increment not null primary key,
-    URL varchar(100)
-);
+-- CREATE TABLE Images(
+-- 	imageId INT auto_increment not null primary key,
+--     URL varchar(100)
+-- );
 
 CREATE TABLE ProductImage(
 	productId INT,
-    imageId INT,
-    primary key (productId,imageID)
+    URL varchar(100),
+    primary key (productId,URL)
 );
 
 
@@ -55,9 +55,9 @@ CREATE TABLE ProductInStore(
 );
 
 CREATE TABLE Store(
-	storeId INT,
-    location VARCHAR(50),
-    storeName VARCHAR(70),
+	storeId INT auto_increment not null primary key,
+    location VARCHAR(100),
+    storeName VARCHAR(30),
     PRIMARY KEY(storeId)
 );
 
