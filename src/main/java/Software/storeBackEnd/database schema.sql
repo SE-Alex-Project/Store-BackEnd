@@ -24,6 +24,19 @@ CREATE TABLE Product(
     productName VARCHAR(50)
 );
 
+
+CREATE TABLE Images(
+	imageId INT auto_increment not null primary key,
+    URL varchar(100)
+);
+
+CREATE TABLE ProductImage(
+	productId INT,
+    imageId INT,
+    primary key (productId,imageID)
+);
+
+
 CREATE TABLE ProductInCart(
 	productId INT,
     cartId INT,

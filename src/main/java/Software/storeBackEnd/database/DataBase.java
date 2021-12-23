@@ -11,7 +11,7 @@ public class DataBase {
     private static DataBase instance = null;
     private DataBase(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            //Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection(
                     "jdbc:mysql://127.0.0.1:3306/storeDB","Store","12345");
 //            Class.forName("com.mysql.jdbc.Driver");
