@@ -1,6 +1,7 @@
 drop SCHEMA storeDB;
 CREATE SCHEMA storeDB;
 use storeDB;
+
 CREATE TABLE Customer(
 	email VARCHAR(50),
 	fName VARCHAR(30),
@@ -34,7 +35,8 @@ CREATE TABLE Product(
 CREATE TABLE ProductImage(
 	productId INT,
     URL varchar(100),
-    primary key (productId,URL)
+    primary key (productId,URL),
+    FOREIGN KEY(productId) REFERENCES Product(productId)
 );
 
 
@@ -43,7 +45,8 @@ CREATE TABLE ProductInCart(
     cartId INT,
     countOfPieces INT,
     PRIMARY KEY(productId, cartId),
-    FOREIGN KEY(cartId) REFERENCES Product(productId)
+    FOREIGN KEY(productId) REFERENCES Product(productId),
+    FOREIGN KEY(cartId) REFERENCES Cart(cartId)
 );
 
 CREATE TABLE ProductInStore(
@@ -51,7 +54,8 @@ CREATE TABLE ProductInStore(
     storeId INT,
     quantity INT,
     PRIMARY KEY(productId, storeId),
-    FOREIGN KEY(productId) REFERENCES Product(productId)
+    FOREIGN KEY(productId) REFERENCES Product(productId),
+    FOREIGN KEY(storeId) REFERENCES Store(storeId)
 );
 
 CREATE TABLE Store(
