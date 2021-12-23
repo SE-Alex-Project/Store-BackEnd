@@ -2,9 +2,9 @@ drop SCHEMA storeDB;
 CREATE SCHEMA storeDB;
 use storeDB;
 CREATE TABLE Customer(
+	email VARCHAR(50),
 	fName VARCHAR(30),
     lName VARCHAR(30),
-    email VARCHAR(50),
     passW VARCHAR(30),
 	PRIMARY KEY (email)
 );
@@ -21,6 +21,7 @@ CREATE TABLE Product(
 	productId INT auto_increment not null primary key,
     categoryName VARCHAR(40),
     price DECIMAL(8,2),
+    descripe varchar(100),
     productName VARCHAR(50)
 );
 

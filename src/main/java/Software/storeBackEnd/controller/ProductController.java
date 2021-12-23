@@ -1,6 +1,7 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.database.ProductDataBase;
+import Software.storeBackEnd.entities.Product;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,19 @@ public class ProductController {
 
     /*product json format
    {
-   "name": product name,
-   "price": product price,
-   "category" : product category
-   "images": [product image 1 (main image), product image 2 , product image 3]
+   "name": "name",
+   "price":"12.5",
+   "category" : "product category",
+   "description" : "hello products",
+   "stores": ["ID:1","2","2","4"],
+   "images": ["product image 1 (main image)", "product image 2" , "product image 3"]
    }
     */
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product){
-        productDataBase.addProduct(product.getAsString("name"),product.getAsString("price"),
-        		product.getAsString("category"),product.getAsString("quantity"));
+        Product p =new Product(product);
+        System.out.println(p);
+        productDataBase.addProduct(p);
         return "true";
     }
 

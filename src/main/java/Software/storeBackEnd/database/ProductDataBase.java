@@ -1,5 +1,6 @@
 package Software.storeBackEnd.database;
 
+import Software.storeBackEnd.entities.Product;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -7,6 +8,7 @@ import net.minidev.json.parser.ParseException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
@@ -16,12 +18,20 @@ public class ProductDataBase {
     public ProductDataBase() {
         dataBase = DataBase.getInstance();
     }
-    
-    public void addProduct(String name ,String price,String category,String quantity){
-    	final String queryCheck = "INSERT INTO PRODUCT(category-name,quantity,price,name) VALUES ('"+category
-    			+"','"+quantity+"','"+price+"','"+name+"');";
+
+
+    // remaining images and stores handling
+    public void addProduct(Product p){
+//
+//    	final String queryCheck = "INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('"+ p.getCategory()
+//    			+"','"+p.getPrice()+"','"+p.getDescription()+"','"+p.getName()+"');";
 		try {
-			dataBase.stmt.executeQuery(queryCheck);
+			dataBase.stmt.execute("INSERT INTO PRODUCT(categoryName,price,descripe,productName) VALUES ('"+ p.getCategory()
+                    +"','"+p.getPrice()+"','"+p.getDescription()+"','"+p.getName()+"');");
+
+            ResultSet s = dataBase.stmt.executeQuery("SELECT LAST_INSERT_ID();");
+            //s.next();
+            //System.out.println(s.getInt(1));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
