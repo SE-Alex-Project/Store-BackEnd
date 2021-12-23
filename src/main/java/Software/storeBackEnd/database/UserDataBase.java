@@ -18,7 +18,7 @@ public class UserDataBase {
     }
 
     public boolean existUser(String name,String password) {
-    	final String queryCheck = "SELECT userName from Customer WHERE email = '"+name+"' AND passW = '"+password+"'";
+    	final String queryCheck = "SELECT fname from Customer WHERE email = '"+name+"' AND passW = '"+password+"'";
     	ResultSet resultSet;
 		try {
 			resultSet = dataBase.stmt.executeQuery(queryCheck);
