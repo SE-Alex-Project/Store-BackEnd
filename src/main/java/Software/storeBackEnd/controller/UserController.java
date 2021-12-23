@@ -23,7 +23,9 @@ public class UserController extends Authentication {
 
     @PostMapping("/logIn")
     public String logIn(@RequestBody JSONObject logInJson){
-        boolean exist = userDataBase.existUser((String)logInJson.get("email"), (String) logInJson.get("password"));
+    	String password = (String)logInJson.get("email");
+    	password = password.hashCode()+""; 
+        boolean exist = userDataBase.existUser((String)logInJson.get("email"), password);
         if(exist) {  
         	return generateToken((String)logInJson.get("email"));
         }
@@ -42,7 +44,9 @@ public class UserController extends Authentication {
 
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
-    	boolean exist = userDataBase.existEmail((String)signUpJson.get("email"));
+    	String password = (String)signUpJson.get("email");
+    	password = password.hashCode()+""; 
+    	boolean exist = userDataBase.existEmail(password);
         if(!exist) {
         	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("first-name"),
         			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
