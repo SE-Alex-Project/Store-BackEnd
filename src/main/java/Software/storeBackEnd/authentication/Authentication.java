@@ -4,6 +4,7 @@ package Software.storeBackEnd.authentication;
 import java.util.HashMap;
 import java.util.UUID;
 
+
 public class Authentication {
 
     //user Token ---> user Email
@@ -11,6 +12,7 @@ public class Authentication {
     protected Authentication(){
         ActiveUsers = new HashMap<>();
     }
+    
 
     public String getUser(String UserToken){
         if (ActiveUsers.containsKey(UserToken))
