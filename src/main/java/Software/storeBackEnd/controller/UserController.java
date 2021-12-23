@@ -48,7 +48,7 @@ public class UserController extends Authentication {
         			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
         	return generateToken((String)signUpJson.get("email"));
         }
-        return "Emial is signed up before !!!";
+        return "Email is signed up before !!!";
     	
     }
 

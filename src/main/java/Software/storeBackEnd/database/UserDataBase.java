@@ -34,7 +34,7 @@ public class UserDataBase {
     
     
     public boolean existEmail(String email) {
-    	final String queryCheck = "SELECT userName from Customer WHERE email = '"+email+"';";
+    	final String queryCheck = "SELECT email from Customer WHERE email = '"+email+"';";
     	ResultSet resultSet;
 		try {
 			resultSet = dataBase.stmt.executeQuery(queryCheck);
@@ -53,7 +53,7 @@ public class UserDataBase {
     	final String queryCheck = "INSERT INTO Customer(email,passW,fname,lname) VALUES ('"+email
     			+"','"+password+"','"+fname+"','"+lname+"');";
 		try {
-			dataBase.stmt.execute(queryCheck);
+			System.out.println(dataBase.stmt.execute(queryCheck));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -63,8 +63,8 @@ public class UserDataBase {
     @SuppressWarnings("rawtypes")
 	public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
         try {
-            dataBase.stmt.execute("UPDATE Customer SET passW = '"+data.get("password")+ "' ,fname = '"+data.get("first-name")+
-					"' ,lname = '"+ data.get("last-name") + "' WHERE email = '" + UserEmail+"'");
+			System.out.println(dataBase.stmt.execute("UPDATE Customer SET passW = '"+data.get("password")+ "' ,fname = '"+data.get("first-name")+
+					"' ,lname = '"+ data.get("last-name") + "' WHERE email = '" + UserEmail+"'"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
