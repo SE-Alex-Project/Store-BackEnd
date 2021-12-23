@@ -22,10 +22,10 @@ public class UserDataBase {
     	ResultSet resultSet;
 		try {
 			resultSet = dataBase.stmt.executeQuery(queryCheck);
-			if(resultSet.getFetchSize() > 0) {
-				System.out.println("true");
-	    	   return true;
-	    	}
+
+			if(resultSet.next()) {
+			    return true;
+			    }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -40,9 +40,9 @@ public class UserDataBase {
 		try {
 			resultSet = dataBase.stmt.executeQuery(queryCheck);
 			
-			if(resultSet.getFetchSize() > 0) {
-	    	   return true;
-	    	}
+			if(resultSet.next()) {
+			    return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -73,9 +73,10 @@ public class UserDataBase {
 
 	public JSONObject getUserInfo(String UserEmail){
 		try {
-			ResultSet resultSet = dataBase.stmt.executeQuery("SELECT fname , lname , email FROM Customer WHERE email = '" + UserEmail+"'");
+			ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail+"'");
+			resultSet.next();
 			return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"first-name\":" +resultSet.getString("fname") + ",\"last-name\":"
-					+resultSet.getString("lname")+",\"email\":"+ resultSet.getString("email")+"}");
+					+resultSet.getString("lname")+",\"email\":"+ resultSet.getString("email")+",\"password\":"+ resultSet.getString("passW")+"}");
 		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
