@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -43,8 +44,9 @@ public class ProductController {
     /*
         {"product" : [product 1 , product 2 , product 3]}
      */
-    @GetMapping("/product_list")
+    @PostMapping("/product_list")
     public JSONArray getProductList(@RequestBody int page){
+        System.out.println(page);
         return productDataBase.getlist(page);
     }
 
@@ -56,7 +58,7 @@ public class ProductController {
     "category" : "category name"
     }
      */
-    @GetMapping("/product_list_category")
+    @PostMapping("/product_list_category")
     public JSONArray getCategoryList(@RequestBody JSONObject productCategory){
         return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")),productCategory.getAsString("category"));
     }
