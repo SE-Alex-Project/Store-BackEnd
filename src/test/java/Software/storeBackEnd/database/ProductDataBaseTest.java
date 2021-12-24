@@ -10,7 +10,7 @@ class ProductDataBaseTest {
     @Test
     void getProduct() {
         ProductDataBase p = new ProductDataBase();
-        p.addProduct();
+//        p.addProduct();
     }
 
     @Test

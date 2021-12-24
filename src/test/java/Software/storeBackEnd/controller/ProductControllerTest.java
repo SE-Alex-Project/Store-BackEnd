@@ -1,5 +1,6 @@
 package Software.storeBackEnd.controller;
 
+import net.minidev.json.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import net.minidev.json.JSONObject;
@@ -12,7 +13,7 @@ class ProductControllerTest {
 
 	@Test
 
-    void get_add_Product() {
+    void get_add_Product() throws ParseException {
 		JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":123,\"name\":adf}");
 		
 		JSONObject ob2 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":456,\"name\":asf}");
@@ -24,10 +25,10 @@ class ProductControllerTest {
 	    pc.addProduct(ob1);
 	    pc.addProduct(ob2);
 
-	    assertEquals(pc.getProduct(123),ob1);
-	    assertEquals(pc.getProduct(456),ob2);
-	    assertEquals(pc.getProduct(789),null);
-	    assertEquals(pc.getProduct(111),null);
+	    assertEquals(pc.getProduct("123"),ob1);
+	    assertEquals(pc.getProduct("456"),ob2);
+	    assertEquals(pc.getProduct("789"),null);
+	    assertEquals(pc.getProduct("111"),null);
 
     }
 

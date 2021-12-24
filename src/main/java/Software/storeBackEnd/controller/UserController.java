@@ -23,10 +23,10 @@ public class UserController extends Authentication {
 
     @PostMapping("/logIn")
     public String logIn(@RequestBody JSONObject logInJson){
-    	//String password = (String)logInJson.get("email");
-    	//password = password.hashCode()+""; 
-        boolean exist = userDataBase.existUser((String)logInJson.get("email"), logInJson.getAsString("email"));
-        if(exist) {  
+    	String password = (String)logInJson.get("password");
+    	password = password.hashCode()+"";
+        boolean exist = userDataBase.existUser((String)logInJson.get("email"), password);
+        if(exist) {
         	return generateToken((String)logInJson.get("email"));
         }
         return "Can't do this operation.";
@@ -36,23 +36,23 @@ public class UserController extends Authentication {
     /*sign up json format
     {
     "email":user email
-    "first-name": user first name
-    "last-name": user last name
+    "firstName": user first name
+    "lastName": user last name
     "password": user hashed password
     }
      */
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
-    	//String password = (String)signUpJson.get("email");
-    	//password = password.hashCode()+""; 
-    	boolean exist = userDataBase.existEmail(signUpJson.getAsString("email"));
+    	String password = (String)signUpJson.get("password");
+    	password = password.hashCode()+"";
+    	boolean exist = userDataBase.existEmail(password);
         if(!exist) {
-        	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("first-name"),
-        			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
+        	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("firstName"),
+        			(String)signUpJson.get("lastName"), password);
         	return generateToken((String)signUpJson.get("email"));
         }
         return "Email is signed up before !!!";
-    	
+
     }
 
 
@@ -70,8 +70,8 @@ public class UserController extends Authentication {
     "id": user token
     "data": {
         "password": new password
-        "first-name": user name
-        "last-name": user last name
+        "firstName": user name
+        "lastName": user last name
         }
     }
      */
