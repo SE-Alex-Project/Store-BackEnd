@@ -12,7 +12,7 @@ CREATE TABLE Customer(
 
 
 CREATE TABLE Cart(
-	cartId INT auto_increment not null primary key, -- the value is got from frontEnd or auto increment here if they cannot do such
+	cartId INT auto_increment not null primary key,
     customerMail VARCHAR(30),
     FOREIGN KEY(customerMail) REFERENCES Customer(email)
 );
@@ -21,8 +21,8 @@ CREATE TABLE Cart(
 CREATE TABLE Product(
 	productId INT auto_increment not null primary key,
     categoryName VARCHAR(40),
-    price DECIMAL(8,2),
-    descripe varchar(100),
+    price DECIMAL(10,2),
+    descripe varchar(200),
     productName VARCHAR(50)
 );
 
