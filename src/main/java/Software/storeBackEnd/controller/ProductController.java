@@ -50,6 +50,12 @@ public class ProductController {
         return productDataBase.getlist(page);
     }
 
+    
+    @PostMapping("/categories")
+    public JSONArray getCategories() {
+		return productDataBase.getCategories();
+ 	
+    }
 
 
     /*
