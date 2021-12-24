@@ -23,10 +23,10 @@ public class UserController extends Authentication {
 
     @PostMapping("/logIn")
     public String logIn(@RequestBody JSONObject logInJson){
-    	//String password = (String)logInJson.get("email");
-    	//password = password.hashCode()+""; 
-        boolean exist = userDataBase.existUser((String)logInJson.get("email"), logInJson.getAsString("email"));
-        if(exist) {  
+    	String password = (String)logInJson.get("password");
+    	password = password.hashCode()+"";
+        boolean exist = userDataBase.existUser((String)logInJson.get("email"), password);
+        if(exist) {
         	return generateToken((String)logInJson.get("email"));
         }
         return "Can't do this operation.";
@@ -43,16 +43,16 @@ public class UserController extends Authentication {
      */
     @PostMapping("/signUp")
     public String signUp(@RequestBody JSONObject signUpJson){
-    	//String password = (String)signUpJson.get("email");
-    	//password = password.hashCode()+""; 
-    	boolean exist = userDataBase.existEmail(signUpJson.getAsString("email"));
+    	String password = (String)signUpJson.get("password");
+    	password = password.hashCode()+"";
+    	boolean exist = userDataBase.existEmail(password);
         if(!exist) {
         	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("first-name"),
-        			(String)signUpJson.get("last-name"), (String)signUpJson.get("password"));
+        			(String)signUpJson.get("last-name"), password);
         	return generateToken((String)signUpJson.get("email"));
         }
         return "Email is signed up before !!!";
-    	
+
     }
 
 
