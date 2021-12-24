@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     
-    @PostMapping("/categories")
+    @GetMapping("/categories")
     public JSONArray getCategories() {
 		return productDataBase.getCategories();
  	
