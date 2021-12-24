@@ -77,7 +77,21 @@ public class ProductDataBase {
         ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM ProductImage WHERE productId = '" + product_id + "'");
         return Parser.parseProductImage(resultSet);
     }
-
+    
+    public JSONArray getCategories()
+    {
+    	final String queryCheck = "SELECT categoryName FROM Product;";
+        JSONArray array = new JSONArray();
+        try {
+            ResultSet resultSet = dataBase.stmt.executeQuery(queryCheck);
+            while (resultSet.next()) {
+                array.add(resultSet.getString("categoryName"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return array;
+    }
     //select * from table order by id asc limit 50 offset 0; -- Returns rows 1-50
 
     public JSONArray getlist(int page) {
