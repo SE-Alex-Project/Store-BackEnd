@@ -12,7 +12,7 @@ public class StoreDataBase {
 
     public void add(String name,String location){
         try {
-            dataBase.stmt.execute("INSERT INTO Store(storeName,location) VALUES ('"+name
+            dataBase.getStatement().execute("INSERT INTO Store(storeName,location) VALUES ('"+name
                     +"','"+location+"');");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -21,7 +21,7 @@ public class StoreDataBase {
 
     public boolean isExist(String StoreID) {
         try {
-            ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * from Store WHERE storeId = '"+StoreID+"'");
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * from Store WHERE storeId = '"+StoreID+"'");
             if(resultSet.next()) {
                 return true;
             }

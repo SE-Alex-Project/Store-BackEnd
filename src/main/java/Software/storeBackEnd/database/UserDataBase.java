@@ -22,7 +22,7 @@ public class UserDataBase {
         final String queryCheck = "SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'";
         ResultSet resultSet;
         try {
-            resultSet = dataBase.stmt.executeQuery(queryCheck);
+            resultSet = dataBase.getStatement().executeQuery(queryCheck);
 
             if (resultSet.next()) {
                 return true;
@@ -39,7 +39,7 @@ public class UserDataBase {
         final String queryCheck = "SELECT email from Customer WHERE email = '" + email + "';";
         ResultSet resultSet;
         try {
-            resultSet = dataBase.stmt.executeQuery(queryCheck);
+            resultSet = dataBase.getStatement().executeQuery(queryCheck);
 
             if (resultSet.next()) {
                 return true;
@@ -51,11 +51,11 @@ public class UserDataBase {
     }
 
 
-    public void insertUser(String email, String fname, String lname, String password) {
+    public void insertUser(String email, String fName, String lName, String password) {
         final String queryCheck = "INSERT INTO Customer(email,passW,fName,lName) VALUES ('" + email
-                + "','" + password + "','" + fname + "','" + lname + "');";
+                + "','" + password + "','" + fName + "','" + lName + "');";
         try {
-            System.out.println(dataBase.stmt.execute(queryCheck));
+            System.out.println(dataBase.getStatement().execute(queryCheck));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,7 @@ public class UserDataBase {
     @SuppressWarnings("rawtypes")
     public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
         try {
-            dataBase.stmt.execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("firstName") +
+            dataBase.getStatement().execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("firstName") +
                     "' ,lname = '" + data.get("lastName") + "' WHERE email = '" + UserEmail + "'");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class UserDataBase {
 
     public JSONObject getUserInfo(String UserEmail) {
         try {
-            ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "'");
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "'");
             resultSet.next();
             return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fName") + ",\"lastName\":"
                     + resultSet.getString("lName") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");

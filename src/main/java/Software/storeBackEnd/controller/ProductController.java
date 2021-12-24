@@ -46,15 +46,7 @@ public class ProductController {
      */
     @PostMapping("/product_list")
     public JSONArray getProductList(@RequestBody int page){
-        System.out.println(page);
-        return productDataBase.getlist(page);
-    }
-
-    
-    @PostMapping("/categories")
-    public JSONArray getCategories() {
-		return productDataBase.getCategories();
- 	
+        return productDataBase.getList(page);
     }
 
 
@@ -68,6 +60,13 @@ public class ProductController {
     public JSONArray getCategoryList(@RequestBody JSONObject productCategory){
         return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")),productCategory.getAsString("category"));
     }
+
+    @PostMapping("/categories")
+    public JSONArray getCategories() {
+        return productDataBase.getCategories();
+
+    }
+
 
     /*
     * {"product_id":[id1 ,id2 ,id3,.....]}

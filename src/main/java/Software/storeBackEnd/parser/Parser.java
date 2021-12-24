@@ -23,42 +23,29 @@ public class Parser {
    }
      */
 
-
-    public static JSONObject parseProduct(ResultSet resultSet){
-        try {
-            return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" +resultSet.getString("productId") + ",\"name\":"
-                    +resultSet.getString("productName")+ ",\"price\":" +resultSet.getString("price")+",\"category\":"+
-                    resultSet.getString("categoryName")+ ",\"description\":" +resultSet.getString("descripe")+"}");
-        } catch (ParseException | SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static JSONObject parseProduct(ResultSet resultSet) throws SQLException, ParseException {
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("productId") + ",\"name\":"
+                + resultSet.getString("productName") + ",\"price\":" + resultSet.getString("price") + ",\"category\":" +
+                resultSet.getString("categoryName") + ",\"description\":" + resultSet.getString("descripe") + "}");
     }
 
-    public static JSONArray parseProductInStore(ResultSet resultSet){
-        try {
-            JSONArray stores = new JSONArray();
-            while(resultSet.next()){
-                stores.add(resultSet.getString("storeId"));
-                stores.add(resultSet.getString("quantity"));
-            }
-            return stores;
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static JSONArray parseProductInStore(ResultSet resultSet) throws SQLException {
+        JSONArray stores = new JSONArray();
+        while (resultSet.next()) {
+            stores.add(resultSet.getString("storeId"));
+            stores.add(resultSet.getString("quantity"));
         }
-        return null;
+        resultSet.close();
+        return stores;
     }
-    public static JSONArray parseProductImage(ResultSet resultSet){
-        try {
-            JSONArray stores = new JSONArray();
-            while(resultSet.next()){
-                stores.add(resultSet.getString("URL"));
-            }
-            return stores;
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+    public static JSONArray parseProductImage(ResultSet resultSet) throws SQLException {
+        JSONArray images = new JSONArray();
+        while (resultSet.next()) {
+            images.add(resultSet.getString("URL"));
         }
-        return null;
+        resultSet.close();
+        return images;
     }
 
 }
