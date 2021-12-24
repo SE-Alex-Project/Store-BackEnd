@@ -65,8 +65,8 @@ public class UserDataBase {
     @SuppressWarnings("rawtypes")
     public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
         try {
-            dataBase.stmt.execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("first-name") +
-                    "' ,lname = '" + data.get("last-name") + "' WHERE email = '" + UserEmail + "'");
+            dataBase.stmt.execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("firstName") +
+                    "' ,lname = '" + data.get("lastName") + "' WHERE email = '" + UserEmail + "'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,7 +76,7 @@ public class UserDataBase {
         try {
             ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "'");
             resultSet.next();
-            return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"first-name\":" + resultSet.getString("fname") + ",\"last-name\":"
+            return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fname") + ",\"lastName\":"
                     + resultSet.getString("lname") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
         } catch (SQLException | ParseException e) {
             e.printStackTrace();
