@@ -137,7 +137,7 @@ public class ProductDataBase {
 
     public void deleteProduct(String product_id) {
         try {
-            dataBase.stmt.executeQuery("DELETE FROM PRODUCT WHERE product_id = '" + product_id + "'");
+            dataBase.stmt.execute("DELETE FROM Product WHERE productId = '" + product_id + "'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
