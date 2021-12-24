@@ -80,7 +80,7 @@ public class ProductDataBase {
     
     public JSONArray getCategories()
     {
-    	final String queryCheck = "SELECT categoryName FROM Product;";
+    	final String queryCheck = "SELECT DISTINCT categoryName FROM Product;";
         JSONArray array = new JSONArray();
         try {
             ResultSet resultSet = dataBase.stmt.executeQuery(queryCheck);
