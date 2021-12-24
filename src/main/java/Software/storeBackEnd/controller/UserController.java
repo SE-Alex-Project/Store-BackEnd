@@ -45,7 +45,7 @@ public class UserController extends Authentication {
     public String signUp(@RequestBody JSONObject signUpJson){
     	String password = (String)signUpJson.get("password");
     	password = password.hashCode()+"";
-    	boolean exist = userDataBase.existEmail(password);
+    	boolean exist = userDataBase.existEmail(signUpJson.getAsString("email"));
         if(!exist) {
         	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("firstName"),
         			(String)signUpJson.get("lastName"), password);

@@ -14,12 +14,11 @@ public class Parser {
 
     /*
      {
-   "id" : "product-id"
    "name": "name",
    "price":"12.5",
    "category" : "product category",
    "description" : "hello products",
-   "stores": ["1","2","2","4"],
+   "stores": ["1","2"],
    "images": ["product image 1 (main image)", "product image 2" , "product image 3"]
    }
      */

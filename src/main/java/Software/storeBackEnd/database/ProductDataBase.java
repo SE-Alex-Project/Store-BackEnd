@@ -56,7 +56,7 @@ public class ProductDataBase {
 
     public JSONObject getProduct(String product_id) {
         try {
-            ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM PRODUCT WHERE productId = '" + product_id + "'");
+            ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM Product WHERE productId = '" + product_id + "'");
             resultSet.next();
             JSONObject product = Parser.parseProduct(resultSet);
             product.put("stores", getProductStores(product_id));

@@ -52,7 +52,7 @@ public class UserDataBase {
 
 
     public void insertUser(String email, String fname, String lname, String password) {
-        final String queryCheck = "INSERT INTO Customer(email,passW,fname,lname) VALUES ('" + email
+        final String queryCheck = "INSERT INTO Customer(email,passW,fName,lName) VALUES ('" + email
                 + "','" + password + "','" + fname + "','" + lname + "');";
         try {
             System.out.println(dataBase.stmt.execute(queryCheck));
@@ -76,8 +76,8 @@ public class UserDataBase {
         try {
             ResultSet resultSet = dataBase.stmt.executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "'");
             resultSet.next();
-            return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fname") + ",\"lastName\":"
-                    + resultSet.getString("lname") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
+            return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fName") + ",\"lastName\":"
+                    + resultSet.getString("lName") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
         } catch (SQLException | ParseException e) {
             e.printStackTrace();
         }
