@@ -15,28 +15,12 @@ class ProductControllerTest {
 
     void get_add_Product() throws ParseException {
 		JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":123,\"name\":adf}");
-		
-		JSONObject ob2 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":456,\"name\":asf}");
-        
-        JSONObject ob3 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":789,\"name\":asl}");
-        
         ProductController pc = new ProductController();
+        System.out.println(pc.getProduct("1"));
 
-	    pc.addProduct(ob1);
-	    pc.addProduct(ob2);
-
-	    assertEquals(pc.getProduct("123"),ob1);
-	    assertEquals(pc.getProduct("456"),ob2);
-	    assertEquals(pc.getProduct("789"),null);
-	    assertEquals(pc.getProduct("111"),null);
+	    assertEquals(pc.getProduct("1"),ob1);
+	 
 
     }
 
-    @Test
-    void getProductList() {
-    }
-
-    @Test
-    void getCategoryList() {
-    }
 }
