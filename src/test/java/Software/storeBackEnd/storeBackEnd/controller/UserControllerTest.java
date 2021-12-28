@@ -15,7 +15,7 @@ public class UserControllerTest {
 
 
     @Test
-    void Sign_UP() throws ParseException {
+    void Sign_UP() throws Exception {
         UserController uc = new UserController();
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "            \"email\":\"testt@test.test\",\n" +
