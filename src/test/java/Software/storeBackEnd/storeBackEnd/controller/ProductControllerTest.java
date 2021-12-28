@@ -1,13 +1,13 @@
-package Software.storeBackEnd.controller;
+package Software.storeBackEnd.storeBackEnd.controller;
 
+import Software.storeBackEnd.controller.ProductController;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProductControllerTest {
 

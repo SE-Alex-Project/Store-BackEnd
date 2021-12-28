@@ -1,6 +1,6 @@
-package Software.storeBackEnd.controller;
+package Software.storeBackEnd.storeBackEnd.controller;
 
-import Software.storeBackEnd.authentication.Authentication;
+import Software.storeBackEnd.controller.UserController;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -22,6 +22,18 @@ public class UserControllerTest {
                 "                \"firstName\": \"test\",\n" +
                 "                \"lastName\": \"test\",\n" +
                 "                \"password\":\"test\"\n" +
+                "        }");
+        JSONObject ob2 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
+                "            \"email\":\"testt2@test.test\",\n" +
+                "                \"firstName\": \"test2\",\n" +
+                "                \"lastName\": \"test2\",\n" +
+                "                \"password\":\"test2\"\n" +
+                "        }");
+        JSONObject ob3 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
+                "            \"email\":\"testt3@test.test\",\n" +
+                "                \"firstName\": \"test3\",\n" +
+                "                \"lastName\": \"test3\",\n" +
+                "                \"password\":\"test3\"\n" +
                 "        }");
         assertEquals("Email is signed up before !!!",uc.signUp(ob1));
     }
@@ -60,3 +72,4 @@ public class UserControllerTest {
     }
 
 }
+
