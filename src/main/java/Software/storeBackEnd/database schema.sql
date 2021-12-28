@@ -34,6 +34,8 @@ CREATE TABLE Employee(
     passW VARCHAR(30) NOT NULL,
     FOREIGN KEY (storeId) REFERENCES Store(storeId)
 );
+
+
 CREATE TABLE Product(
 	productId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     categoryName VARCHAR(45) NOT NULL,
