@@ -74,7 +74,7 @@ public class UserDataBase {
 
     public JSONObject getUserInfo(String UserEmail) {
         try {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "'");
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "';");
             resultSet.next();
             return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fName") + ",\"lastName\":"
                     + resultSet.getString("lName") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
@@ -82,5 +82,17 @@ public class UserDataBase {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public int createCart() throws SQLException {
+    	dataBase.getStatement().execute("INSERT INTO cart(userEmail) values (null);");
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
+        resultSet.next();
+        int id = Integer.parseInt(resultSet.getString("cartID"));
+        return id;
+    }
+    
+    public void updateCart(String email,int id) throws SQLException {
+    	dataBase.getStatement().execute("update cart set userEmail='"+email+"' where cartId='"+id+"';");
     }
 }

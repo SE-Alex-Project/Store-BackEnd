@@ -4,6 +4,7 @@ import Software.storeBackEnd.database.UserDataBase;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
 @CrossOrigin
@@ -42,13 +43,18 @@ public class UserController extends Authentication {
     }
      */
     @PostMapping("/signUp")
-    public String signUp(@RequestBody JSONObject signUpJson){
+    public String signUp(@RequestBody JSONObject signUpJson) throws SQLException{
     	String password = (String)signUpJson.get("password");
     	password = password.hashCode()+"";
     	boolean exist = userDataBase.existEmail(signUpJson.getAsString("email"));
         if(!exist) {
+        	//create cart
+        	int id = userDataBase.createCart();
+        	//create user
         	userDataBase.insertUser((String)signUpJson.get("email"), (String)signUpJson.get("firstName"),
         			(String)signUpJson.get("lastName"), password);
+        	//update cart
+        	userDataBase.updateCart((String)signUpJson.get("email"), id);
         	return generateToken((String)signUpJson.get("email"));
         }
         return "Email is signed up before !!!";
