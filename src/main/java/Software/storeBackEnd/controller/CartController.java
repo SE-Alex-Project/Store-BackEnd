@@ -20,7 +20,7 @@ class CartController extends Authentication{
     public String buyCart(String token) throws Exception {
       String email = getUser(token);
       String cartId = cartDataBase.getCart(email);
-      Cart cart = cartDataBase.getProductInCart(cartId);
+      Cart cart = cartDataBase.getProductInCart(cartId,email);
       return cartDataBase.buyCart(cart);
     }
 }

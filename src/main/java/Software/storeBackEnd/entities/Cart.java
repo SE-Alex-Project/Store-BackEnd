@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Cart {
 	
 	int id;
+	String email;
     ArrayList<ProductQuantity> products;
 
     public Cart(){
@@ -26,4 +27,13 @@ public class Cart {
 	public void addProduct (int id,int quantity){
         products.add(new ProductQuantity(id, quantity));
     }
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 }

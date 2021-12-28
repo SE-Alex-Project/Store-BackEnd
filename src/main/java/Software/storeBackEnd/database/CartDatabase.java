@@ -23,10 +23,11 @@ public class CartDatabase {
     	return cartId;
     }
     
-    public Cart getProductInCart(String cart_id) throws SQLException {
+    public Cart getProductInCart(String cart_id,String email) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM CartProducts WHERE cartId = '" + cart_id + "'");
        Cart c = new Cart();
        c.setId(Integer.parseInt(cart_id));
+       c.setEmail(email);
         while (resultSet.next()) {
         	String productId = resultSet.getString("productId");
         	String quantity = resultSet.getString("quantity");
@@ -56,7 +57,21 @@ public class CartDatabase {
         	int q = p.getQuantity();
         	dataBase.getStatement().execute("UPDATE ProductInStore SET quantity = '"+q+"' WHERE productId = '" + id + "' AND storeId = '1' ;");
         }
+        int newCart = createCartByEmail(cart.getEmail());
+        updateCustomerCart(newCart, cart.getEmail());
         return "Operation Done";
+    }
+    
+    private int createCartByEmail(String email) throws SQLException {
+    	dataBase.getStatement().execute("INSERT INTO cart(userEmail) values ('"+email+"');");
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
+        resultSet.next();
+        int id = Integer.parseInt(resultSet.getString("cartID"));
+        return id;
+    }
+    
+    private void updateCustomerCart(int id,String email) throws SQLException {
+    	dataBase.getStatement().execute("update Customer set cartId = '"+id+"' where email ='"+email+"';");
     }
 
     
