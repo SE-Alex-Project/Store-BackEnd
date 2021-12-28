@@ -1,8 +1,6 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.database.StoreDataBase;
-import Software.storeBackEnd.database.UserDataBase;
-import Software.storeBackEnd.entities.Product;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Cart {
-    ArrayList<Product> products;
+    ArrayList<Integer> products;
     public Cart(){
         products = new ArrayList<>();
     }
-    public void addProduct (Product... p){
+    public void addProduct (Integer... p){
         products.addAll(Arrays.asList(p));
     }
 }

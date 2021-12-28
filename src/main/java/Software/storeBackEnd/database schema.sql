@@ -2,81 +2,84 @@ drop SCHEMA storeDB;
 CREATE SCHEMA storeDB;
 use storeDB;
 
-CREATE TABLE Customer(
-	email VARCHAR(50),
-	fName VARCHAR(30),
-    lName VARCHAR(30),
-    passW VARCHAR(30),
-	PRIMARY KEY (email)
-);
-
-
 CREATE TABLE Cart(
-	cartId INT auto_increment not null primary key,
-    customerMail VARCHAR(30),
-    FOREIGN KEY(customerMail) REFERENCES Customer(email)
+	cartId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    userEmail VARCHAR(30),
+    buyDate DATE
+);
+
+CREATE TABLE Customer(
+	email VARCHAR(50) PRIMARY KEY NOT NULL,
+	fName VARCHAR(30) NOT NULL,
+    lName VARCHAR(30) NOT NULL,
+    passW VARCHAR(30) NOT NULL,
+    cartId INT NOT NULL,
+	FOREIGN KEY(cartId) REFERENCES Cart(cartId)
+);
+
+ALTER TABLE Cart ADD FOREIGN KEY(userEmail) REFERENCES Customer(email);
+
+CREATE TABLE Store(
+	storeId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    storeName VARCHAR(45) NOT NULL
 );
 
 
+CREATE TABLE Employee(
+	email VARCHAR(50) PRIMARY KEY NOT NULL,
+	fName VARCHAR(45) NOT NULL,
+    lName VARCHAR(45) NOT NULL,
+    storeId INT NOT NULL,
+    passW VARCHAR(30) NOT NULL,
+    FOREIGN KEY (storeId) REFERENCES Store(storeId)
+);
 CREATE TABLE Product(
-	productId INT auto_increment not null primary key,
-    categoryName VARCHAR(40),
-    price DECIMAL(10,2),
-    descripe varchar(200),
-    productName VARCHAR(50)
+	productId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    categoryName VARCHAR(45) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    descripe VARCHAR(300) NOT NULL,
+    productName VARCHAR(45) NOT NULL,
+    addedBy VARCHAR(50) NOT NULL,
+    added_date datetime DEFAULT NOW(),
+    FOREIGN KEY(addedBy) REFERENCES Employee(email)
 );
 
 
--- CREATE TABLE Images(
--- 	imageId INT auto_increment not null primary key,
---     URL varchar(100)
--- );
+CREATE TABLE CartProducts(
+	cartId INT NOT NULL,
+    productId INT NOT NULL,
+    PRIMARY KEY (cartId,productId),
+    FOREIGN KEY(productId) REFERENCES Product(productId)
+);
+
 
 CREATE TABLE ProductImage(
-	productId INT,
-    url varchar(100),
+	productId INT NOT NULL,
+    url VARCHAR(100) NOT NULL,
     primary key (productId,url),
     FOREIGN KEY(productId) REFERENCES Product(productId)
 );
 
 
 CREATE TABLE ProductInCart(
-	productId INT,
-    cartId INT,
-    countOfPieces INT,
+	productId INT NOT NULL,
+    cartId INT NOT NULL,
+    countOfPieces INT NOT NULL,
     PRIMARY KEY(productId, cartId),
     FOREIGN KEY(productId) REFERENCES Product(productId),
     FOREIGN KEY(cartId) REFERENCES Cart(cartId)
 );
 
-CREATE TABLE Store(
-	storeId INT auto_increment not null primary key,
-    location VARCHAR(100),
-    storeName VARCHAR(30)
-);
-
 
 CREATE TABLE ProductInStore(
-	productId INT,
-    storeId INT,
-    quantity INT,
+	productId INT NOT NULL,
+    storeId INT NOT NULL,
+    quantity INT NOT NULL,
     PRIMARY KEY(productId, storeId),
     FOREIGN KEY(productId) REFERENCES Product(productId),
     FOREIGN KEY(storeId) REFERENCES Store(storeId)
 );
-
--- CREATE TABLE Employee(
--- 	fName VARCHAR(30),
---     mName VARCHAR(30),
---     lName VARCHAR(30),
--- 	userName VARCHAR(30),
---     storeId INT, -- if he can work in multi store so we don't add it to primary key , else >> add it 
---     email VARCHAR(50),
---     passW VARCHAR(30),
---     address VARCHAR(70),
--- 	PRIMARY KEY (userName),
---     FOREIGN KEY (storeId) REFERENCES Store(storeId)
--- );
 
 
 

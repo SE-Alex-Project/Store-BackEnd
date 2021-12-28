@@ -28,7 +28,7 @@ public class ProductController {
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product){
         Product p =new Product(product);
-        System.out.println(p);
+        //System.out.println(p);
         productDataBase.addProduct(p);
         return "true";
     }
