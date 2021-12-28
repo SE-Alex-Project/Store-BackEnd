@@ -1,14 +1,29 @@
 package Software.storeBackEnd.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Cart {
-    ArrayList<Integer> products;
+	
+	int id;
+    ArrayList<ProductQuantity> products;
+
     public Cart(){
         products = new ArrayList<>();
     }
-    public void addProduct (Integer... p){
-        products.addAll(Arrays.asList(p));
+	
+	public ArrayList<ProductQuantity> getProducts() {
+		return products;
+	}
+	public void setProducts(ArrayList<ProductQuantity> products) {
+		this.products = products;
+	}
+    public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public void addProduct (int id,int quantity){
+        products.add(new ProductQuantity(id, quantity));
     }
 }
