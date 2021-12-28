@@ -1,17 +1,19 @@
 package Software.storeBackEnd.database;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
 
-public class CartDatabase {
+public class CustomerDatabase {
 
 	private final DataBase dataBase;
 
-    public CartDatabase() {
+    public CustomerDatabase() {
         dataBase = DataBase.getInstance();
     }
     
@@ -57,9 +59,16 @@ public class CartDatabase {
         	int q = p.getQuantity();
         	dataBase.getStatement().execute("UPDATE ProductInStore SET quantity = '"+q+"' WHERE productId = '" + id + "' AND storeId = '1' ;");
         }
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        updateBuyTime(cart.getId(), formatter.format(date));
         int newCart = createCartByEmail(cart.getEmail());
         updateCustomerCart(newCart, cart.getEmail());
         return "Operation Done";
+    }
+    
+    private void updateBuyTime(int id,String date) throws SQLException {
+    	dataBase.getStatement().execute("update cart set buyDate='"+date+"' where cartId='"+id+"';");
     }
     
     private int createCartByEmail(String email) throws SQLException {
