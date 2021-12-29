@@ -82,6 +82,10 @@ public class CustomerDatabase {
     private void updateCustomerCart(int id,String email) throws SQLException {
     	dataBase.getStatement().execute("update Customer set cartId = '"+id+"' where email ='"+email+"';");
     }
+    
+    public void addToCart(int product_id,int cart_id) throws SQLException {
+    	dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('"+cart_id+"','"+product_id+"','1') ;");
+    }
 
     
 }
