@@ -1,6 +1,6 @@
 package Software.storeBackEnd.storeBackEnd.database;
 
-import Software.storeBackEnd.database.UserDataBase;
+import Software.storeBackEnd.database.UserDatabase;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -13,7 +13,7 @@ class UserDataBaseTest {
 
     @Test
     void existUser() {
-        UserDataBase ud = new UserDataBase();
+        UserDatabase ud = new UserDatabase();
         ud.insertUser("test@test.com","ftest","ltest","pass");
         ud.insertUser("test2@test.com","ftest2","ltest","pass");
         ud.insertUser("test3@test.com","ftest3","ltest","pass");
@@ -26,7 +26,7 @@ class UserDataBaseTest {
 
     @Test
     void existEmail() {
-        UserDataBase ud = new UserDataBase();
+        UserDatabase ud = new UserDatabase();
         ud.insertUser("test@test.com","ftest","ltest","pass");
         ud.insertUser("test2@test.com","ftest2","ltest","pass");
         ud.insertUser("test3@test.com","ftest3","ltest","pass");
@@ -39,7 +39,7 @@ class UserDataBaseTest {
 
     @Test
     void getUserInfo() throws ParseException {
-        UserDataBase ud = new UserDataBase();
+        UserDatabase ud = new UserDatabase();
         ud.insertUser("test@test.com", "ftest", "ltest", "pass");
         ud.insertUser("test2@test.com", "ftest2", "ltest", "pass");
 

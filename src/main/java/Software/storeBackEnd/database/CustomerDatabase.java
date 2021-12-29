@@ -11,10 +11,10 @@ import Software.storeBackEnd.entities.ProductQuantity;
 
 public class CustomerDatabase {
 
-	private final DataBase dataBase;
+	private final Database dataBase;
 
     public CustomerDatabase() {
-        dataBase = DataBase.getInstance();
+        dataBase = Database.getInstance();
     }
     
     

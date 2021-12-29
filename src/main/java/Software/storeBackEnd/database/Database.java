@@ -2,12 +2,12 @@ package Software.storeBackEnd.database;
 
 import java.sql.*;
 
-public class DataBase {
+public class Database {
 
     private Connection con;
-    private static DataBase instance = null;
+    private static Database instance = null;
 
-    private DataBase() {
+    private Database() {
         try {
 //            Connection con= DriverManager.getConnection(
 //                    "jdbc:mysql://127.0.0.1:3306/storeDB","Store","12345");
@@ -20,9 +20,9 @@ public class DataBase {
         }
     }
 
-    public static DataBase getInstance() {
+    public static Database getInstance() {
         if (instance == null)
-            instance = new DataBase();
+            instance = new Database();
         return instance;
     }
 

@@ -3,11 +3,11 @@ package Software.storeBackEnd.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class StoreDataBase {
+public class StoreDatabase {
 
-    private final DataBase dataBase;
-    public StoreDataBase() {
-        dataBase = DataBase.getInstance();
+    private final Database dataBase;
+    public StoreDatabase() {
+        dataBase = Database.getInstance();
     }
 
     public void add(String name,String location){

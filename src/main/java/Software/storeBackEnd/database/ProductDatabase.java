@@ -10,12 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ProductDataBase {
+public class ProductDatabase {
 
-    private final DataBase dataBase;
+    private final Database dataBase;
 
-    public ProductDataBase() {
-        dataBase = DataBase.getInstance();
+    public ProductDatabase() {
+        dataBase = Database.getInstance();
     }
 
 

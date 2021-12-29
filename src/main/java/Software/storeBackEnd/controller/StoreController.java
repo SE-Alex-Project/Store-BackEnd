@@ -1,6 +1,6 @@
 package Software.storeBackEnd.controller;
 
-import Software.storeBackEnd.database.StoreDataBase;
+import Software.storeBackEnd.database.StoreDatabase;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/store")
 public class StoreController {
 
-    private final StoreDataBase storeDataBase = new StoreDataBase();
+    private final StoreDatabase storeDataBase = new StoreDatabase();
 
     /*store json format
    {

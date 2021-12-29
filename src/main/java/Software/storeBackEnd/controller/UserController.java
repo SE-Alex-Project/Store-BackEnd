@@ -1,6 +1,6 @@
 package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
-import Software.storeBackEnd.database.UserDataBase;
+import Software.storeBackEnd.database.UserDatabase;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 @RequestMapping("/user")
 public class UserController extends Authentication {
 
-    private final UserDataBase userDataBase = new UserDataBase();
+    private final UserDatabase userDataBase = new UserDatabase();
 
 
     /*log in json format

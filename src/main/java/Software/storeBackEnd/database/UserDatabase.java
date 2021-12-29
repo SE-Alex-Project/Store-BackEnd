@@ -10,12 +10,12 @@ import java.util.LinkedHashMap;
 
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
-public class UserDataBase {
+public class UserDatabase {
 
-    private final DataBase dataBase;
+    private final Database dataBase;
 
-    public UserDataBase() {
-        dataBase = DataBase.getInstance();
+    public UserDatabase() {
+        dataBase = Database.getInstance();
     }
 
     public boolean existUser(String name, String password) {

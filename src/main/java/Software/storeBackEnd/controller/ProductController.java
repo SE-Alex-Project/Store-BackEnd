@@ -1,6 +1,6 @@
 package Software.storeBackEnd.controller;
 
-import Software.storeBackEnd.database.ProductDataBase;
+import Software.storeBackEnd.database.ProductDatabase;
 import Software.storeBackEnd.entities.Product;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @RequestMapping("/product")
 public class ProductController {
 
-    ProductDataBase productDataBase = new ProductDataBase();
+    ProductDatabase productDataBase = new ProductDatabase();
 
     /*product json format
    {
@@ -28,7 +28,6 @@ public class ProductController {
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product){
         Product p =new Product(product);
-        //System.out.println(p);
         productDataBase.addProduct(p);
         return "true";
     }
