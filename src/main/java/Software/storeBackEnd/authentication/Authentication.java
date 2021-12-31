@@ -7,7 +7,6 @@ public class Authentication {
         userTokenManager = new TokenManager();
     }
     
-
     public String getUser(String UserToken){
         return userTokenManager.getUser(UserToken);
     }
