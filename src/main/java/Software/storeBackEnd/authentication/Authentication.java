@@ -20,6 +20,11 @@ public class Authentication {
         return null;
     }
     
+    public void removeUser(String UserToken) {
+    	if (ActiveUsers.containsKey(UserToken))
+    		ActiveUsers.remove(UserToken);
+    }
+    
     public String generateToken(String email) {
     	String token = UUID.randomUUID().toString().toUpperCase() 
                 + " | " 

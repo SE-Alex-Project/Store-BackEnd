@@ -66,7 +66,7 @@ public class UserController extends Authentication {
 
     @PostMapping("/logOut")
     public void logOut (@RequestBody String userToken){
-
+    	removeUser(userToken);
     }
 
 

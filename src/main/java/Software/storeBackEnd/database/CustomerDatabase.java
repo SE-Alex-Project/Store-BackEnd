@@ -86,6 +86,14 @@ public class CustomerDatabase {
     public void addToCart(int product_id,int cart_id) throws SQLException {
     	dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('"+cart_id+"','"+product_id+"','1') ;");
     }
+    
+    public String modify(int cart_id,ArrayList<ProductQuantity> cart) throws SQLException {
+    	for(int i = 0 ; i < cart.size() ; i++ ) {
+    		ProductQuantity p = cart.get(i);
+    		dataBase.getStatement().execute("UPDATE CartProducts set quantity = '"+p.getQuantity()+"' where cartId ='"+cart_id+"' AND productId = '"+p.getProduct_id()+"';");
+    	}
+    	return "Cart Updated !!!";
+    }
 
     
 }
