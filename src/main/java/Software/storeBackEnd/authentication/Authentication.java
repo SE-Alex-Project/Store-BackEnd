@@ -13,8 +13,7 @@ public class Authentication {
     }
     
     public void removeUser(String UserToken) {
-    	if (ActiveUsers.containsKey(UserToken))
-    		ActiveUsers.remove(UserToken);
+        userTokenManager.removeUser(UserToken);
     }
     
     public String generateToken(String email) {

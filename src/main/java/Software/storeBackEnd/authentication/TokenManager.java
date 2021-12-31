@@ -30,6 +30,11 @@ public class TokenManager {
         return token;
     }
 
+    public void removeUser(String UserToken) {
+        if (Active.containsKey(UserToken))
+            Active.remove(UserToken);
+    }
+
 
     public class UserToken{
         String userEmail;
