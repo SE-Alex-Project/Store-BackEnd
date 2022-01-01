@@ -1,14 +1,13 @@
 package Software.storeBackEnd.authentication;
 
 import Software.storeBackEnd.database.Database;
+import Software.storeBackEnd.entities.UserType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Authentication {
     private final static Database dataBase = Database.getInstance();
-//    private static TokenManager customerToken = new TokenManager();
-//    private static TokenManager employeeToken = new TokenManager();
 
     public static boolean isCustomer(String name, String password) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'");
@@ -35,7 +34,12 @@ public class Authentication {
         return resultSet.next();
     }
 
-    public static char getUserType(String email){
-        return 0;
+    public static UserType getUserType(String email){
+        if (email.contains("@employee"))
+            return UserType.Employee;
+        else if (email.contains("@Manager"))
+            return UserType.Manager;
+        else
+            return UserType.Customer;
     }
 }

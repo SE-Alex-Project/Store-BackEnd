@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public class TokenManager {
     //generated Token ---> user Email and token validation
-//    private final HashMap<String,UserToken> Active;
-    private final HashMap<UserType,HashMap<String,UserToken>> Tokens;
+    private final HashMap<String,UserToken> Active;
+//    private final HashMap<UserType,HashMap<String,UserToken>> Tokens;
 
     private static TokenManager instance = null;
     public static TokenManager getInstance() {
@@ -19,15 +19,16 @@ public class TokenManager {
     }
 
     private TokenManager(){
-        Tokens = new HashMap<>();
-        Tokens.put(UserType.Customer,new HashMap<>());
-        Tokens.put(UserType.Employee,new HashMap<>());
-        Tokens.put(UserType.Manager,new HashMap<>());
+//        Tokens = new HashMap<>();
+//        Tokens.put(UserType.Customer,new HashMap<>());
+//        Tokens.put(UserType.Employee,new HashMap<>());
+//        Tokens.put(UserType.Manager,new HashMap<>());
+        Active = new HashMap<>();
     }
 
 
-    public String getUser(UserType userType,String token){
-        HashMap<String,UserToken> Active = Tokens.get(userType);
+    public String getUser(String token){
+//        HashMap<String,UserToken> Active = Tokens.get(userType);
         if (Active.containsKey(token)){
             UserToken user = Active.get(token);
             if (user.isValid()){
@@ -40,18 +41,19 @@ public class TokenManager {
         return null;
     }
 
-    public String generateToken(UserType userType,String email) {
+    public String generateToken(String email) {
         String token = UUID.randomUUID().toString().toUpperCase()
                 + " | "
                 + System.currentTimeMillis();
-        Tokens.get(userType).put(token, new UserToken(email));
+        Active.put(token, new UserToken(email));
         return token;
     }
 
     public void removeUser(String UserToken) {
-        Tokens.get(UserType.Customer).remove(UserToken);
-        Tokens.get(UserType.Employee).remove(UserToken);
-        Tokens.get(UserType.Manager).remove(UserToken);
+//        Tokens.get(UserType.Customer).remove(UserToken);
+//        Tokens.get(UserType.Employee).remove(UserToken);
+//        Tokens.get(UserType.Manager).remove(UserToken);
+        Active.remove(UserToken);
     }
 
 

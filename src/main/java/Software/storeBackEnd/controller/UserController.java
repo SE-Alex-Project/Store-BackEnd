@@ -20,7 +20,6 @@ public class UserController {
 
     /*log in json format
     {
-    "userType": {c,e,m}
     "email":user email,
     "password": user hashed password
     }
@@ -30,20 +29,14 @@ public class UserController {
     public String logIn(@RequestBody JSONObject logInJson) throws SQLException {
         String password = (String) logInJson.get("password");
         password = password.hashCode() + "";
-        UserType userType = null;
-        boolean exist = switch (logInJson.getAsString("userType")) {
-            case "c" -> {
-                userType = UserType.Customer;
-                yield  Authentication.isCustomer(logInJson.getAsString("email"), password);
-            }
-            case "e" -> {
-                userType = UserType.Employee;
-                yield Authentication.isEmployee(logInJson.getAsString("email"), password);
-            }
+        UserType userType = Authentication.getUserType(logInJson.getAsString("email"));
+        boolean exist = switch (userType) {
+            case Customer -> Authentication.isCustomer(logInJson.getAsString("email"), password);
+            case Employee -> Authentication.isEmployee(logInJson.getAsString("email"), password);
             default -> false;
         };
         if (exist)
-            return tokenManager.generateToken(userType,logInJson.getAsString("email"));
+            return tokenManager.generateToken(logInJson.getAsString("email"));
         return "Can't do this operation.";
     }
 
@@ -69,7 +62,7 @@ public class UserController {
                     (String) signUpJson.get("lastName"), password);
             //update cart
             userDataBase.updateCart((String) signUpJson.get("email"), id);
-            return tokenManager.generateToken(UserType.Customer,signUpJson.getAsString("email"));
+            return tokenManager.generateToken(signUpJson.getAsString("email"));
         }
         return "Email is signed up before !!!";
     }
@@ -95,7 +88,7 @@ public class UserController {
     @SuppressWarnings("rawtypes")
     @PostMapping("/modifyInfo")
     public String modifyInfo(@RequestBody JSONObject modifyJson) {
-        String userEmail = tokenManager.getUser(UserType.Customer,modifyJson.getAsString("id"));
+        String userEmail = tokenManager.getUser(modifyJson.getAsString("id"));
         if (userEmail == null)
             return "Invalid Operation Log In Again";
         userDataBase.modifyUserinfo(userEmail, (LinkedHashMap) modifyJson.get("data"));
@@ -108,7 +101,7 @@ public class UserController {
      */
     @GetMapping("/info")
     public JSONObject userInfo(@RequestBody String userToken) {
-        String userEmail = tokenManager.getUser(UserType.Customer,userToken);
+        String userEmail = tokenManager.getUser(userToken);
         if (userEmail == null)
             return null;
         return userDataBase.getUserInfo(userEmail);
