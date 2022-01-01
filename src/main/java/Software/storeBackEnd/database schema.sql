@@ -5,7 +5,7 @@ use storeDB;
 CREATE TABLE Cart(
 	cartId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     userEmail VARCHAR(30),
-    buyDate DATE
+    buyDate DATETIME
 );
 
 CREATE TABLE Customer(
@@ -43,7 +43,7 @@ CREATE TABLE Product(
     descripe VARCHAR(300) NOT NULL,
     productName VARCHAR(45) NOT NULL,
     addedBy VARCHAR(50) NOT NULL,
-    added_date datetime DEFAULT NOW(),
+    added_date DATETIME DEFAULT NOW(),
     FOREIGN KEY(addedBy) REFERENCES Employee(email)
 );
 

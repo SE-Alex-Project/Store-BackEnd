@@ -46,7 +46,7 @@ public class CustomerDatabase {
             ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
             resultSet.next();
             int quantity = Integer.parseInt(resultSet.getString("quantity"));
-            if (q >= quantity) {
+            if (q <= quantity) {
                 q = quantity - q;
                 p.setQuantity(q);
             } else {

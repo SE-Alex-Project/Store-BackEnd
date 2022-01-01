@@ -4,7 +4,6 @@ import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.EmployeeDatabase;
 import Software.storeBackEnd.entities.Employee;
-import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,7 @@ import java.sql.SQLException;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/Manager")
+@RequestMapping("/manager")
 public class ManagerController {
 
     EmployeeDatabase employeeDatabase = new EmployeeDatabase();
@@ -27,16 +26,16 @@ public class ManagerController {
     }*/
     @PostMapping("/addEmployee")
     public String addEmployee(@RequestBody JSONObject employee) throws SQLException {
-        UserType user = Authentication.getUserType(tokenManager.getUser(employee.getAsString("token")));
-        if (user == UserType.Manager){
+        //UserType user = Authentication.getUserType(tokenManager.getUser(employee.getAsString("token")));
+        //if (user == UserType.Manager){
             if (!Authentication.isEmployeeEmail(employee.getAsString("email"))) {
                 Employee E = new Employee(employee);
                 employeeDatabase.insertEmployee(E);
                 return "OK";
             }
             return "This Email Have an Account!!!";
-        }
-        return "Invalid Owner Access";
+        //}
+//        return "Invalid Owner Access";
     }
 
 

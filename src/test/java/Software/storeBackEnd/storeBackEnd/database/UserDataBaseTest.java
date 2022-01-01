@@ -17,9 +17,9 @@ class UserDataBaseTest {
     @Test
     void existUser() throws SQLException {
         UserDatabase ud = new UserDatabase();
-        ud.insertUser("test@test.com","ftest","ltest","pass");
-        ud.insertUser("test2@test.com","ftest2","ltest","pass");
-        ud.insertUser("test3@test.com","ftest3","ltest","pass");
+//        ud.insertUser("test@test.com","ftest","ltest","pass");
+//        ud.insertUser("test2@test.com","ftest2","ltest","pass");
+//        ud.insertUser("test3@test.com","ftest3","ltest","pass");
 
         assertTrue(Authentication.isCustomer("test@test.com", "pass"));
         assertTrue(Authentication.isCustomer("test2@test.com", "pass"));
@@ -30,9 +30,9 @@ class UserDataBaseTest {
     @Test
     void existEmail() throws SQLException {
         UserDatabase ud = new UserDatabase();
-        ud.insertUser("test@test.com","ftest","ltest","pass");
-        ud.insertUser("test2@test.com","ftest2","ltest","pass");
-        ud.insertUser("test3@test.com","ftest3","ltest","pass");
+//        ud.insertUser("test@test.com","ftest","ltest","pass");
+//        ud.insertUser("test2@test.com","ftest2","ltest","pass");
+//        ud.insertUser("test3@test.com","ftest3","ltest","pass");
 
         assertTrue(Authentication.isCustomerEmail("test@test.com"));
         assertTrue(Authentication.isCustomerEmail("test2@test.com"));
@@ -43,8 +43,8 @@ class UserDataBaseTest {
     @Test
     void getUserInfo() throws ParseException {
         UserDatabase ud = new UserDatabase();
-        ud.insertUser("test@test.com", "ftest", "ltest", "pass");
-        ud.insertUser("test2@test.com", "ftest2", "ltest", "pass");
+//        ud.insertUser("test@test.com", "ftest", "ltest", "pass");
+//        ud.insertUser("test2@test.com", "ftest2", "ltest", "pass");
 
         JSONObject ob1 =    (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + "ftest" + ",\"lastName\":"
                 + "ltest" + ",\"email\":" + "test@test.com" + ",\"password\":" + "pass" + "}");
