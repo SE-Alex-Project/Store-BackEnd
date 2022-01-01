@@ -65,7 +65,7 @@ public class UserController {
             int id = userDataBase.createCart();
             //create user
             userDataBase.insertUser((String) signUpJson.get("email"), (String) signUpJson.get("firstName"),
-                    (String) signUpJson.get("lastName"), password);
+                    (String) signUpJson.get("lastName"), password,id);
             //update cart
             userDataBase.updateCart((String) signUpJson.get("email"), id);
             return tokenManager.generateToken(signUpJson.getAsString("email"));
