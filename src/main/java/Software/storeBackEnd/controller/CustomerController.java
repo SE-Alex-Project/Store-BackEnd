@@ -39,6 +39,7 @@ public class CustomerController{
     @PostMapping("/addToCart")
     public void addToCart(@RequestBody JSONObject addToCartJson) throws Exception{
     	String email = tokenManager.getUser(addToCartJson.getAsString("token"));
+        assert email != null;
         String cartId = customerDataBase.getCart(email);
         String product_id = addToCartJson.getAsString("product");
         customerDataBase.addToCart(Integer.parseInt(product_id), Integer.parseInt(cartId));
