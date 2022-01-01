@@ -6,8 +6,10 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ProductDatabase {
@@ -20,8 +22,11 @@ public class ProductDatabase {
 
 
     public void addProduct(Product p) throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy) VALUES ('" + p.getCategory()
-                + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "');");
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        String d = formatter.format(date);
+        dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
+                + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','"+d+"');");
 
         ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
         s.next();
