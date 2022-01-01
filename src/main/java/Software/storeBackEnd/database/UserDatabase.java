@@ -30,7 +30,6 @@ public class UserDatabase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("false");
         return false;
     }
 

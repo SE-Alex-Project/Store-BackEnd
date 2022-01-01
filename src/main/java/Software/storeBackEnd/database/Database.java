@@ -6,6 +6,11 @@ public class Database {
 
     private Connection con;
     private static Database instance = null;
+    public static Database getInstance() {
+        if (instance == null)
+            instance = new Database();
+        return instance;
+    }
 
     private Database() {
         connect();
@@ -23,13 +28,6 @@ public class Database {
         }
     }
 
-
-
-    public static Database getInstance() {
-        if (instance == null)
-            instance = new Database();
-        return instance;
-    }
 
     public Statement getStatement() throws SQLException {
         if (con.isClosed()){

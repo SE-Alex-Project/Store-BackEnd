@@ -1,5 +1,4 @@
 package Software.storeBackEnd.controller;
-import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.UserDatabase;
 import net.minidev.json.JSONObject;
@@ -11,10 +10,10 @@ import java.util.LinkedHashMap;
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
-public class UserController /*extends Authentication */{
+public class UserController{
 
     private final UserDatabase userDataBase = new UserDatabase();
-    TokenManager userTokenManager = new TokenManager();
+    TokenManager tokenManager = TokenManager.getInstance();
 
     /*log in json format
     {
@@ -29,7 +28,7 @@ public class UserController /*extends Authentication */{
     	password = password.hashCode()+"";
         boolean exist = userDataBase.existUser((String)logInJson.get("email"), password);
         if(exist) {
-        	return userTokenManager.generateToken((String)logInJson.get("email"));
+        	return tokenManager.generateToken((String)logInJson.get("email"));
         }
         return "Can't do this operation.";
     }
@@ -56,10 +55,9 @@ public class UserController /*extends Authentication */{
         			(String)signUpJson.get("lastName"), password);
         	//update cart
         	userDataBase.updateCart((String)signUpJson.get("email"), id);
-        	return userTokenManager.generateToken((String)signUpJson.get("email"));
+        	return tokenManager.generateToken((String)signUpJson.get("email"));
         }
         return "Email is signed up before !!!";
-
     }
 
 
@@ -67,7 +65,7 @@ public class UserController /*extends Authentication */{
 
     @PostMapping("/logOut")
     public void logOut (@RequestBody String userToken){
-        userTokenManager.removeUser(userToken);
+        tokenManager.removeUser(userToken);
     }
 
 
@@ -85,7 +83,7 @@ public class UserController /*extends Authentication */{
     @SuppressWarnings("rawtypes")
 	@PostMapping("/modifyInfo")
     public String modifyInfo(@RequestBody JSONObject modifyJson){
-        String userEmail = userTokenManager.getUser(modifyJson.getAsString("id"));
+        String userEmail = tokenManager.getUser(modifyJson.getAsString("id"));
         if (userEmail == null)
             return "Invalid Operation Log In Again";
         userDataBase.modifyUserinfo(userEmail, (LinkedHashMap) modifyJson.get("data"));
@@ -99,10 +97,9 @@ public class UserController /*extends Authentication */{
      */
     @GetMapping("/info")
     public JSONObject userInfo(@RequestBody String userToken){
-        String userEmail = userTokenManager.getUser(userToken);
+        String userEmail = tokenManager.getUser(userToken);
         if (userEmail == null)
             return null;
-            //return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"email:\"Invalid Operation Log In Again}");
         return userDataBase.getUserInfo(userEmail);
     }
 

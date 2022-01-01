@@ -1,14 +1,27 @@
 package Software.storeBackEnd.authentication;
 
+
+import Software.storeBackEnd.database.Database;
+
 import java.util.HashMap;
 import java.util.UUID;
 
 public class TokenManager {
-    //user Token ---> user Email and token validation
-    HashMap<String,UserToken> Active;
-    public TokenManager(){
+    //generated Token ---> user Email and token validation
+    private HashMap<String,UserToken> Active;
+    private static TokenManager instance = null;
+
+    public static TokenManager getInstance() {
+        if (instance == null)
+            instance = new TokenManager();
+        return instance;
+    }
+
+    private TokenManager(){
         Active = new HashMap<>();
     }
+
+
     public String getUser(String token){
         if (Active.containsKey(token)){
             UserToken user = Active.get(token);

@@ -1,8 +1,5 @@
 package Software.storeBackEnd.storeBackEnd.authentication;
 
-import Software.storeBackEnd.authentication.Authentication;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AuthenticationTest {
