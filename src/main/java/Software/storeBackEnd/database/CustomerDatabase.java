@@ -82,12 +82,20 @@ public class CustomerDatabase {
     }
 
     public void addToCart(int product_id, int cart_id) throws SQLException {
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM CartProducts WHERE productId = '" + product_id + "' AND cartId = '"+cart_id+"' ;");
+    	if(resultSet.next()) {
+    		int quantity =  Integer.parseInt(resultSet.getString("quantity"));
+    		quantity++;
+    		dataBase.getStatement().execute("UPDATE CartProducts set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
+    	}else {
         dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
+    	}
     }
 
     public String modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
+    	dataBase.getStatement().execute("DELETE FROM CartProducts WHERE productId ='"+ cart.get(0).getProduct_id() +"';");
         for (ProductQuantity p : cart) {
-            dataBase.getStatement().execute("UPDATE CartProducts set quantity = '" + p.getQuantity() + "' where cartId ='" + cart_id + "' AND productId = '" + p.getProduct_id() + "';");
+            dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','"+p.getQuantity()+"') ;");
         }
         return "Cart Updated !!!";
     }
