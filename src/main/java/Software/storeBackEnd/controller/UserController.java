@@ -30,10 +30,16 @@ public class UserController {
         String password = (String) logInJson.get("password");
         password = password.hashCode() + "";
         UserType userType = Authentication.getUserType(logInJson.getAsString("email"));
-        boolean exist = switch (userType) {
-            case Customer -> Authentication.isCustomer(logInJson.getAsString("email"), password);
-            case Employee -> Authentication.isEmployee(logInJson.getAsString("email"), password);
-            default -> false;
+        boolean exist;
+        switch (userType) {
+            case Customer :
+            	exist = Authentication.isCustomer(logInJson.getAsString("email"), password);
+            	break;
+            case Employee : 
+            	exist = Authentication.isEmployee(logInJson.getAsString("email"), password);
+            	break;
+            default : 
+            	exist =false;
         };
         if (exist)
             return tokenManager.generateToken(logInJson.getAsString("email"));
