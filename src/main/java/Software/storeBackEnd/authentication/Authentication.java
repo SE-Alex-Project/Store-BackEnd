@@ -19,7 +19,7 @@ public class Authentication {
         return resultSet.next();
     }
     public static boolean isManager(String name, String password) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Manager WHERE email = '" + name + "' AND passW = '" + password + "'");
         return resultSet.next();
     }
 
