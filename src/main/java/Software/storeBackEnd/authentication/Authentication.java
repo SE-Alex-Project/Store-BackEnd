@@ -33,4 +33,8 @@ public class Authentication {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * from Store WHERE storeId = '" + StoreID + "'");
         return resultSet.next();
     }
+
+    public static char getUserType(String email){
+        return 0;
+    }
 }
