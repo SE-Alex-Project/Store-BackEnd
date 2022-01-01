@@ -22,8 +22,8 @@ public class StoreController {
     */
 
     @PostMapping("/add")
-    public String addStore(@RequestBody JSONObject store){
-        storeDataBase.add(store.getAsString("name"),store.getAsString("location"));
+    public String addStore(@RequestBody JSONObject store) {
+        storeDataBase.add(store.getAsString("name"), store.getAsString("location"));
         return "true";
     }
 }

@@ -28,7 +28,7 @@ public class DriveUpload {
     private static final String APPLICATION_NAME = "Google Drive API";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
-    
+
 
     private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
     private static final String CREDENTIALS_FILE_PATH = "/client_secret.json";
@@ -52,7 +52,7 @@ public class DriveUpload {
         //returns an authorized Credential object.
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
-    
+
     public static Drive initDriveService() throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -60,14 +60,14 @@ public class DriveUpload {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
-    
+
     public void uploadFiles(FileToUpload[] files) throws GeneralSecurityException, IOException {
-    	// Build a new authorized API client service.
-        if (driveService == null) 
-        	driveService = initDriveService();
-        
+        // Build a new authorized API client service.
+        if (driveService == null)
+            driveService = initDriveService();
+
         String[] ids = new String[files.length];
-        
+
         int i = 0;
         for (FileToUpload fileInfo : files) {
             File fileMetadata = new File();
@@ -75,23 +75,23 @@ public class DriveUpload {
             fileMetadata.setParents(List.of(PARENT_FOLDER));
             FileContent mediaContent = new FileContent(fileInfo.content_type, fileInfo.file);
             File file = driveService.files().create(fileMetadata, mediaContent)
-                .setFields("id")
-                .execute();
-            
+                    .setFields("id")
+                    .execute();
+
             ids[i++] = file.getId();
         }
-        
+
         System.out.println(Arrays.asList(ids));
     }
-    
+
     public static void main(String... args) throws IOException, GeneralSecurityException {
-    	FileToUpload[] files = new FileToUpload[1];
-    	files[0] = new FileToUpload();
-    	files[0].file = new java.io.File("photo.png");
-    	files[0].name = "photo.png";
-    	files[0].content_type = "image/png";
-    	
-    	DriveUpload drive = new DriveUpload();
-    	drive.uploadFiles(files);
+        FileToUpload[] files = new FileToUpload[1];
+        files[0] = new FileToUpload();
+        files[0].file = new java.io.File("photo.png");
+        files[0].name = "photo.png";
+        files[0].content_type = "image/png";
+
+        DriveUpload drive = new DriveUpload();
+        drive.uploadFiles(files);
     }
 }

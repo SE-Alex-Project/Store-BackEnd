@@ -26,8 +26,8 @@ public class ProductController {
    }
     */
     @PostMapping("/add")
-    public String addProduct(@RequestBody JSONObject product){
-        Product p =new Product(product);
+    public String addProduct(@RequestBody JSONObject product) {
+        Product p = new Product(product);
         productDataBase.addProduct(p);
         return "true";
     }
@@ -36,7 +36,7 @@ public class ProductController {
     return product json object
      */
     @GetMapping("/get")
-    public JSONObject getProduct(@RequestBody String product_id){
+    public JSONObject getProduct(@RequestBody String product_id) {
         return productDataBase.getProduct(product_id);
     }
 
@@ -44,7 +44,7 @@ public class ProductController {
         {"product" : [product 1 , product 2 , product 3]}
      */
     @PostMapping("/product_list")
-    public JSONArray getProductList(@RequestBody int page){
+    public JSONArray getProductList(@RequestBody int page) {
         return productDataBase.getList(page);
     }
 
@@ -56,8 +56,8 @@ public class ProductController {
     }
      */
     @PostMapping("/product_list_category")
-    public JSONArray getCategoryList(@RequestBody JSONObject productCategory){
-        return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")),productCategory.getAsString("category"));
+    public JSONArray getCategoryList(@RequestBody JSONObject productCategory) {
+        return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category"));
     }
 
     @PostMapping("/categories")
@@ -68,13 +68,13 @@ public class ProductController {
 
 
     /*
-    * {"product_id":[id1 ,id2 ,id3,.....]}
-    * */
+     * {"product_id":[id1 ,id2 ,id3,.....]}
+     * */
     @SuppressWarnings("unchecked")
-	@DeleteMapping("/delete")
-    public void deleteProduct(@RequestBody JSONObject product_ids){
+    @DeleteMapping("/delete")
+    public void deleteProduct(@RequestBody JSONObject product_ids) {
         ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
-        for (String s : products){
+        for (String s : products) {
             productDataBase.deleteProduct(s);
         }
     }

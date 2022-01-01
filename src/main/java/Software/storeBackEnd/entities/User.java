@@ -1,7 +1,7 @@
 package Software.storeBackEnd.entities;
 
 public class User {
-    String firstname,lastname,hashedPassword,email;
+    String firstname, lastname, hashedPassword, email;
     Cart userCart;
 
     public String getFirstname() {

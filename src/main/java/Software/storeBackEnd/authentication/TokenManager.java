@@ -1,24 +1,23 @@
 package Software.storeBackEnd.authentication;
 
 
-import Software.storeBackEnd.entities.UserType;
-
 import java.util.HashMap;
 import java.util.UUID;
 
 public class TokenManager {
     //generated Token ---> user Email and token validation
-    private final HashMap<String,UserToken> Active;
+    private final HashMap<String, UserToken> Active;
 //    private final HashMap<UserType,HashMap<String,UserToken>> Tokens;
 
     private static TokenManager instance = null;
+
     public static TokenManager getInstance() {
         if (instance == null)
             instance = new TokenManager();
         return instance;
     }
 
-    private TokenManager(){
+    private TokenManager() {
 //        Tokens = new HashMap<>();
 //        Tokens.put(UserType.Customer,new HashMap<>());
 //        Tokens.put(UserType.Employee,new HashMap<>());
@@ -27,15 +26,14 @@ public class TokenManager {
     }
 
 
-    public String getUser(String token){
+    public String getUser(String token) {
 //        HashMap<String,UserToken> Active = Tokens.get(userType);
-        if (Active.containsKey(token)){
+        if (Active.containsKey(token)) {
             UserToken user = Active.get(token);
-            if (user.isValid()){
+            if (user.isValid()) {
                 user.setLastUsed();
                 return user.userEmail;
-            }
-            else
+            } else
                 Active.remove(token);
         }
         return null;
@@ -57,17 +55,20 @@ public class TokenManager {
     }
 
 
-    public static class UserToken{
+    public static class UserToken {
         String userEmail;
         long lastUsed;
-        public UserToken(String email){
+
+        public UserToken(String email) {
             userEmail = email;
             setLastUsed();
         }
-        public void setLastUsed(){
+
+        public void setLastUsed() {
             lastUsed = System.currentTimeMillis();
         }
-        public boolean isValid(){
+
+        public boolean isValid() {
             return System.currentTimeMillis() - lastUsed < (24 * 60 * 60 * 1000);
         }
     }

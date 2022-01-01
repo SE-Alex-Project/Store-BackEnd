@@ -34,7 +34,7 @@ public class Authentication {
         return resultSet.next();
     }
 
-    public static UserType getUserType(String email){
+    public static UserType getUserType(String email) {
         if (email.contains("@employee"))
             return UserType.Employee;
         else if (email.contains("@Manager"))

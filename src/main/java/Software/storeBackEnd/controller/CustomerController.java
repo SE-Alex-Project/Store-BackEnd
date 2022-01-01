@@ -1,18 +1,14 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.TokenManager;
-import Software.storeBackEnd.entities.User;
-import Software.storeBackEnd.entities.UserType;
-import net.minidev.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import org.springframework.web.bind.annotation.*;
-
 import Software.storeBackEnd.database.CustomerDatabase;
 import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
+import net.minidev.json.JSONObject;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @CrossOrigin
 @RestController

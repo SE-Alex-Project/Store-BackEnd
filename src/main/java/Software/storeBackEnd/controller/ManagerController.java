@@ -14,6 +14,7 @@ import java.sql.SQLException;
 public class ManagerController {
 
     EmployeeDatabase employeeDatabase = new EmployeeDatabase();
+
     /*{
         "email":user email
         "firstName": user first name
@@ -23,7 +24,7 @@ public class ManagerController {
     }*/
     @PostMapping("/add")
     public String addEmployee(@RequestBody JSONObject employee) throws SQLException {
-        if(!Authentication.isEmployeeEmail(employee.getAsString("email"))){
+        if (!Authentication.isEmployeeEmail(employee.getAsString("email"))) {
             Employee E = new Employee(employee);
             employeeDatabase.insertEmployee(E);
         }
