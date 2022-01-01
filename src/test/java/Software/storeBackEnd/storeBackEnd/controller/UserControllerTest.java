@@ -6,6 +6,8 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -39,7 +41,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void Log_In() throws ParseException {
+    void Log_In() throws ParseException, SQLException {
         UserController uc = new UserController();
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "        \"email\":\"testt@test.test\",\n" +
@@ -56,7 +58,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void UserInfo() throws ParseException {
+    void UserInfo() throws ParseException, SQLException {
         UserController uc = new UserController();
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "        \"email\":\"testt@test.test\",\n" +

@@ -18,18 +18,17 @@ public class UserDatabase {
         dataBase = Database.getInstance();
     }
 
-    public boolean existUser(String name, String password) {
-        final String queryCheck = "SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'";
-        ResultSet resultSet;
-        try {
-            resultSet = dataBase.getStatement().executeQuery(queryCheck);
+    public boolean isCustomer(String name, String password) throws SQLException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'");
+        if (resultSet.next())
+            return true;
+        return false;
+    }
 
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public boolean isEmployee(String name, String password) throws SQLException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
+        if (resultSet.next())
+            return true;
         return false;
     }
 
@@ -82,16 +81,16 @@ public class UserDatabase {
         }
         return null;
     }
-    
+
     public int createCart() throws SQLException {
-    	dataBase.getStatement().execute("INSERT INTO cart(userEmail) values (null);");
-    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
+        dataBase.getStatement().execute("INSERT INTO cart(userEmail) values (null);");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
         resultSet.next();
         int id = Integer.parseInt(resultSet.getString("cartID"));
         return id;
     }
-    
-    public void updateCart(String email,int id) throws SQLException {
-    	dataBase.getStatement().execute("update cart set userEmail='"+email+"' where cartId='"+id+"';");
+
+    public void updateCart(String email, int id) throws SQLException {
+        dataBase.getStatement().execute("update cart set userEmail='" + email + "' where cartId='" + id + "';");
     }
 }

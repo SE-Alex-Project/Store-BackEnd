@@ -63,7 +63,7 @@ public class CustomerController{
      */
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping("/modify")
+	@PostMapping("/modifyCart")
     public String modify(@RequestBody JSONObject modifyJson) throws Exception{
     	String email = tokenManager.getUser(modifyJson.getAsString("token"));
         String cartId = customerDataBase.getCart(email);
