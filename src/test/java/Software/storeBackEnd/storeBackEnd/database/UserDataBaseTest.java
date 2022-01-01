@@ -1,5 +1,6 @@
 package Software.storeBackEnd.storeBackEnd.database;
 
+import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.UserDatabase;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -20,23 +21,23 @@ class UserDataBaseTest {
         ud.insertUser("test2@test.com","ftest2","ltest","pass");
         ud.insertUser("test3@test.com","ftest3","ltest","pass");
 
-        assertTrue(ud.isCustomer("test@test.com", "pass"));
-        assertTrue(ud.isCustomer("test2@test.com", "pass"));
-        assertTrue(ud.isCustomer("test3@test.com", "pass"));
-        assertFalse(ud.isCustomer("tt", "rr"));
+        assertTrue(Authentication.isCustomer("test@test.com", "pass"));
+        assertTrue(Authentication.isCustomer("test2@test.com", "pass"));
+        assertTrue(Authentication.isCustomer("test3@test.com", "pass"));
+        assertFalse(Authentication.isCustomer("tt", "rr"));
     }
 
     @Test
-    void existEmail() {
+    void existEmail() throws SQLException {
         UserDatabase ud = new UserDatabase();
         ud.insertUser("test@test.com","ftest","ltest","pass");
         ud.insertUser("test2@test.com","ftest2","ltest","pass");
         ud.insertUser("test3@test.com","ftest3","ltest","pass");
 
-        assertTrue(ud.existEmail("test@test.com"));
-        assertTrue(ud.existEmail("test2@test.com"));
-        assertTrue(ud.existEmail("test3@test.com"));
-        assertFalse(ud.existEmail("tt"));
+        assertTrue(Authentication.isCustomerEmail("test@test.com"));
+        assertTrue(Authentication.isCustomerEmail("test2@test.com"));
+        assertTrue(Authentication.isCustomerEmail("test3@test.com"));
+        assertFalse(Authentication.isCustomerEmail("tt"));
     }
 
     @Test

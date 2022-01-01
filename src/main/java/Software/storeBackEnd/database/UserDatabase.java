@@ -18,37 +18,6 @@ public class UserDatabase {
         dataBase = Database.getInstance();
     }
 
-    public boolean isCustomer(String name, String password) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'");
-        if (resultSet.next())
-            return true;
-        return false;
-    }
-
-    public boolean isEmployee(String name, String password) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
-        if (resultSet.next())
-            return true;
-        return false;
-    }
-
-
-    public boolean existEmail(String email) {
-        final String queryCheck = "SELECT email from Customer WHERE email = '" + email + "';";
-        ResultSet resultSet;
-        try {
-            resultSet = dataBase.getStatement().executeQuery(queryCheck);
-
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
     public void insertUser(String email, String fName, String lName, String password) {
         final String queryCheck = "INSERT INTO Customer(email,passW,fName,lName) VALUES ('" + email
                 + "','" + password + "','" + fName + "','" + lName + "');";

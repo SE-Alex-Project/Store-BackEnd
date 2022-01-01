@@ -1,5 +1,6 @@
 package Software.storeBackEnd.controller;
 
+import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.UserDatabase;
 import net.minidev.json.JSONObject;
@@ -29,8 +30,8 @@ public class UserController {
         String password = (String) logInJson.get("password");
         password = password.hashCode() + "";
         boolean exist = switch (logInJson.getAsString("userType")) {
-            case "c" -> userDataBase.isCustomer(logInJson.getAsString("email"), password);
-            case "e" -> userDataBase.isEmployee(logInJson.getAsString("email"), password);
+            case "c" -> Authentication.isCustomer(logInJson.getAsString("email"), password);
+            case "e" -> Authentication.isEmployee(logInJson.getAsString("email"), password);
             default -> false;
         };
         if (exist)
@@ -51,7 +52,7 @@ public class UserController {
     public String signUp(@RequestBody JSONObject signUpJson) throws SQLException {
         String password = (String) signUpJson.get("password");
         password = password.hashCode() + "";
-        boolean exist = userDataBase.existEmail(signUpJson.getAsString("email"));
+        boolean exist = Authentication.isCustomerEmail(signUpJson.getAsString("email"));
         if (!exist) {
             //create cart
             int id = userDataBase.createCart();
