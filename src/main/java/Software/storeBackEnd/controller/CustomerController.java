@@ -28,7 +28,7 @@ public class CustomerController{
 	 */
 	@PostMapping("/buy")
     public String buyCart(@RequestBody String token) throws Exception {
-      String email = tokenManager.getUser(UserType.Customer,token);
+      String email = tokenManager.getUser(token);
       String cartId = customerDataBase.getCart(email);
       Cart cart = customerDataBase.getProductInCart(cartId,email);
       return customerDataBase.buyCart(cart);
@@ -42,7 +42,7 @@ public class CustomerController{
      */
     @PostMapping("/addToCart")
     public void addToCart(@RequestBody JSONObject addToCartJson) throws Exception{
-    	String email = tokenManager.getUser(UserType.Customer,addToCartJson.getAsString("token"));
+    	String email = tokenManager.getUser(addToCartJson.getAsString("token"));
         String cartId = customerDataBase.getCart(email);
         String product_id = addToCartJson.getAsString("product_id");
         customerDataBase.addToCart(Integer.parseInt(product_id), Integer.parseInt(cartId));
@@ -67,7 +67,7 @@ public class CustomerController{
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/modifyCart")
     public String modify(@RequestBody JSONObject modifyJson) throws Exception{
-    	String email = tokenManager.getUser(UserType.Customer,modifyJson.getAsString("token"));
+    	String email = tokenManager.getUser(modifyJson.getAsString("token"));
         String cartId = customerDataBase.getCart(email);
         ArrayList<LinkedHashMap> products = (ArrayList<LinkedHashMap>) modifyJson.get("products");
         ArrayList<ProductQuantity> cart = new ArrayList<>();
