@@ -10,23 +10,17 @@ public class Authentication {
 
     public static boolean isCustomer(String name, String password) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'");
-        if (resultSet.next())
-            return true;
-        return false;
+        return resultSet.next();
     }
 
     public static boolean isEmployee(String name, String password) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
-        if (resultSet.next())
-            return true;
-        return false;
+        return resultSet.next();
     }
 
 
     public static boolean isCustomerEmail(String email) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Customer WHERE email = '" + email + "';");
-        if (resultSet.next())
-            return true;
-        return false;
+        return resultSet.next();
     }
 }
