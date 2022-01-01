@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 public class Authentication {
     private final static Database dataBase = Database.getInstance();
+//    private static TokenManager customerToken = new TokenManager();
+//    private static TokenManager employeeToken = new TokenManager();
 
     public static boolean isCustomer(String name, String password) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'");
@@ -17,7 +19,6 @@ public class Authentication {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
         return resultSet.next();
     }
-
 
     public static boolean isCustomerEmail(String email) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Customer WHERE email = '" + email + "';");
@@ -30,7 +31,7 @@ public class Authentication {
     }
 
     public static boolean isStore(String StoreID) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * from Store WHERE storeId = '" + StoreID + "'");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT storeId from Store WHERE storeId = '" + StoreID + "'");
         return resultSet.next();
     }
 

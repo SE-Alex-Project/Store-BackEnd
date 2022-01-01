@@ -1,14 +1,17 @@
 package Software.storeBackEnd.authentication;
 
 
+import Software.storeBackEnd.entities.UserType;
+
 import java.util.HashMap;
 import java.util.UUID;
 
 public class TokenManager {
     //generated Token ---> user Email and token validation
-    private final HashMap<String,UserToken> Active;
-    private static TokenManager instance = null;
+//    private final HashMap<String,UserToken> Active;
+    private final HashMap<UserType,HashMap<String,UserToken>> Tokens;
 
+    private static TokenManager instance = null;
     public static TokenManager getInstance() {
         if (instance == null)
             instance = new TokenManager();
@@ -16,11 +19,15 @@ public class TokenManager {
     }
 
     private TokenManager(){
-        Active = new HashMap<>();
+        Tokens = new HashMap<>();
+        Tokens.put(UserType.Customer,new HashMap<>());
+        Tokens.put(UserType.Employee,new HashMap<>());
+        Tokens.put(UserType.Manager,new HashMap<>());
     }
 
 
-    public String getUser(String token){
+    public String getUser(UserType userType,String token){
+        HashMap<String,UserToken> Active = Tokens.get(userType);
         if (Active.containsKey(token)){
             UserToken user = Active.get(token);
             if (user.isValid()){
@@ -33,16 +40,18 @@ public class TokenManager {
         return null;
     }
 
-    public String generateToken(String email) {
+    public String generateToken(UserType userType,String email) {
         String token = UUID.randomUUID().toString().toUpperCase()
                 + " | "
                 + System.currentTimeMillis();
-        Active.put(token, new UserToken(email));
+        Tokens.get(userType).put(token, new UserToken(email));
         return token;
     }
 
     public void removeUser(String UserToken) {
-        Active.remove(UserToken);
+        Tokens.get(UserType.Customer).remove(UserToken);
+        Tokens.get(UserType.Employee).remove(UserToken);
+        Tokens.get(UserType.Manager).remove(UserToken);
     }
 
 
