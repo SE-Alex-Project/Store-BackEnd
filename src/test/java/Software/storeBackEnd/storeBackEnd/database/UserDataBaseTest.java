@@ -6,22 +6,24 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserDataBaseTest {
 
     @Test
-    void existUser() {
+    void existUser() throws SQLException {
         UserDatabase ud = new UserDatabase();
         ud.insertUser("test@test.com","ftest","ltest","pass");
         ud.insertUser("test2@test.com","ftest2","ltest","pass");
         ud.insertUser("test3@test.com","ftest3","ltest","pass");
 
-        assertTrue(ud.existUser("test@test.com", "pass"));
-        assertTrue(ud.existUser("test2@test.com", "pass"));
-        assertTrue(ud.existUser("test3@test.com", "pass"));
-        assertFalse(ud.existUser("tt", "rr"));
+        assertTrue(ud.isCustomer("test@test.com", "pass"));
+        assertTrue(ud.isCustomer("test2@test.com", "pass"));
+        assertTrue(ud.isCustomer("test3@test.com", "pass"));
+        assertFalse(ud.isCustomer("tt", "rr"));
     }
 
     @Test

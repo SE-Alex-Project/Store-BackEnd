@@ -31,6 +31,7 @@ public class UserController {
         boolean exist = switch (logInJson.getAsString("userType")) {
             case "c" -> userDataBase.isCustomer(logInJson.getAsString("email"), password);
             case "e" -> userDataBase.isEmployee(logInJson.getAsString("email"), password);
+            default -> false;
         };
         if (exist)
             return tokenManager.generateToken((String) logInJson.get("email"));
