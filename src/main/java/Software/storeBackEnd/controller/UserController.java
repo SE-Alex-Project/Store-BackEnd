@@ -38,6 +38,9 @@ public class UserController {
             case Employee : 
             	exist = Authentication.isEmployee(logInJson.getAsString("email"), password);
             	break;
+            case Manager:
+                exist = Authentication.isManager(logInJson.getAsString("email"), password);
+                break;
             default : 
             	exist = false;
         }

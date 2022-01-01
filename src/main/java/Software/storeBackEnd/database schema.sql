@@ -84,7 +84,10 @@ CREATE TABLE ProductInStore(
     FOREIGN KEY(storeId) REFERENCES Store(storeId)
 );
 
-
-
+CREATE TABLE Manager(
+    email VARCHAR(50) PRIMARY KEY NOT NULL,
+    passW VARCHAR(30) NOT NULL
+);
+INSERT INTO Manager VALUES('software@manager.com','12345');
 
 

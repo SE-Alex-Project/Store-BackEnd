@@ -18,6 +18,10 @@ public class Authentication {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
         return resultSet.next();
     }
+    public static boolean isManager(String name, String password) throws SQLException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Employee WHERE email = '" + name + "' AND passW = '" + password + "'");
+        return resultSet.next();
+    }
 
     public static boolean isCustomerEmail(String email) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Customer WHERE email = '" + email + "';");
@@ -37,7 +41,7 @@ public class Authentication {
     public static UserType getUserType(String email) {
         if (email.contains("@employee"))
             return UserType.Employee;
-        else if (email.contains("@Manager"))
+        else if (email.contains("@manager"))
             return UserType.Manager;
         else
             return UserType.Customer;
