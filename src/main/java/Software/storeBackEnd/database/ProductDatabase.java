@@ -19,20 +19,16 @@ public class ProductDatabase {
     }
 
 
-    public void addProduct(Product p) {
-        try {
-            dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName) VALUES ('" + p.getCategory()
-                    + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "');");
+    public void addProduct(Product p) throws SQLException {
+        dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy) VALUES ('" + p.getCategory()
+                + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "');");
 
-            ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
-            s.next();
-            int productId = s.getInt(1);
-            s.close();
-            addProductStores(productId, p.getStores());
-            addProductImages(productId, p.getImagesURL());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
+        s.next();
+        int productId = s.getInt(1);
+        s.close();
+        addProductStores(productId, p.getStores());
+        addProductImages(productId, p.getImagesURL());
 
     }
 

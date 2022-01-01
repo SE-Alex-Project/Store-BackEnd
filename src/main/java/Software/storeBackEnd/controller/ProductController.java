@@ -1,11 +1,13 @@
 package Software.storeBackEnd.controller;
 
+import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.ProductDatabase;
 import Software.storeBackEnd.entities.Product;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @CrossOrigin
@@ -17,6 +19,7 @@ public class ProductController {
 
     /*product json format
    {
+   "addedBy":"user email2"
    "name": "name",
    "price":"12.5",
    "category" : "product category",
@@ -26,10 +29,13 @@ public class ProductController {
    }
     */
     @PostMapping("/add")
-    public String addProduct(@RequestBody JSONObject product) {
-        Product p = new Product(product);
-        productDataBase.addProduct(p);
-        return "true";
+    public String addProduct(@RequestBody JSONObject product) throws SQLException {
+        if (Authentication.isEmployeeEmail(product.getAsString("addedBy"))){
+            Product p = new Product(product);
+            productDataBase.addProduct(p);
+            return "true";
+        }
+        return "Invalid Employee Access";
     }
 
     /*

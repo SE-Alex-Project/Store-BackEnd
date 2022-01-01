@@ -7,6 +7,8 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,7 +17,7 @@ class ProductdataBaseTest {
 
 
     @Test
-    void getProduct() throws ParseException {
+    void getProduct() throws ParseException, SQLException {
         ProductDatabase p = new ProductDatabase();
 
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"images\":[\"https:\\/\\/shop.orange.eg\\/content\\/images\\/thumbs\\/0002724_iphone-12-pro.jpeg\",\"https:\\/\\/shop.orange.eg\\/content\\/images\\/thumbs\\/0002726_iphone-12-pro.jpeg\"],\"price\":23.5,\"stores\":[\"1\",\"200\"],\"name\":\"Iphone 12 pro\",\"description\":\"Body Weight:189 g (6.67 oz)\\nDisplay Size:6.1 inches\\nDisplay type: Super Retina XDR OLED\",\"id\":1,\"category\":\"Smart Phone\"}");

@@ -39,8 +39,8 @@ public class UserController {
             	exist = Authentication.isEmployee(logInJson.getAsString("email"), password);
             	break;
             default : 
-            	exist =false;
-        };
+            	exist = false;
+        }
         if (exist)
             return tokenManager.generateToken(logInJson.getAsString("email"));
         return "Can't do this operation.";

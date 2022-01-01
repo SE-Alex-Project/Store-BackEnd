@@ -25,7 +25,7 @@ public class Authentication {
     }
 
     public static boolean isEmployeeEmail(String email) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Customer WHERE email = '" + email + "';");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Employee WHERE email = '" + email + "';");
         return resultSet.next();
     }
 

@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 public class Product {
     double price;
-    String name, category, description;
+    String name, category, description, addedBy;
     ArrayList<String> imagesURL;
     ArrayList<productStore> stores;
+
 
     private Product() {
         imagesURL = new ArrayList<>();
@@ -22,6 +23,7 @@ public class Product {
         this.setName(product.getAsString("name"));
         this.setPrice(Double.parseDouble(product.getAsString("price")));
         this.setDescription(product.getAsString("description"));
+        this.setAddedBy(product.getAsString("addedBy"));
         ArrayList<String> images = (ArrayList<String>) product.get("images");
         for (String s : images) {
             this.AddImage(s);
@@ -105,6 +107,14 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(String addedBy) {
+        this.addedBy = addedBy;
     }
 
     @Override

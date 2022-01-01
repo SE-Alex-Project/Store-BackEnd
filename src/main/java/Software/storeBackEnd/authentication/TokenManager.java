@@ -24,20 +24,22 @@ public class TokenManager {
 //        Tokens.put(UserType.Manager,new HashMap<>());
         Active = new HashMap<>();
         Thread t = new Thread(() -> {
-            while (true){
-                try {
-                    wait(24 * 60 * 60 * 1000);
-                    clear();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            synchronized (this) {
+                while (true) {
+                    try {
+                        this.wait(24 * 60 * 60 * 1000);
+                        clear();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
         t.start();
     }
 
-    private void clear(){
-        Active.forEach((token,userToken)->{
+    private void clear() {
+        Active.forEach((token, userToken) -> {
             if (!userToken.isValid())
                 Active.remove(token);
         });
