@@ -43,7 +43,7 @@ CREATE TABLE Product(
     descripe VARCHAR(300) NOT NULL,
     productName VARCHAR(45) NOT NULL,
     addedBy VARCHAR(50) NOT NULL,
-    added_date DATETIME DEFAULT NOW(),
+    added_date DATETIME NOT NULL,
     FOREIGN KEY(addedBy) REFERENCES Employee(email)
 );
 
