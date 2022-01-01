@@ -33,7 +33,7 @@ public class Product {
         }
     }
 
-    public class productStore {
+    public static class productStore {
         int StoreID, Quantity;
 
         public productStore(int storeID, int Quantity) {

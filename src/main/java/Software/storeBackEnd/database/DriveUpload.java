@@ -49,21 +49,19 @@ public class DriveUpload {
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
         //returns an authorized Credential object.
-        return credential;
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
     
     public static Drive initDriveService() throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-        return service;
     }
     
-    public String[] uploadFiles(FileToUpload[] files) throws GeneralSecurityException, IOException {
+    public void uploadFiles(FileToUpload[] files) throws GeneralSecurityException, IOException {
     	// Build a new authorized API client service.
         if (driveService == null) 
         	driveService = initDriveService();
@@ -74,7 +72,7 @@ public class DriveUpload {
         for (FileToUpload fileInfo : files) {
             File fileMetadata = new File();
             fileMetadata.setName(fileInfo.name);
-            fileMetadata.setParents(Arrays.asList(PARENT_FOLDER));
+            fileMetadata.setParents(List.of(PARENT_FOLDER));
             FileContent mediaContent = new FileContent(fileInfo.content_type, fileInfo.file);
             File file = driveService.files().create(fileMetadata, mediaContent)
                 .setFields("id")
@@ -84,7 +82,6 @@ public class DriveUpload {
         }
         
         System.out.println(Arrays.asList(ids));
-    	return ids;
     }
     
     public static void main(String... args) throws IOException, GeneralSecurityException {

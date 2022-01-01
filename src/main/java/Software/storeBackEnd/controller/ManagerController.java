@@ -1,5 +1,6 @@
 package Software.storeBackEnd.controller;
 
+import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.database.EmployeeDatabase;
 import Software.storeBackEnd.entities.Employee;
 import net.minidev.json.JSONObject;
@@ -22,7 +23,7 @@ public class ManagerController {
     }*/
     @PostMapping("/add")
     public String addEmployee(@RequestBody JSONObject employee) throws SQLException {
-        if(!employeeDatabase.isExist(employee.getAsString("email"))){
+        if(!Authentication.isEmployeeEmail(employee.getAsString("email"))){
             Employee E = new Employee(employee);
             employeeDatabase.insertEmployee(E);
         }

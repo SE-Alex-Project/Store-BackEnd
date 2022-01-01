@@ -1,14 +1,12 @@
 package Software.storeBackEnd.authentication;
 
 
-import Software.storeBackEnd.database.Database;
-
 import java.util.HashMap;
 import java.util.UUID;
 
 public class TokenManager {
     //generated Token ---> user Email and token validation
-    private HashMap<String,UserToken> Active;
+    private final HashMap<String,UserToken> Active;
     private static TokenManager instance = null;
 
     public static TokenManager getInstance() {
@@ -44,12 +42,11 @@ public class TokenManager {
     }
 
     public void removeUser(String UserToken) {
-        if (Active.containsKey(UserToken))
-            Active.remove(UserToken);
+        Active.remove(UserToken);
     }
 
 
-    public class UserToken{
+    public static class UserToken{
         String userEmail;
         long lastUsed;
         public UserToken(String email){
@@ -60,9 +57,7 @@ public class TokenManager {
             lastUsed = System.currentTimeMillis();
         }
         public boolean isValid(){
-            if (System.currentTimeMillis() - lastUsed < (24*60*60*1000))
-                return true;
-            return false;
+            return System.currentTimeMillis() - lastUsed < (24 * 60 * 60 * 1000);
         }
     }
 }

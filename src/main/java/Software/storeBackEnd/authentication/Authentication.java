@@ -23,4 +23,14 @@ public class Authentication {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Customer WHERE email = '" + email + "';");
         return resultSet.next();
     }
+
+    public static boolean isEmployeeEmail(String email) throws SQLException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT email from Customer WHERE email = '" + email + "';");
+        return resultSet.next();
+    }
+
+    public static boolean isStore(String StoreID) throws SQLException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * from Store WHERE storeId = '" + StoreID + "'");
+        return resultSet.next();
+    }
 }

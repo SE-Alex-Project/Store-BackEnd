@@ -55,8 +55,7 @@ public class UserDatabase {
         dataBase.getStatement().execute("INSERT INTO cart(userEmail) values (null);");
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
         resultSet.next();
-        int id = Integer.parseInt(resultSet.getString("cartID"));
-        return id;
+        return Integer.parseInt(resultSet.getString("cartID"));
     }
 
     public void updateCart(String email, int id) throws SQLException {
