@@ -1,8 +1,10 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.Authentication;
+import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.ProductDatabase;
 import Software.storeBackEnd.entities.Product;
+import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +18,11 @@ import java.util.ArrayList;
 public class ProductController {
 
     ProductDatabase productDataBase = new ProductDatabase();
+    TokenManager token = TokenManager.getInstance();
 
     /*product json format
    {
-   "addedBy":"user email2"
+   "addedBy":"user token"
    "name": "name",
    "price":"12.5",
    "category" : "product category",
@@ -30,12 +33,15 @@ public class ProductController {
     */
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product) throws SQLException {
-        if (Authentication.isEmployeeEmail(product.getAsString("addedBy"))){
-            Product p = new Product(product);
-            productDataBase.addProduct(p);
-            return "true";
+        UserType userType = Authentication.getUserType(token.getUser(product.getAsString("addedBy")));
+        switch (userType){
+            case Employee,Manager :{
+                Product p = new Product(product);
+                productDataBase.addProduct(p);
+                return "true";
+            }
+            default : return "Invalid Employee Access";
         }
-        return "Invalid Employee Access";
     }
 
     /*
