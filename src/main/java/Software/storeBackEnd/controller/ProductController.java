@@ -33,10 +33,12 @@ public class ProductController {
     */
     @PostMapping("/add")
     public String addProduct(@RequestBody JSONObject product) throws SQLException {
-        UserType userType = Authentication.getUserType(token.getUser(product.getAsString("addedBy")));
+        String userMail = token.getUser(product.getAsString("addedBy"));
+        UserType userType = Authentication.getUserType(userMail);
         switch (userType){
             case Employee,Manager :{
                 Product p = new Product(product);
+                p.setAddedBy(userMail);
                 productDataBase.addProduct(p);
                 return "true";
             }

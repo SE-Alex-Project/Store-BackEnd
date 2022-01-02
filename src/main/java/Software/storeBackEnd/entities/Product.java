@@ -23,7 +23,6 @@ public class Product {
         this.setName(product.getAsString("name"));
         this.setPrice(Double.parseDouble(product.getAsString("price")));
         this.setDescription(product.getAsString("description"));
-        this.setAddedBy(product.getAsString("addedBy"));
         ArrayList<String> images = (ArrayList<String>) product.get("images");
         for (String s : images) {
             this.AddImage(s);
