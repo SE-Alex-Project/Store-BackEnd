@@ -29,12 +29,11 @@ public class ProductParser {
                 resultSet.getString("categoryName") + ",\"description\":" + resultSet.getString("descripe") + "}");
     }
 
-    public static JSONArray parseProductInStore(ResultSet resultSet) throws SQLException {
+    public static JSONArray parseProductInStore(ResultSet resultSet) throws SQLException, ParseException {
         JSONArray stores = new JSONArray();
         while (resultSet.next()) {
-//            stores.add(resultSet.getString("storeId"));
-            stores.add(resultSet.getString("storeName"));
-            stores.add(resultSet.getString("quantity"));
+            stores.add(new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("storeId") + ",\"name\":"
+                    + resultSet.getString("storeName") + ",\"quantity\":" + resultSet.getString("quantity") + "}"));
         }
         resultSet.close();
         return stores;

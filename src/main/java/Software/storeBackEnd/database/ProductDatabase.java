@@ -68,8 +68,8 @@ public class ProductDatabase {
         return null;
     }
 
-    private JSONArray getProductStores(String product_id) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT storeName,quantity FROM (ProductInStore NATURAL JOIN Store) WHERE productId = '" + product_id + "'");
+    private JSONArray getProductStores(String product_id) throws SQLException, ParseException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT storeId,storeName,quantity FROM (ProductInStore NATURAL JOIN Store) WHERE productId = '" + product_id + "'");
         return ProductParser.parseProductInStore(resultSet);
     }
 

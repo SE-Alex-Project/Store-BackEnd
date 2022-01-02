@@ -52,13 +52,13 @@ public class UserDatabase {
     }
 
     public int createCart() throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO cart(userEmail) values (null);");
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
+        dataBase.getStatement().execute("INSERT INTO Cart(userEmail) values (null);");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Cart ORDER BY cartID DESC LIMIT 1;");
         resultSet.next();
         return Integer.parseInt(resultSet.getString("cartID"));
     }
 
     public void updateCart(String email, int id) throws SQLException {
-        dataBase.getStatement().execute("update cart set userEmail='" + email + "' where cartId='" + id + "';");
+        dataBase.getStatement().execute("update Cart set userEmail='" + email + "' where cartId='" + id + "';");
     }
 }
