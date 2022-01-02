@@ -42,7 +42,7 @@ public class ProductController {
     return product json object
      */
     @GetMapping("/get")
-    public JSONObject getProduct(@RequestBody String product_id) {
+    public JSONObject getProduct(@RequestParam("pId") String product_id) {
         return productDataBase.getProduct(product_id);
     }
 
