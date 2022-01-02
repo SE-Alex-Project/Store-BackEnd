@@ -1,7 +1,7 @@
 package Software.storeBackEnd.database;
 
 import Software.storeBackEnd.entities.Product;
-import Software.storeBackEnd.parser.Parser;
+import Software.storeBackEnd.parser.ProductParser;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
@@ -57,7 +57,7 @@ public class ProductDatabase {
         try {
             ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Product WHERE productId = '" + product_id + "'");
             resultSet.next();
-            JSONObject product = Parser.parseProduct(resultSet);
+            JSONObject product = ProductParser.parseProduct(resultSet);
             resultSet.close();
             product.put("stores", getProductStores(product_id));
             product.put("images", getProductImages(product_id));
@@ -69,13 +69,13 @@ public class ProductDatabase {
     }
 
     private JSONArray getProductStores(String product_id) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductInStore WHERE productId = '" + product_id + "'");
-        return Parser.parseProductInStore(resultSet);
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT storeName,quantity FROM (ProductInStore NATURAL JOIN Store) WHERE productId = '" + product_id + "'");
+        return ProductParser.parseProductInStore(resultSet);
     }
 
     private JSONArray getProductImages(String product_id) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductImage WHERE productId = '" + product_id + "'");
-        return Parser.parseProductImage(resultSet);
+        return ProductParser.parseProductImage(resultSet);
     }
 
     public JSONArray getCategories() {
@@ -113,7 +113,7 @@ public class ProductDatabase {
         try {
             resultSet = dataBase.getStatement().executeQuery(Query);
             while (resultSet.next()) {
-                product = Parser.parseProduct(resultSet);
+                product = ProductParser.parseProduct(resultSet);
                 product.put("stores", getProductStores(product.getAsString("id")));
                 product.put("images", getProductImages(product.getAsString("id")));
                 array.add(product);

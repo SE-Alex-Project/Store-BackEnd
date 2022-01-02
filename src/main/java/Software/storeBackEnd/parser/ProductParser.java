@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
-public class Parser {
+public class ProductParser {
 
     /*
      {
@@ -32,7 +32,8 @@ public class Parser {
     public static JSONArray parseProductInStore(ResultSet resultSet) throws SQLException {
         JSONArray stores = new JSONArray();
         while (resultSet.next()) {
-            stores.add(resultSet.getString("storeId"));
+//            stores.add(resultSet.getString("storeId"));
+            stores.add(resultSet.getString("storeName"));
             stores.add(resultSet.getString("quantity"));
         }
         resultSet.close();
