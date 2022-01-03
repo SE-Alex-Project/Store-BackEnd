@@ -29,7 +29,7 @@ public class UserController {
     }
      */
 
-//    @PostMapping("/logIn")
+    //    @PostMapping("/logIn")
 //    public String logIn(@RequestBody JSONObject logInJson) {
 //        try {
 //            String password = (String) logInJson.get("password");
@@ -75,7 +75,7 @@ public class UserController {
     }
      */
     @PostMapping("/signUp")
-    public String signUp(@RequestBody JSONObject signUpJson) {
+    public ResponseEntity<String> signUp(@RequestBody JSONObject signUpJson) {
         try {
             String password = (String) signUpJson.get("password");
             password = password.hashCode() + "";
@@ -89,9 +89,9 @@ public class UserController {
                     signUpJson.getAsString("lastName"), password, id);
             //update cart
             userDataBase.updateCart(signUpJson.getAsString("email"), id);
-            return tokenManager.generateToken(signUpJson.getAsString("email"));
+            return ResponseEntity.status(HttpStatus.OK).body(tokenManager.generateToken(signUpJson.getAsString("email")));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 
@@ -132,16 +132,16 @@ public class UserController {
     return json object same as signup object
      */
     @GetMapping("/info")
-    public JSONObject userInfo(@RequestBody String userToken) {
+    public ResponseEntity<?> userInfo(@RequestBody String userToken) {
         try {
             String userEmail = tokenManager.getUser(userToken);
             if (userEmail == null)
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
-            return userDataBase.getUserInfo(userEmail);
+            return ResponseEntity.status(HttpStatus.OK).body(userDataBase.getUserInfo(userEmail));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
     }
 

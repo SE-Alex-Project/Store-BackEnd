@@ -1,10 +1,10 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.database.StoreDatabase;
-import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,24 +37,24 @@ public class StoreController {
     }
 
     @PostMapping("/get_list")
-    public JSONArray getStoreList() {
+    public ResponseEntity<?> getStoreList() {
         try {
-            return storeDataBase.getList();
+            return ResponseEntity.status(HttpStatus.OK).body(storeDataBase.getList());
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
     }
 
     @PostMapping("/get")
-    public JSONObject getStore(@RequestBody String store_id) {
+    public ResponseEntity<?> getStore(@RequestBody String store_id) {
         try {
-            return storeDataBase.get(store_id);
+            return ResponseEntity.status(HttpStatus.OK).body(storeDataBase.get(store_id));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
     }
 

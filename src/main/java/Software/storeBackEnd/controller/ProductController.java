@@ -5,10 +5,10 @@ import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.ProductDatabase;
 import Software.storeBackEnd.entities.Product;
 import Software.storeBackEnd.entities.UserType;
-import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -47,7 +47,7 @@ public class ProductController {
                     productDataBase.addProduct(p);
                 }
                 default:
-                  throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Access\n");
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Access\n");
             }
         } catch (SQLException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
@@ -58,13 +58,13 @@ public class ProductController {
     return product json object
      */
     @GetMapping("/get")
-    public JSONObject getProduct(@RequestParam("pId") String product_id) {
+    public ResponseEntity<?> getProduct(@RequestParam("pId") String product_id) {
         try {
-            return productDataBase.getProduct(product_id);
+            return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getProduct(product_id));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
     }
 
@@ -72,13 +72,13 @@ public class ProductController {
         {"product" : [product 1 , product 2 , product 3]}
      */
     @PostMapping("/product_list")
-    public JSONArray getProductList(@RequestBody int page) {
+    public ResponseEntity<?> getProductList(@RequestBody int page) {
         try {
-            return productDataBase.getList(page);
+            return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getList(page));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
     }
 
@@ -90,23 +90,23 @@ public class ProductController {
     }
      */
     @PostMapping("/product_list_category")
-    public JSONArray getCategoryList(@RequestBody JSONObject productCategory) {
+    public ResponseEntity<?> getCategoryList(@RequestBody JSONObject productCategory) {
         try {
-            return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category"));
+            return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category")));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
 
     }
 
     @PostMapping("/categories")
-    public JSONArray getCategories() {
+    public ResponseEntity<?> getCategories() {
         try {
-            return productDataBase.getCategories();
+            return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getCategories());
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 
