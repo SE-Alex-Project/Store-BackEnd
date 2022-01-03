@@ -18,10 +18,6 @@ public class TokenManager {
     }
 
     private TokenManager() {
-//        Tokens = new HashMap<>();
-//        Tokens.put(UserType.Customer,new HashMap<>());
-//        Tokens.put(UserType.Employee,new HashMap<>());
-//        Tokens.put(UserType.Manager,new HashMap<>());
         Active = new HashMap<>();
         Thread t = new Thread(() -> {
             synchronized (this) {
@@ -68,9 +64,6 @@ public class TokenManager {
     }
 
     public void removeUser(String UserToken) {
-//        Tokens.get(UserType.Customer).remove(UserToken);
-//        Tokens.get(UserType.Employee).remove(UserToken);
-//        Tokens.get(UserType.Manager).remove(UserToken);
         Active.remove(UserToken);
     }
 

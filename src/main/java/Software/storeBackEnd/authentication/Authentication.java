@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class Authentication {
     private final static Database dataBase = Database.getInstance();
-    private static TokenManager tokenManager = TokenManager.getInstance();
+    private static final TokenManager tokenManager = TokenManager.getInstance();
 
     public static boolean isCustomer(String name, String password) throws SQLException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT fname from Customer WHERE email = '" + name + "' AND passW = '" + password + "'");

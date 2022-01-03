@@ -4,6 +4,7 @@ package Software.storeBackEnd.entities;
 import net.minidev.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Product {
     double price;
@@ -19,7 +20,7 @@ public class Product {
 
     public Product(JSONObject product) {
         this();
-        this.setCategory(product.getAsString("category"));
+        this.setCategory(product.getAsString("category").toLowerCase(Locale.ROOT));
         this.setName(product.getAsString("name"));
         this.setPrice(Double.parseDouble(product.getAsString("price")));
         this.setDescription(product.getAsString("description"));

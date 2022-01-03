@@ -4,15 +4,9 @@ import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
 import Software.storeBackEnd.parser.ProductParser;
 import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-
+import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import net.minidev.json.parser.ParseException;
-
-import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -30,23 +24,23 @@ public class CustomerDatabase {
 
 
     public String getCart(String email) throws SQLException {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Customer WHERE email = '" + email + "'");
-            resultSet.next();
-            return resultSet.getString("cartId");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Customer WHERE email = '" + email + "'");
+        resultSet.next();
+        return resultSet.getString("cartId");
     }
 
     public Cart getProductInCart(String cart_id, String email) throws SQLException {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductInCart WHERE cartId = '" + cart_id + "'");
-            Cart c = new Cart();
-            c.setId(Integer.parseInt(cart_id));
-            c.setEmail(email);
-            while (resultSet.next()) {
-                String productId = resultSet.getString("productId");
-                String quantity = resultSet.getString("quantity");
-                c.addProduct(Integer.parseInt(productId), Integer.parseInt(quantity));
-            }
-            resultSet.close();
-            return c;
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductInCart WHERE cartId = '" + cart_id + "'");
+        Cart c = new Cart();
+        c.setId(Integer.parseInt(cart_id));
+        c.setEmail(email);
+        while (resultSet.next()) {
+            String productId = resultSet.getString("productId");
+            String quantity = resultSet.getString("quantity");
+            c.addProduct(Integer.parseInt(productId), Integer.parseInt(quantity));
+        }
+        resultSet.close();
+        return c;
     }
 
     public ResponseEntity<String> buyCart(Cart cart) throws SQLException {
@@ -93,37 +87,33 @@ public class CustomerDatabase {
     }
 
     public void addToCart(int product_id, int cart_id) throws SQLException {
-    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInCart WHERE productId = '" + product_id + "' AND cartId = '"+cart_id+"' ;");
-    	if(resultSet.next()) {
-    		int quantity =  Integer.parseInt(resultSet.getString("quantity"));
-    		quantity++;
-    		dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
-    	}else {
-        dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
-    	}
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInCart WHERE productId = '" + product_id + "' AND cartId = '" + cart_id + "' ;");
+        if (resultSet.next()) {
+            int quantity = Integer.parseInt(resultSet.getString("quantity"));
+            quantity++;
+            dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
+        } else {
+            dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
+        }
     }
 
     public void modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
-    	dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE productId ='"+ cart.get(0).getProduct_id() +"';");
+        dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE productId ='" + cart.get(0).getProduct_id() + "';");
         for (ProductQuantity p : cart) {
-            dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','"+p.getQuantity()+"') ;");
+            dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','" + p.getQuantity() + "') ;");
         }
     }
-    
-    public JSONArray getCartInfo(Cart cart) throws SQLException,ParseException {
-    	JSONArray array = new JSONArray();
-    	int cart_id = cart.getId();
-    	ArrayList<ProductQuantity> a = cart.getProducts();
+
+    public JSONArray getCartInfo(Cart cart) throws SQLException, ParseException {
+        JSONArray array = new JSONArray();
+        int cart_id = cart.getId();
+        ArrayList<ProductQuantity> a = cart.getProducts();
         for (ProductQuantity p : a) {
-        	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT c.productId,p.price,p.productName,c.quantity FROM ( ProductInCart AS c JOIN Product AS p ON c.productId=p.productId)"
-        			+ " WHERE cartId='"+cart_id+"' AND c.productId='"+p.getProduct_id()+"';");
-        	if(resultSet.next()) {
-        		JSONObject obj = ProductParser.parseProductInCart(resultSet);
-        		array.add(obj);
-        	}	
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT c.productId,p.price,p.productName,c.quantity FROM ( ProductInCart AS c JOIN Product AS p ON c.productId=p.productId)"
+                    + " WHERE cartId='" + cart_id + "' AND c.productId='" + p.getProduct_id() + "';");
+            if (resultSet.next())
+                array.add(ProductParser.parseProductInCart(resultSet));
         }
-    	return array;
+        return array;
     }
-
-
 }

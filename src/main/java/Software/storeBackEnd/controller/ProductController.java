@@ -40,12 +40,12 @@ public class ProductController {
             String userMail = token.getUser(product.getAsString("addedBy"));
             UserType userType = Authentication.getUserType(userMail);
             product.put("addedBy", userMail);
-            if(userType == UserType.Employee || userType == UserType.Manager) {
-                    Product p = new Product(product);
-                    productDataBase.addProduct(p);
-                    return ResponseEntity.status(HttpStatus.OK).body(null);
-                }
-             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
+            if (userType == UserType.Employee || userType == UserType.Manager) {
+                Product p = new Product(product);
+                productDataBase.addProduct(p);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
@@ -114,17 +114,17 @@ public class ProductController {
     }
      */
     @SuppressWarnings("unchecked")
-	@PostMapping("/add_category")
+    @PostMapping("/add_category")
     public ResponseEntity<String> addCategories(@RequestBody JSONObject categories) {
         try {
             UserType userType = Authentication.tokenUserType(categories.getAsString("token"));
-            if(userType == UserType.Employee ||  userType == UserType.Manager) {
-                    ArrayList<String> categoryNames = (ArrayList<String>) categories.get("categories");
-                    for (String s : categoryNames)
-                        productDataBase.addCategory(s.toLowerCase(Locale.ROOT));
-                    return ResponseEntity.status(HttpStatus.OK).body(null);
-                }
-              return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
+            if (userType == UserType.Employee || userType == UserType.Manager) {
+                ArrayList<String> categoryNames = (ArrayList<String>) categories.get("categories");
+                for (String s : categoryNames)
+                    productDataBase.addCategory(s.toLowerCase(Locale.ROOT));
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
