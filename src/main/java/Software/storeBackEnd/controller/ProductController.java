@@ -53,7 +53,7 @@ public class ProductController {
     /*product json format
     {
     "id":"product_id"
-    "modifiedBy":"user token",
+    "addedBy":"user token",
     "name": "name",
     "price":"12.5",
     "category" : "product category",
@@ -65,13 +65,13 @@ public class ProductController {
      @PostMapping("/edit")
      public ResponseEntity<String> editProduct(@RequestBody JSONObject product) {
          try {
-             String userMail = token.getUser(product.getAsString("modifiedBy"));
+             String userMail = token.getUser(product.getAsString("addedBy"));
              UserType userType = Authentication.getUserType(userMail);
              product.put("addedBy", userMail);
              int product_id = Integer.parseInt(product.getAsString("id"));
              if (userType == UserType.Employee || userType == UserType.Manager) {
                  Product p = new Product(product);
-                 return productDataBase.addProduct(p);
+                 return productDataBase.editProduct(p, product_id);
              }
              return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
          } catch (SQLException e) {
