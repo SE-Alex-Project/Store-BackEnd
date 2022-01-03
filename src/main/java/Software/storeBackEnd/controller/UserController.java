@@ -115,7 +115,7 @@ public class UserController {
     /*
      * return json object same as signup object
      */
-    @GetMapping("/info")
+    @PostMapping("/info")
     public ResponseEntity<?> userInfo(@RequestBody String userToken) {
         try {
             String userEmail = tokenManager.getUser(userToken);
