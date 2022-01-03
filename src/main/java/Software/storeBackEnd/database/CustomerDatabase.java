@@ -19,26 +19,26 @@ public class CustomerDatabase {
 
 
     public String getCart(String email) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Customer WHERE email = '" + email + "'");
-        resultSet.next();
-        return resultSet.getString("cartId");
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Customer WHERE email = '" + email + "'");
+            resultSet.next();
+            return resultSet.getString("cartId");
     }
 
     public Cart getProductInCart(String cart_id, String email) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM CartProducts WHERE cartId = '" + cart_id + "'");
-        Cart c = new Cart();
-        c.setId(Integer.parseInt(cart_id));
-        c.setEmail(email);
-        while (resultSet.next()) {
-            String productId = resultSet.getString("productId");
-            String quantity = resultSet.getString("quantity");
-            c.addProduct(Integer.parseInt(productId), Integer.parseInt(quantity));
-        }
-        resultSet.close();
-        return c;
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM CartProducts WHERE cartId = '" + cart_id + "'");
+            Cart c = new Cart();
+            c.setId(Integer.parseInt(cart_id));
+            c.setEmail(email);
+            while (resultSet.next()) {
+                String productId = resultSet.getString("productId");
+                String quantity = resultSet.getString("quantity");
+                c.addProduct(Integer.parseInt(productId), Integer.parseInt(quantity));
+            }
+            resultSet.close();
+            return c;
     }
 
-    public String buyCart(Cart cart) throws Exception {
+    public String buyCart(Cart cart) throws SQLException {
         ArrayList<ProductQuantity> a = cart.getProducts();
         for (ProductQuantity p : a) {
             int id = p.getProduct_id();

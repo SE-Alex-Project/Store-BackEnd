@@ -16,18 +16,14 @@ public class StoreDatabase {
         dataBase = Database.getInstance();
     }
 
-    public void add(String name, String location) {
-        try {
-            dataBase.getStatement().execute("INSERT INTO Store(storeName,location) VALUES ('" + name
-                    + "','" + location + "');");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void add(String name, String location) throws SQLException {
+        dataBase.getStatement().execute("INSERT INTO Store(storeName,location) VALUES ('" + name
+                + "','" + location + "');");
     }
 
 
     public JSONObject get(String Store_id) throws SQLException, ParseException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Store WHERE storeId ='"+Store_id+"';");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Store WHERE storeId ='" + Store_id + "';");
         resultSet.next();
         return StoreParser.parseStore(resultSet);
     }
@@ -35,7 +31,7 @@ public class StoreDatabase {
     public JSONArray getList() throws SQLException, ParseException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Store;");
         JSONArray array = new JSONArray();
-        while (resultSet.next()){
+        while (resultSet.next()) {
             array.add(StoreParser.parseStore(resultSet));
         }
         return array;

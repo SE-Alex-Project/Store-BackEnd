@@ -5,7 +5,10 @@ import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.UserDatabase;
 import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
+import net.minidev.json.parser.ParseException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
@@ -26,27 +29,22 @@ public class UserController {
      */
 
     @PostMapping("/logIn")
-    public String logIn(@RequestBody JSONObject logInJson) throws SQLException {
-        String password = (String) logInJson.get("password");
-        password = password.hashCode() + "";
-        UserType userType = Authentication.getUserType(logInJson.getAsString("email"));
-        boolean exist;
-        switch (userType) {
-            case Customer :
-            	exist = Authentication.isCustomer(logInJson.getAsString("email"), password);
-            	break;
-            case Employee : 
-            	exist = Authentication.isEmployee(logInJson.getAsString("email"), password);
-            	break;
-            case Manager:
-                exist = Authentication.isManager(logInJson.getAsString("email"), password);
-                break;
-            default : 
-            	exist = false;
-        }
-        if (exist)
+    public String logIn(@RequestBody JSONObject logInJson) {
+        try {
+            String password = (String) logInJson.get("password");
+            password = password.hashCode() + "";
+            UserType userType = Authentication.getUserType(logInJson.getAsString("email"));
+            boolean exist = switch (userType) {
+                case Customer -> Authentication.isCustomer(logInJson.getAsString("email"), password);
+                case Employee -> Authentication.isEmployee(logInJson.getAsString("email"), password);
+                case Manager -> Authentication.isManager(logInJson.getAsString("email"), password);
+            };
+            if (!exist)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Email Haven't an Account!!!\nSign Up Instead\n");
             return tokenManager.generateToken(logInJson.getAsString("email"));
-        return "Can't do this operation.";
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        }
     }
 
 
@@ -59,21 +57,24 @@ public class UserController {
     }
      */
     @PostMapping("/signUp")
-    public String signUp(@RequestBody JSONObject signUpJson) throws SQLException {
-        String password = (String) signUpJson.get("password");
-        password = password.hashCode() + "";
-        boolean exist = Authentication.isCustomerEmail(signUpJson.getAsString("email"));
-        if (!exist) {
+    public String signUp(@RequestBody JSONObject signUpJson) {
+        try {
+            String password = (String) signUpJson.get("password");
+            password = password.hashCode() + "";
+            boolean exist = Authentication.isCustomerEmail(signUpJson.getAsString("email"));
+            if (exist)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Email Have an Account!!!\nLog In Instead");
             //create cart
             int id = userDataBase.createCart();
             //create user
-            userDataBase.insertUser((String) signUpJson.get("email"), (String) signUpJson.get("firstName"),
-                    (String) signUpJson.get("lastName"), password,id);
+            userDataBase.insertUser(signUpJson.getAsString("email"), signUpJson.getAsString("firstName"),
+                    signUpJson.getAsString("lastName"), password, id);
             //update cart
-            userDataBase.updateCart((String) signUpJson.get("email"), id);
+            userDataBase.updateCart(signUpJson.getAsString("email"), id);
             return tokenManager.generateToken(signUpJson.getAsString("email"));
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
         }
-        return "Email is signed up before !!!";
     }
 
 
@@ -96,12 +97,16 @@ public class UserController {
      */
     @SuppressWarnings("rawtypes")
     @PostMapping("/modifyInfo")
-    public String modifyInfo(@RequestBody JSONObject modifyJson) {
-        String userEmail = tokenManager.getUser(modifyJson.getAsString("id"));
-        if (userEmail == null)
-            return "Invalid Operation Log In Again";
-        userDataBase.modifyUserinfo(userEmail, (LinkedHashMap) modifyJson.get("data"));
-        return "valid";
+    public void modifyInfo(@RequestBody JSONObject modifyJson) {
+        try {
+            String userEmail = tokenManager.getUser(modifyJson.getAsString("id"));
+            if (userEmail == null)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+            userDataBase.modifyUserinfo(userEmail, (LinkedHashMap) modifyJson.get("data"));
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        }
+
     }
 
 
@@ -110,10 +115,16 @@ public class UserController {
      */
     @GetMapping("/info")
     public JSONObject userInfo(@RequestBody String userToken) {
-        String userEmail = tokenManager.getUser(userToken);
-        if (userEmail == null)
-            return null;
-        return userDataBase.getUserInfo(userEmail);
+        try {
+            String userEmail = tokenManager.getUser(userToken);
+            if (userEmail == null)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+            return userDataBase.getUserInfo(userEmail);
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+        }
     }
 
 }

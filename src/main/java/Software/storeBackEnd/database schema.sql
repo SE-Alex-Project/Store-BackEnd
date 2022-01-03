@@ -1,6 +1,6 @@
-drop SCHEMA storeDB;
-CREATE SCHEMA storeDB;
-use storeDB;
+-- drop SCHEMA storeDB;
+-- CREATE SCHEMA storeDB;
+-- use storeDB;
 
 CREATE TABLE Cart(
 	cartId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE Customer(
     lName VARCHAR(30) NOT NULL,
     passW VARCHAR(30) NOT NULL,
     cartId INT NOT NULL,
-	FOREIGN KEY(cartId) REFERENCES Cart(cartId)
+	CONSTRAINT FK_cartId FOREIGN KEY(cartId) REFERENCES Cart(cartId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 ALTER TABLE Cart ADD FOREIGN KEY(userEmail) REFERENCES Customer(email);
@@ -32,9 +32,12 @@ CREATE TABLE Employee(
     lName VARCHAR(45) NOT NULL,
     storeId INT NOT NULL,
     passW VARCHAR(30) NOT NULL,
-    FOREIGN KEY (storeId) REFERENCES Store(storeId)
+    CONSTRAINT FK_storeId FOREIGN KEY (storeId) REFERENCES Store(storeId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE Category(
+	categoryName VARCHAR(45) PRIMARY KEY NOT NULL
+);
 
 CREATE TABLE Product(
 	productId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -44,7 +47,8 @@ CREATE TABLE Product(
     productName VARCHAR(45) NOT NULL,
     addedBy VARCHAR(50) NOT NULL,
     added_date DATETIME NOT NULL,
-    FOREIGN KEY(addedBy) REFERENCES Employee(email)
+    CONSTRAINT FK_addedBy FOREIGN KEY(addedBy) REFERENCES Employee(email) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT FK_categoryName FOREIGN KEY(categoryName) REFERENCES Category(categoryName) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -53,15 +57,15 @@ CREATE TABLE CartProducts(
     productId INT NOT NULL,
     quantity INT NOT NULL,
     PRIMARY KEY (cartId,productId),
-    FOREIGN KEY(productId) REFERENCES Product(productId)
+    CONSTRAINT FK_productId FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE ProductImage(
 	productId INT NOT NULL,
     url VARCHAR(100) NOT NULL,
-    primary key (productId,url),
-    FOREIGN KEY(productId) REFERENCES Product(productId)
+    PRIMARY KEY (productId,url),
+    CONSTRAINT FK_productId FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -70,8 +74,8 @@ CREATE TABLE ProductInCart(
     cartId INT NOT NULL,
     countOfPieces INT NOT NULL,
     PRIMARY KEY(productId, cartId),
-    FOREIGN KEY(productId) REFERENCES Product(productId),
-    FOREIGN KEY(cartId) REFERENCES Cart(cartId)
+    CONSTRAINT FK_productId FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT FK_cartId FOREIGN KEY(cartId) REFERENCES Cart(cartId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -80,14 +84,15 @@ CREATE TABLE ProductInStore(
     storeId INT NOT NULL,
     quantity INT NOT NULL,
     PRIMARY KEY(productId, storeId),
-    FOREIGN KEY(productId) REFERENCES Product(productId),
-    FOREIGN KEY(storeId) REFERENCES Store(storeId)
+    CONSTRAINT FK_productId FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT FK_storeId FOREIGN KEY (storeId) REFERENCES Store(storeId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Manager(
     email VARCHAR(50) PRIMARY KEY NOT NULL,
     passW VARCHAR(30) NOT NULL
 );
-INSERT INTO Manager VALUES('software@manager.com','12345');
+
+INSERT INTO Manager VALUES('software@manager.com','-1113294952');
 
 

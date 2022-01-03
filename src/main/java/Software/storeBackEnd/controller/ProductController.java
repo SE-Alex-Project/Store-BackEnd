@@ -7,10 +7,14 @@ import Software.storeBackEnd.entities.Product;
 import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.parser.ParseException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 @CrossOrigin
 @RestController
@@ -32,17 +36,22 @@ public class ProductController {
    }
     */
     @PostMapping("/add")
-    public String addProduct(@RequestBody JSONObject product) throws SQLException {
-        String userMail = token.getUser(product.getAsString("addedBy"));
-        UserType userType = Authentication.getUserType(userMail);
-        switch (userType){
-            case Employee,Manager :{
-                Product p = new Product(product);
-                p.setAddedBy(userMail);
-                productDataBase.addProduct(p);
-                return "true";
+    public String addProduct(@RequestBody JSONObject product) {
+        try {
+            String userMail = token.getUser(product.getAsString("addedBy"));
+            UserType userType = Authentication.getUserType(userMail);
+            product.put("addedBy", userMail);
+            switch (userType) {
+                case Employee, Manager: {
+                    Product p = new Product(product);
+                    productDataBase.addProduct(p);
+                    return "true";
+                }
+                default:
+                    return "Invalid Employee Access";
             }
-            default : return "Invalid Employee Access";
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
         }
     }
 
@@ -51,7 +60,13 @@ public class ProductController {
      */
     @GetMapping("/get")
     public JSONObject getProduct(@RequestParam("pId") String product_id) {
-        return productDataBase.getProduct(product_id);
+        try {
+            return productDataBase.getProduct(product_id);
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+        }
     }
 
     /*
@@ -59,7 +74,13 @@ public class ProductController {
      */
     @PostMapping("/product_list")
     public JSONArray getProductList(@RequestBody int page) {
-        return productDataBase.getList(page);
+        try {
+            return productDataBase.getList(page);
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+        }
     }
 
 
@@ -71,13 +92,46 @@ public class ProductController {
      */
     @PostMapping("/product_list_category")
     public JSONArray getCategoryList(@RequestBody JSONObject productCategory) {
-        return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category"));
+        try {
+            return productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category"));
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error IN Parsing JsonObject\n");
+        }
+
     }
 
     @PostMapping("/categories")
     public JSONArray getCategories() {
-        return productDataBase.getCategories();
+        try {
+            return productDataBase.getCategories();
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        }
+    }
 
+    /*
+    {
+    "token":"",
+    "categories" : ["","",""]
+    }
+     */
+    @PostMapping("/add_category")
+    public void addCategories(@RequestBody JSONObject categories) {
+        try {
+            UserType userType = Authentication.tokenUserType(categories.getAsString("token"));
+            switch (userType) {
+                case Employee, Manager -> {
+                    ArrayList<String> categoryNames = (ArrayList<String>) categories.get("categories");
+                    for (String s : categoryNames) {
+                        productDataBase.addCategory(s.toLowerCase(Locale.ROOT));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+        }
     }
 
 
@@ -87,11 +141,12 @@ public class ProductController {
     @SuppressWarnings("unchecked")
     @DeleteMapping("/delete")
     public void deleteProduct(@RequestBody JSONObject product_ids) {
-        ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
-        for (String s : products) {
-            productDataBase.deleteProduct(s);
+        try {
+            ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
+            for (String s : products)
+                productDataBase.deleteProduct(s);
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
         }
     }
-
-
 }

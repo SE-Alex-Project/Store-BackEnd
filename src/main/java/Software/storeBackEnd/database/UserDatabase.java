@@ -18,9 +18,9 @@ public class UserDatabase {
         dataBase = Database.getInstance();
     }
 
-    public void insertUser(String email, String fName, String lName, String password,int id) {
+    public void insertUser(String email, String fName, String lName, String password, int id) {
         final String queryCheck = "INSERT INTO Customer(email,passW,fName,lName,cartId) VALUES ('" + email
-                + "','" + password + "','" + fName + "','" + lName +"','"+id +"');";
+                + "','" + password + "','" + fName + "','" + lName + "','" + id + "');";
         try {
             System.out.println(dataBase.getStatement().execute(queryCheck));
         } catch (SQLException e) {
@@ -30,25 +30,16 @@ public class UserDatabase {
     }
 
     @SuppressWarnings("rawtypes")
-    public void modifyUserinfo(String UserEmail, LinkedHashMap data) {
-        try {
-            dataBase.getStatement().execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("firstName") +
-                    "' ,lname = '" + data.get("lastName") + "' WHERE email = '" + UserEmail + "'");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void modifyUserinfo(String UserEmail, LinkedHashMap data) throws SQLException {
+        dataBase.getStatement().execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("firstName") +
+                "' ,lname = '" + data.get("lastName") + "' WHERE email = '" + UserEmail + "'");
     }
 
-    public JSONObject getUserInfo(String UserEmail) {
-        try {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "';");
-            resultSet.next();
-            return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fName") + ",\"lastName\":"
-                    + resultSet.getString("lName") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public JSONObject getUserInfo(String UserEmail) throws SQLException, ParseException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "';");
+        resultSet.next();
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fName") + ",\"lastName\":"
+                + resultSet.getString("lName") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
     }
 
     public int createCart() throws SQLException {

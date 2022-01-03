@@ -22,11 +22,11 @@ public class ProductDatabase {
 
 
     public void addProduct(Product p) throws SQLException {
-    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         String d = formatter.format(date);
         dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
-                + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','"+d+"');");
+                + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','" + d + "');");
 
         ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
         s.next();
@@ -53,19 +53,14 @@ public class ProductDatabase {
         }
     }
 
-    public JSONObject getProduct(String product_id) {
-        try {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Product WHERE productId = '" + product_id + "'");
-            resultSet.next();
-            JSONObject product = ProductParser.parseProduct(resultSet);
-            resultSet.close();
-            product.put("stores", getProductStores(product_id));
-            product.put("images", getProductImages(product_id));
-            return product;
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public JSONObject getProduct(String product_id) throws SQLException, ParseException {
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Product WHERE productId = '" + product_id + "'");
+        resultSet.next();
+        JSONObject product = ProductParser.parseProduct(resultSet);
+        resultSet.close();
+        product.put("stores", getProductStores(product_id));
+        product.put("images", getProductImages(product_id));
+        return product;
     }
 
     private JSONArray getProductStores(String product_id) throws SQLException, ParseException {
@@ -78,59 +73,50 @@ public class ProductDatabase {
         return ProductParser.parseProductImage(resultSet);
     }
 
-    public JSONArray getCategories() {
-        final String queryCheck = "SELECT DISTINCT categoryName FROM Product;";
+    public JSONArray getCategories() throws SQLException {
         JSONArray array = new JSONArray();
-        try {
-            ResultSet resultSet = dataBase.getStatement().executeQuery(queryCheck);
-            while (resultSet.next()) {
-                array.add(resultSet.getString("categoryName"));
-            }
-            resultSet.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Category;");
+        while (resultSet.next()) {
+            array.add(resultSet.getString("categoryName"));
         }
+        resultSet.close();
         return array;
+    }
+
+    public void addCategory(String categoryName) throws SQLException {
+        dataBase.getStatement().execute("INSERT INTO Category VALUES('" + categoryName + "');");
     }
 
 
     //select * from table order by id asc limit 50 offset 0; -- Returns rows 1-50
 
-    public JSONArray getList(int page) {
+    public JSONArray getList(int page) throws SQLException, ParseException {
         final String queryCheck = "SELECT * FROM Product limit 50 offset " + ((page - 1) * 50) + ";";
         return getProducts(queryCheck);
     }
 
-    public JSONArray getListByCategory(int page, String category) {
+    public JSONArray getListByCategory(int page, String category) throws SQLException, ParseException {
         final String queryCheck = "SELECT * FROM Product WHERE categoryName = '" + category + "' limit 50 offset " + ((page - 1) * 50) + ";";
         return getProducts(queryCheck);
     }
 
-    private JSONArray getProducts(String Query) {
+    private JSONArray getProducts(String Query) throws SQLException, ParseException {
         ResultSet resultSet;
         JSONArray array = new JSONArray();
         JSONObject product;
-        try {
-            resultSet = dataBase.getStatement().executeQuery(Query);
-            while (resultSet.next()) {
-                product = ProductParser.parseProduct(resultSet);
-                product.put("stores", getProductStores(product.getAsString("id")));
-                product.put("images", getProductImages(product.getAsString("id")));
-                array.add(product);
-            }
-            resultSet.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        resultSet = dataBase.getStatement().executeQuery(Query);
+        while (resultSet.next()) {
+            product = ProductParser.parseProduct(resultSet);
+            product.put("stores", getProductStores(product.getAsString("id")));
+            product.put("images", getProductImages(product.getAsString("id")));
+            array.add(product);
         }
+        resultSet.close();
         return array;
     }
 
-    public void deleteProduct(String product_id) {
-        try {
-            dataBase.getStatement().execute("DELETE FROM Product WHERE productId = '" + product_id + "'");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteProduct(String product_id) throws SQLException {
+        dataBase.getStatement().execute("DELETE FROM Product WHERE productId = '" + product_id + "'");
     }
 
 }
