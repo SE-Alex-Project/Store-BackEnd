@@ -28,7 +28,9 @@ public class ProductDatabase {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date(System.currentTimeMillis());
             String d = formatter.format(date);
-            dataBase.getStatement().execute("START TRANSACTION; INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
+            String query = "START TRANSACTION;";
+            dataBase.getStatement().execute(query);
+            dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
                     + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','" + d + "');");
 
             ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
@@ -40,6 +42,7 @@ public class ProductDatabase {
             dataBase.getStatement().execute("COMMIT;");
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (SQLException e) {
+            System.out.println(e.getMessage());
             dataBase.getStatement().execute("ROLLBACK;");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
