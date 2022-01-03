@@ -4,6 +4,7 @@ import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.CustomerDatabase;
 import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,37 @@ public class CustomerController{
         }
     }
 	
+	/*
+	 [
+	    {
+	        "id":"product_id",
+	        "name":"product_name",
+	        "quantity":"quantity",
+	        "price":"price"
+	    }
+	    ,
+	    {
+	        "id":"product_id",
+	        "name":"product_name",
+	        "quantity":"quantity",
+	        "price":"price"
+	    }
+	  ]
+	 */
+	@PostMapping("/getCart")
+    public ResponseEntity<?> getCart(@RequestBody String token) {
+        try {
+            String email = tokenManager.getUser(token);
+            if (email == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
+            String cartId = customerDataBase.getCart(email);
+            Cart cart = customerDataBase.getProductInCart(cartId,email);
+            JSONArray array = customerDataBase.getCartInfo(cart);
+            return ResponseEntity.status(HttpStatus.OK).body(array);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+        }
+    }
 	/*add To Cart json format
     {
     "token":token,
