@@ -10,7 +10,6 @@ import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class ProductController {
    }
     */
     @PostMapping("/add")
-    public void addProduct(@RequestBody JSONObject product) {
+    public ResponseEntity<String> addProduct(@RequestBody JSONObject product) {
         try {
             String userMail = token.getUser(product.getAsString("addedBy"));
             UserType userType = Authentication.getUserType(userMail);
@@ -45,12 +44,13 @@ public class ProductController {
                 case Employee, Manager: {
                     Product p = new Product(product);
                     productDataBase.addProduct(p);
+                    return ResponseEntity.status(HttpStatus.OK).body(null);
                 }
                 default:
-                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Access\n");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
             }
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 
@@ -117,19 +117,20 @@ public class ProductController {
     }
      */
     @PostMapping("/add_category")
-    public void addCategories(@RequestBody JSONObject categories) {
+    public ResponseEntity<String> addCategories(@RequestBody JSONObject categories) {
         try {
             UserType userType = Authentication.tokenUserType(categories.getAsString("token"));
             switch (userType) {
-                case Employee, Manager -> {
+                case Employee, Manager : {
                     ArrayList<String> categoryNames = (ArrayList<String>) categories.get("categories");
-                    for (String s : categoryNames) {
+                    for (String s : categoryNames)
                         productDataBase.addCategory(s.toLowerCase(Locale.ROOT));
-                    }
+                    return ResponseEntity.status(HttpStatus.OK).body(null);
                 }
+                default : return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
             }
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 
@@ -139,13 +140,14 @@ public class ProductController {
      * */
     @SuppressWarnings("unchecked")
     @DeleteMapping("/delete")
-    public void deleteProduct(@RequestBody JSONObject product_ids) {
+    public ResponseEntity<String> deleteProduct(@RequestBody JSONObject product_ids) {
         try {
             ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
             for (String s : products)
                 productDataBase.deleteProduct(s);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 }

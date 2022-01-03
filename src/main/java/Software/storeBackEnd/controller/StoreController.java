@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 
@@ -28,11 +27,12 @@ public class StoreController {
     */
 
     @PostMapping("/add")
-    public void addStore(@RequestBody JSONObject store) {
+    public ResponseEntity<String> addStore(@RequestBody JSONObject store) {
         try {
             storeDataBase.add(store.getAsString("name"), store.getAsString("location"));
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 

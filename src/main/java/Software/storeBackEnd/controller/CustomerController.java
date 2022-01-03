@@ -8,7 +8,6 @@ import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,16 +44,17 @@ public class CustomerController{
     }
      */
     @PostMapping("/addToCart")
-    public void addToCart(@RequestBody JSONObject addToCartJson){
+    public ResponseEntity<String> addToCart(@RequestBody JSONObject addToCartJson){
         try {
             String email = tokenManager.getUser(addToCartJson.getAsString("token"));
             if (email == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             String cartId = customerDataBase.getCart(email);
             String product_id = addToCartJson.getAsString("product");
             customerDataBase.addToCart(Integer.parseInt(product_id), Integer.parseInt(cartId));
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (SQLException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 

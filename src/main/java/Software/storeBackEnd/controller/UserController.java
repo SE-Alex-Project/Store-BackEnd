@@ -97,8 +97,9 @@ public class UserController {
 
 
     @PostMapping("/logOut")
-    public void logOut(@RequestBody String userToken) {
+    public ResponseEntity<String> logOut(@RequestBody String userToken) {
         tokenManager.removeUser(userToken);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 
@@ -115,14 +116,15 @@ public class UserController {
      */
     @SuppressWarnings("rawtypes")
     @PostMapping("/modifyInfo")
-    public void modifyInfo(@RequestBody JSONObject modifyJson) {
+    public ResponseEntity<String> modifyInfo(@RequestBody JSONObject modifyJson) {
         try {
             String userEmail = tokenManager.getUser(modifyJson.getAsString("id"));
             if (userEmail == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             userDataBase.modifyUserinfo(userEmail, (LinkedHashMap) modifyJson.get("data"));
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
 
     }

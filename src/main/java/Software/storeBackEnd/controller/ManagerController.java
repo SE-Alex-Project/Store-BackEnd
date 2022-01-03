@@ -7,8 +7,8 @@ import Software.storeBackEnd.entities.Employee;
 import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 
@@ -29,20 +29,19 @@ public class ManagerController {
         "store":"1"
     }*/
     @PostMapping("/addEmployee")
-    public void addEmployee(@RequestBody JSONObject employee) {
+    public ResponseEntity<String> addEmployee(@RequestBody JSONObject employee) {
         try {
             UserType user = Authentication.getUserType(tokenManager.getUser(employee.getAsString("token")));
-            switch (user) {
-                case Manager -> {
-                    if (Authentication.isEmployeeEmail(employee.getAsString("email")))
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Email Have an Account!!!\n");
-                    Employee E = new Employee(employee);
-                    employeeDatabase.insertEmployee(E);
-                }
-                default -> throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Owner Access\n");
+            if (user == UserType.Manager) {
+                if (Authentication.isEmployeeEmail(employee.getAsString("email")))
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This Email Have an Account!!!\n");
+                Employee E = new Employee(employee);
+                employeeDatabase.insertEmployee(E);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
             }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Owner Access\n");
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 
