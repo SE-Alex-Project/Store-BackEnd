@@ -27,7 +27,7 @@ public class CustomerDatabase {
     }
 
     public Cart getProductInCart(String cart_id, String email) throws SQLException {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM CartProducts WHERE cartId = '" + cart_id + "'");
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductInCart WHERE cartId = '" + cart_id + "'");
             Cart c = new Cart();
             c.setId(Integer.parseInt(cart_id));
             c.setEmail(email);
@@ -84,20 +84,20 @@ public class CustomerDatabase {
     }
 
     public void addToCart(int product_id, int cart_id) throws SQLException {
-    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM CartProducts WHERE productId = '" + product_id + "' AND cartId = '"+cart_id+"' ;");
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInCart WHERE productId = '" + product_id + "' AND cartId = '"+cart_id+"' ;");
     	if(resultSet.next()) {
     		int quantity =  Integer.parseInt(resultSet.getString("quantity"));
     		quantity++;
-    		dataBase.getStatement().execute("UPDATE CartProducts set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
+    		dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
     	}else {
-        dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
+        dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
     	}
     }
 
     public void modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
-    	dataBase.getStatement().execute("DELETE FROM CartProducts WHERE productId ='"+ cart.get(0).getProduct_id() +"';");
+    	dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE productId ='"+ cart.get(0).getProduct_id() +"';");
         for (ProductQuantity p : cart) {
-            dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','"+p.getQuantity()+"') ;");
+            dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','"+p.getQuantity()+"') ;");
         }
     }
 
