@@ -6,6 +6,8 @@ import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.parser.ParseException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,8 +67,10 @@ public class CustomerController{
             Cart cart = customerDataBase.getProductInCart(cartId,email);
             JSONArray array = customerDataBase.getCartInfo(cart);
             return ResponseEntity.status(HttpStatus.OK).body(array);
-        }catch (Exception e){
+        }catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+        } catch (ParseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
     }
 	/*add To Cart json format

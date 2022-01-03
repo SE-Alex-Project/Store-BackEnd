@@ -47,5 +47,11 @@ public class ProductParser {
         resultSet.close();
         return images;
     }
+    
+    public static JSONObject parseProductInCart(ResultSet resultSet) throws SQLException, ParseException {
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("productId") + ",\"name\":"
+                + resultSet.getString("productName") + ",\"price\":" + resultSet.getString("price") 
+                + ",\"quantity\":" + resultSet.getString("quantity")+"}");
+	}
 
 }

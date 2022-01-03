@@ -2,12 +2,15 @@ package Software.storeBackEnd.database;
 
 import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
+import Software.storeBackEnd.parser.ProductParser;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import net.minidev.json.parser.ParseException;
 
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
@@ -107,7 +110,7 @@ public class CustomerDatabase {
         }
     }
     
-    public JSONArray getCartInfo(Cart cart) throws Exception {
+    public JSONArray getCartInfo(Cart cart) throws SQLException,ParseException {
     	JSONArray array = new JSONArray();
     	int cart_id = cart.getId();
     	ArrayList<ProductQuantity> a = cart.getProducts();
@@ -115,9 +118,7 @@ public class CustomerDatabase {
         	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT c.productId,p.price,p.productName,c.quantity FROM ( ProductInCart AS c JOIN Product AS p ON c.productId=p.productId)"
         			+ " WHERE cartId='"+cart_id+"' AND c.productId='"+p.getProduct_id()+"';");
         	if(resultSet.next()) {
-        		JSONObject obj = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("productId") + ",\"name\":"
-                        + resultSet.getString("productName") + ",\"price\":" + resultSet.getString("price") 
-                        + ",\"quantity\":" + resultSet.getString("quantity")+"}");
+        		JSONObject obj = ProductParser.parseProductInCart(resultSet);
         		array.add(obj);
         	}	
         }
