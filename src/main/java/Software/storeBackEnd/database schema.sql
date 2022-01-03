@@ -52,16 +52,6 @@ CREATE TABLE Product(
 );
 
 
-CREATE TABLE CartProducts(
-	cartId INT NOT NULL,
-    productId INT NOT NULL,
-    quantity INT NOT NULL,
-    PRIMARY KEY (cartId,productId),
-    FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(cartId) REFERENCES Cart(cartId) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE ProductImage(
 	productId INT NOT NULL,
     url VARCHAR(100) NOT NULL,
