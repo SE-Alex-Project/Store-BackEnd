@@ -95,7 +95,6 @@ public class ProductController {
         } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }
-
     }
 
     @PostMapping("/categories")
@@ -137,12 +136,16 @@ public class ProductController {
      * */
     @SuppressWarnings("unchecked")
     @PostMapping("/delete")
-    public ResponseEntity<String> deleteProduct(@RequestBody JSONObject product_ids) {
+    public ResponseEntity<String> deleteProduct(@RequestBody JSONObject product) {
         try {
-            ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
-            for (String s : products)
-                productDataBase.deleteProduct(s);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+            UserType userType = Authentication.tokenUserType(product.getAsString("token"));
+            if (userType == UserType.Employee || userType == UserType.Manager) {
+                ArrayList<String> products = (ArrayList<String>) product.get("product_id");
+                for (String s : products)
+                    productDataBase.deleteProduct(s);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
