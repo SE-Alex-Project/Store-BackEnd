@@ -47,6 +47,7 @@ public class ProductController {
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }

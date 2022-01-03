@@ -34,7 +34,6 @@ public class ProductDatabase {
         s.close();
         addProductStores(productId, p.getStores());
         addProductImages(productId, p.getImagesURL());
-
     }
 
     private void addProductStores(int productID, ArrayList<Product.productStore> productStores) throws SQLException {

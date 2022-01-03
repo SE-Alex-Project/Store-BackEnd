@@ -24,15 +24,14 @@ public class Product {
         this.setName(product.getAsString("name"));
         this.setPrice(Double.parseDouble(product.getAsString("price")));
         this.setDescription(product.getAsString("description"));
+        this.setAddedBy(product.getAsString("addedBy"));
         ArrayList<String> images = (ArrayList<String>) product.get("images");
-        for (String s : images) {
+        for (String s : images)
             this.AddImage(s);
-        }
         ArrayList<String> stores = (ArrayList<String>) product.get("stores");
-        System.out.println(stores);
-        for (int i = 0; i < stores.size(); i += 2) {
+        for (int i = 0; i < stores.size(); i += 2)
             this.AddStore(Integer.parseInt(stores.get(i)), Integer.parseInt(stores.get(i + 1)));
-        }
+
     }
 
     public static class productStore {
