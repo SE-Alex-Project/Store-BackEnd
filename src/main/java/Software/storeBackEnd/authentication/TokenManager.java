@@ -43,7 +43,6 @@ public class TokenManager {
 
 
     public String getUser(String token) {
-//        HashMap<String,UserToken> Active = Tokens.get(userType);
         if (Active.containsKey(token)) {
             UserToken user = Active.get(token);
             if (user.isValid()) {

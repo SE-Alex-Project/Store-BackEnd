@@ -36,7 +36,7 @@ public class CustomerController {
             Cart cart = customerDataBase.getProductInCart(cartId, email);
             return customerDataBase.buyCart(cart);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class CustomerController {
             JSONArray array = customerDataBase.getCartInfo(cart);
             return ResponseEntity.status(HttpStatus.OK).body(array);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
         }

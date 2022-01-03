@@ -56,7 +56,7 @@ CREATE TABLE ProductImage(
 	productId INT NOT NULL,
     url VARCHAR(100) NOT NULL,
     PRIMARY KEY (productId,url),
-    CONSTRAINT FK_productId FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(productId) REFERENCES Product(productId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 

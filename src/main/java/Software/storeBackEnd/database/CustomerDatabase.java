@@ -72,12 +72,12 @@ public class CustomerDatabase {
     }
 
     private void updateBuyTime(int id, String date) throws SQLException {
-        dataBase.getStatement().execute("update cart set buyDate='" + date + "' where cartId='" + id + "';");
+        dataBase.getStatement().execute("update Cart set buyDate='" + date + "' where cartId='" + id + "';");
     }
 
     private int createCartByEmail(String email) throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO cart(userEmail) values ('" + email + "');");
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM cart ORDER BY cartID DESC LIMIT 1;");
+        dataBase.getStatement().execute("INSERT INTO Cart(userEmail) values ('" + email + "');");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Cart ORDER BY cartID DESC LIMIT 1;");
         resultSet.next();
         return Integer.parseInt(resultSet.getString("cartID"));
     }
