@@ -31,7 +31,7 @@ public class CustomerController{
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             String cartId = customerDataBase.getCart(email);
             Cart cart = customerDataBase.getProductInCart(cartId,email);
-            return ResponseEntity.status(HttpStatus.OK).body(customerDataBase.buyCart(cart));
+            return customerDataBase.buyCart(cart);
         }catch (SQLException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
@@ -90,7 +90,8 @@ public class CustomerController{
                         Integer.parseInt((String) ob.getOrDefault("quantity", 0)));
                 cart.add(p);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(customerDataBase.modify(Integer.parseInt(cartId), cart));
+            customerDataBase.modify(Integer.parseInt(cartId), cart);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (SQLException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }

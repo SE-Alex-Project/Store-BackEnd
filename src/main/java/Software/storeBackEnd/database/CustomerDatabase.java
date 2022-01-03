@@ -2,6 +2,8 @@ package Software.storeBackEnd.database;
 
 import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -38,7 +40,7 @@ public class CustomerDatabase {
             return c;
     }
 
-    public String buyCart(Cart cart) throws SQLException {
+    public ResponseEntity<String> buyCart(Cart cart) throws SQLException {
         ArrayList<ProductQuantity> a = cart.getProducts();
         for (ProductQuantity p : a) {
             int id = p.getProduct_id();
@@ -50,7 +52,7 @@ public class CustomerDatabase {
                 q = quantity - q;
                 p.setQuantity(q);
             } else {
-                return "Can't do this Operation because Database Updated";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated");
             }
         }
         for (ProductQuantity p : a) {
@@ -63,7 +65,7 @@ public class CustomerDatabase {
         updateBuyTime(cart.getId(), formatter.format(date));
         int newCart = createCartByEmail(cart.getEmail());
         updateCustomerCart(newCart, cart.getEmail());
-        return "Operation Done";
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     private void updateBuyTime(int id, String date) throws SQLException {
@@ -92,12 +94,11 @@ public class CustomerDatabase {
     	}
     }
 
-    public String modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
+    public void modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
     	dataBase.getStatement().execute("DELETE FROM CartProducts WHERE productId ='"+ cart.get(0).getProduct_id() +"';");
         for (ProductQuantity p : cart) {
             dataBase.getStatement().execute("INSERT INTO CartProducts(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','"+p.getQuantity()+"') ;");
         }
-        return "Cart Updated !!!";
     }
 
 

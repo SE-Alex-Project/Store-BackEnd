@@ -18,15 +18,10 @@ public class UserDatabase {
         dataBase = Database.getInstance();
     }
 
-    public void insertUser(String email, String fName, String lName, String password, int id) {
+    public void insertUser(String email, String fName, String lName, String password, int id) throws SQLException {
         final String queryCheck = "INSERT INTO Customer(email,passW,fName,lName,cartId) VALUES ('" + email
                 + "','" + password + "','" + fName + "','" + lName + "','" + id + "');";
-        try {
-            System.out.println(dataBase.getStatement().execute(queryCheck));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        dataBase.getStatement().execute(queryCheck);
     }
 
     @SuppressWarnings("rawtypes")
