@@ -46,6 +46,37 @@ public class ProductDatabase {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
+    
+    public ResponseEntity<String> editProduct(Product p,int id) throws SQLException {
+        try{
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            String d = formatter.format(date);
+            dataBase.getStatement().execute("START TRANSACTION;");
+            dataBase.getStatement().execute("UPDATE Product SET categoryName = '"+p.getCategory()+"' , price = '"+p.getPrice()+"' , descripe = '"+p.getDescription()+"' "
+            		+ ", productName = '"+p.getName()+"' , addedBy = '"+p.getAddedBy()+"' ,added_date = '"+ d +"'" + 
+            		"WHERE ProductId = '"+id+"';");
+            deleteProductStores(id);
+            deleteProductImages(id);
+            addProductStores(id, p.getStores());
+            addProductImages(id, p.getImagesURL());
+            dataBase.getStatement().execute("COMMIT;");
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            dataBase.getStatement().execute("ROLLBACK;");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+        }
+    }
+    
+    private void deleteProductStores(int productID) throws SQLException { 
+            dataBase.getStatement().execute("DELETE FROM ProductInStore WHERE ProductId = '"+productID+"';");
+    }
+
+    private void deleteProductImages(int productID) throws SQLException {
+            dataBase.getStatement().execute("DELETE FROM ProductImage WHERE ProductId = '"+productID+"';");
+
+    }
 
     private void addProductStores(int productID, ArrayList<Product.productStore> productStores) throws SQLException {
         for (Product.productStore p : productStores) {

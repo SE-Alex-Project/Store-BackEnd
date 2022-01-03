@@ -50,6 +50,36 @@ public class ProductController {
         }
     }
 
+    /*product json format
+    {
+    "id":"product_id"
+    "modifiedBy":"user token",
+    "name": "name",
+    "price":"12.5",
+    "category" : "product category",
+    "description" : "hello products",
+    "stores": ["ID:1","2","2","4"],
+    "images": ["product image 1 (main image)", "product image 2" , "product image 3"]
+    }
+     */
+     @PostMapping("/edit")
+     public ResponseEntity<String> editProduct(@RequestBody JSONObject product) {
+         try {
+             String userMail = token.getUser(product.getAsString("modifiedBy"));
+             UserType userType = Authentication.getUserType(userMail);
+             product.put("addedBy", userMail);
+             int product_id = Integer.parseInt(product.getAsString("id"));
+             if (userType == UserType.Employee || userType == UserType.Manager) {
+                 Product p = new Product(product);
+                 return productDataBase.addProduct(p);
+             }
+             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
+         } catch (SQLException e) {
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+         }
+     }
+
+     
     /*
     return product json object
      */

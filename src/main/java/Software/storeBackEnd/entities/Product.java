@@ -18,7 +18,8 @@ public class Product {
         stores = new ArrayList<>();
     }
 
-    public Product(JSONObject product) {
+    @SuppressWarnings("unchecked")
+	public Product(JSONObject product) {
         this();
         this.setCategory(product.getAsString("category").toLowerCase(Locale.ROOT));
         this.setName(product.getAsString("name"));
