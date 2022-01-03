@@ -26,7 +26,7 @@ public class UserDatabase {
 
     @SuppressWarnings("rawtypes")
     public void modifyUserinfo(String UserEmail, LinkedHashMap data) throws SQLException {
-        dataBase.getStatement().execute("UPDATE Customer SET passW = '" + data.get("password") + "' ,fname = '" + data.get("firstName") +
+        dataBase.getStatement().execute("UPDATE Customer SET fname = '" + data.get("firstName") +
                 "' ,lname = '" + data.get("lastName") + "' WHERE email = '" + UserEmail + "'");
     }
 
