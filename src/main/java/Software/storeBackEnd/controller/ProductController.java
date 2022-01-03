@@ -132,10 +132,11 @@ public class ProductController {
 
 
     /*
-     * {"product_id":[id1 ,id2 ,id3,.....]}
+     * {"token","user token"
+     * ,"product_id":[id1 ,id2 ,id3,.....]}
      * */
     @SuppressWarnings("unchecked")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<String> deleteProduct(@RequestBody JSONObject product_ids) {
         try {
             ArrayList<String> products = (ArrayList<String>) product_ids.get("product_id");
