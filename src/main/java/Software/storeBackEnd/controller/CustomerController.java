@@ -18,17 +18,6 @@ import java.util.LinkedHashMap;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController{
-
-
-    /*@GetMapping("/rse")
-    public String withResponseStatusException() {
-        try {
-            throw new RuntimeException("Error Occurred");
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HTTP Status will be NOT FOUND (CODE 404)\n");
-        }
-    }*/
-
     private final CustomerDatabase customerDataBase = new CustomerDatabase();
     TokenManager tokenManager = TokenManager.getInstance();
 
