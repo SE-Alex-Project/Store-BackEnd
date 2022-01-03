@@ -42,13 +42,11 @@ public class ProductController {
             product.put("addedBy", userMail);
             if (userType == UserType.Employee || userType == UserType.Manager) {
                 Product p = new Product(product);
-                productDataBase.addProduct(p);
-                return ResponseEntity.status(HttpStatus.OK).body(null);
+                return productDataBase.addProduct(p);
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
 

@@ -5,6 +5,8 @@ import Software.storeBackEnd.parser.ProductParser;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -21,19 +23,26 @@ public class ProductDatabase {
     }
 
 
-    public void addProduct(Product p) throws SQLException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        String d = formatter.format(date);
-        dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
-                + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','" + d + "');");
+    public ResponseEntity<String> addProduct(Product p) throws SQLException {
+        try{
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            String d = formatter.format(date);
+            dataBase.getStatement().execute("START TRANSACTION; INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
+                    + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','" + d + "');");
 
-        ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
-        s.next();
-        int productId = s.getInt(1);
-        s.close();
-        addProductStores(productId, p.getStores());
-        addProductImages(productId, p.getImagesURL());
+            ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
+            s.next();
+            int productId = s.getInt(1);
+            s.close();
+            addProductStores(productId, p.getStores());
+            addProductImages(productId, p.getImagesURL());
+            dataBase.getStatement().execute("COMMIT;");
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }catch (SQLException e) {
+            dataBase.getStatement().execute("ROLLBACK;");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+        }
     }
 
     private void addProductStores(int productID, ArrayList<Product.productStore> productStores) throws SQLException {
