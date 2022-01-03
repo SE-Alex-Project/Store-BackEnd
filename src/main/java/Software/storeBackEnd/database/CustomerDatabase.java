@@ -98,7 +98,7 @@ public class CustomerDatabase {
     }
 
     public void modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
-        dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE productId ='" + cart.get(0).getProduct_id() + "';");
+        dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE cartId ='" + cart_id + "';");
         for (ProductQuantity p : cart) {
             dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','" + p.getQuantity() + "') ;");
         }
