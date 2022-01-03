@@ -46,10 +46,9 @@ public class UserController {
                     break;
                 }
             }
-            ;
             if (!exist)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("This Email Haven't an Account!!!\nSign Up Instead\n");
+                        .body("Wrong email or Password\n");
             return ResponseEntity.status(HttpStatus.OK)
                     .body(tokenManager.generateToken(logInJson.getAsString("email")));
         } catch (SQLException e) {
@@ -65,12 +64,13 @@ public class UserController {
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody JSONObject signUpJson) {
         try {
+            //// validate email first
             String password = (String) signUpJson.get("password");
             password = password.hashCode() + "";
             boolean exist = Authentication.isCustomerEmail(signUpJson.getAsString("email"));
             if (exist)
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "This Email Have an Account!!!\nLog In Instead");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("This Email Have an Account!!!\nLog In Instead");
             // create cart
             int id = userDataBase.createCart();
             // create user
