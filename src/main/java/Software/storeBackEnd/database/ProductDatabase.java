@@ -41,15 +41,13 @@ public class ProductDatabase {
             dataBase.getStatement().execute("INSERT INTO ProductInStore VALUES ('" + productID
                     + "','" + p.getStoreID() + "','" + p.getQuantity() + "');");
         }
-
     }
 
     private void addProductImages(int productID, ArrayList<String> productImages) throws SQLException {
         System.out.println(productImages.toString());
-        for (String s : productImages) {
-            System.out.println(s);
+        for (String s : productImages)
             dataBase.getStatement().execute("INSERT INTO ProductImage VALUES ('" + productID + "','" + s + "');");
-        }
+
     }
 
     public JSONObject getProduct(String product_id) throws SQLException, ParseException {
