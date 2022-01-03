@@ -7,6 +7,7 @@ import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,8 +29,26 @@ public class UserController {
     }
      */
 
+//    @PostMapping("/logIn")
+//    public String logIn(@RequestBody JSONObject logInJson) {
+//        try {
+//            String password = (String) logInJson.get("password");
+//            password = password.hashCode() + "";
+//            UserType userType = Authentication.getUserType(logInJson.getAsString("email"));
+//            boolean exist = switch (userType) {
+//                case Customer -> Authentication.isCustomer(logInJson.getAsString("email"), password);
+//                case Employee -> Authentication.isEmployee(logInJson.getAsString("email"), password);
+//                case Manager -> Authentication.isManager(logInJson.getAsString("email"), password);
+//            };
+//            if (!exist)
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Email Haven't an Account!!!\nSign Up Instead\n");
+//            return tokenManager.generateToken(logInJson.getAsString("email"));
+//        } catch (SQLException e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+//        }
+//    }
     @PostMapping("/logIn")
-    public String logIn(@RequestBody JSONObject logInJson) {
+    public ResponseEntity<String> logIn(@RequestBody JSONObject logInJson) {
         try {
             String password = (String) logInJson.get("password");
             password = password.hashCode() + "";
@@ -40,13 +59,12 @@ public class UserController {
                 case Manager -> Authentication.isManager(logInJson.getAsString("email"), password);
             };
             if (!exist)
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Email Haven't an Account!!!\nSign Up Instead\n");
-            return tokenManager.generateToken(logInJson.getAsString("email"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This Email Haven't an Account!!!\nSign Up Instead\n");
+            return ResponseEntity.status(HttpStatus.OK).body(tokenManager.generateToken(logInJson.getAsString("email")));
         } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
-
 
     /*sign up json format
     {

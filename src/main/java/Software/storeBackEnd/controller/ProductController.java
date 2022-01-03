@@ -36,7 +36,7 @@ public class ProductController {
    }
     */
     @PostMapping("/add")
-    public String addProduct(@RequestBody JSONObject product) {
+    public void addProduct(@RequestBody JSONObject product) {
         try {
             String userMail = token.getUser(product.getAsString("addedBy"));
             UserType userType = Authentication.getUserType(userMail);
@@ -45,10 +45,9 @@ public class ProductController {
                 case Employee, Manager: {
                     Product p = new Product(product);
                     productDataBase.addProduct(p);
-                    return "true";
                 }
                 default:
-                    return "Invalid Employee Access";
+                  throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Access\n");
             }
         } catch (SQLException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");

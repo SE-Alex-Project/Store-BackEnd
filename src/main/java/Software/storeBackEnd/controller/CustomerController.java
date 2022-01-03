@@ -6,6 +6,7 @@ import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,16 +36,16 @@ public class CustomerController{
 	 * token
 	 */
 	@PostMapping("/buy")
-    public String buyCart(@RequestBody String token) {
+    public ResponseEntity<String> buyCart(@RequestBody String token) {
         try {
             String email = tokenManager.getUser(token);
             if (email == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             String cartId = customerDataBase.getCart(email);
             Cart cart = customerDataBase.getProductInCart(cartId,email);
-            return customerDataBase.buyCart(cart);
+            return ResponseEntity.status(HttpStatus.OK).body(customerDataBase.buyCart(cart));
         }catch (SQLException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 	
@@ -67,6 +68,7 @@ public class CustomerController{
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
         }
     }
+
     /*
       {
       "token": token of user   ,
@@ -86,11 +88,11 @@ public class CustomerController{
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/modifyCart")
-    public String modify(@RequestBody JSONObject modifyJson){
+    public ResponseEntity<String> modify(@RequestBody JSONObject modifyJson){
         try{
             String email = tokenManager.getUser(modifyJson.getAsString("token"));
             if (email == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             String cartId = customerDataBase.getCart(email);
             ArrayList<LinkedHashMap> products = (ArrayList<LinkedHashMap>) modifyJson.get("products");
             ArrayList<ProductQuantity> cart = new ArrayList<>();
@@ -99,9 +101,9 @@ public class CustomerController{
                         Integer.parseInt((String) ob.getOrDefault("quantity", 0)));
                 cart.add(p);
             }
-            return customerDataBase.modify(Integer.parseInt(cartId), cart);
+            return ResponseEntity.status(HttpStatus.OK).body(customerDataBase.modify(Integer.parseInt(cartId), cart));
         }catch (SQLException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
         }
     }
 }
