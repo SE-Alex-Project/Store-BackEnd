@@ -123,14 +123,14 @@ public class CustomerController {
             ArrayList<LinkedHashMap> products = (ArrayList<LinkedHashMap>) modifyJson.get("products");
             ArrayList<ProductQuantity> cart = new ArrayList<>();
             for (LinkedHashMap ob : products) {
-                ProductQuantity p = new ProductQuantity(Integer.parseInt((String) ob.getOrDefault("product", 0)),
-                        Integer.parseInt((String) ob.getOrDefault("quantity", 0)));
+                ProductQuantity p = new ProductQuantity((Integer) ob.getOrDefault("product", 0),
+                        (Integer)ob.getOrDefault("quantity", 0));
                 cart.add(p);
             }
             customerDataBase.modify(Integer.parseInt(cartId), cart);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
 }

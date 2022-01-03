@@ -28,8 +28,7 @@ public class ProductDatabase {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date(System.currentTimeMillis());
             String d = formatter.format(date);
-            String query = "START TRANSACTION;";
-            dataBase.getStatement().execute(query);
+            dataBase.getStatement().execute("START TRANSACTION;");
             dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
                     + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','" + d + "');");
 
