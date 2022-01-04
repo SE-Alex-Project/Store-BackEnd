@@ -32,8 +32,11 @@ public class CustomerController {
             String email = tokenManager.getUser(token);
             if (email == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
+            System.out.println(1);
             String cartId = customerDataBase.getCart(email);
+            System.out.println(2);
             Cart cart = customerDataBase.getProductInCart(cartId, email);
+            System.out.println(3);
             return customerDataBase.buyCart(cart);
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
@@ -81,7 +84,7 @@ public class CustomerController {
     }
      */
     @PostMapping("/addToCart")
-    public ResponseEntity<String> addToCart(@RequestBody JSONObject addToCartJson) {
+    public ResponseEntity<String> addToCart(@RequestBody JSONObject addToCartJson) {///check product quantity first in store 1
         try {
             String email = tokenManager.getUser(addToCartJson.getAsString("token"));
             if (email == null)
@@ -114,7 +117,7 @@ public class CustomerController {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @PostMapping("/modifyCart")
-    public ResponseEntity<String> modify(@RequestBody JSONObject modifyJson) {
+    public ResponseEntity<String> modify(@RequestBody JSONObject modifyJson) {///check product quantity first in store 1
         try {
             String email = tokenManager.getUser(modifyJson.getAsString("token"));
             if (email == null)
