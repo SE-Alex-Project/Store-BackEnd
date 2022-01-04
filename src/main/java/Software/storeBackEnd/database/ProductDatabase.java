@@ -130,9 +130,7 @@ public class ProductDatabase {
     //select * from table order by id asc limit 50 offset 0; -- Returns rows 1-50
 
     public JSONArray getList(int page) throws SQLException, ParseException {
-        System.out.println("s1");
         final String queryCheck = "SELECT * FROM Product limit 50 offset " + ((page - 1) * 50) + ";";
-        System.out.println("s2");
         return getProducts(queryCheck);
     }
 
@@ -145,16 +143,11 @@ public class ProductDatabase {
         ResultSet resultSet;
         JSONArray array = new JSONArray();
         JSONObject product;
-        System.out.println(1);
         resultSet = dataBase.getStatement().executeQuery(Query);
         while (resultSet.next()) {
-            System.out.println(2);
             product = ProductParser.parseProduct(resultSet);
-            System.out.println(3);
             product.put("stores", getProductStores(product.getAsString("id")));
-            System.out.println(4);
             product.put("images", getProductImages(product.getAsString("id")));
-            System.out.println(5);
             array.add(product);
         }
         resultSet.close();
