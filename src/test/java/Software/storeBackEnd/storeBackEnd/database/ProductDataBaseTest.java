@@ -37,15 +37,15 @@ class ProductdataBaseTest {
 
     }
 
-  /*  @Test
-    void getlist() throws ParseException {
+    /*@Test
+    void getlist() throws ParseException, SQLException {*/
 
-        /*
-        {"images":["https:\/\/eg.jumia.is\/unsafe\/fit-in\/150x150\/filters:fill(white)\/product\/95\/041322\/3.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/150x150\/filters:fill(white)\/product\/95\/041322\/4.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/95\/041322\/1.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/95\/041322\/5.jpg?0530"],"price":580.0,"stores":["1","2"],"name":"Standard GM014","description":"Standard Headphone Gaming ST Standard GM014","id":4,"category":"Headset"},
+
+       /* {"images":["https:\/\/eg.jumia.is\/unsafe\/fit-in\/150x150\/filters:fill(white)\/product\/95\/041322\/3.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/150x150\/filters:fill(white)\/product\/95\/041322\/4.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/95\/041322\/1.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/95\/041322\/5.jpg?0530"],"price":580.0,"stores":["1","2"],"name":"Standard GM014","description":"Standard Headphone Gaming ST Standard GM014","id":4,"category":"Headset"},
                    {"images":["https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/26\/696112\/1.jpg?3946","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/26\/696112\/2.jpg?7495","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/26\/696112\/5.jpg?7495"],"price":198.0,"stores":["1","5"],"name":"GIGAHERTZ M9RGB","description":"GIGAHERTZ 7.1 RGB USB Surround Gaming Headset With Noise Cancelling Mic - M9RGB For PC\/Laptop","id":6,"category":"Headset"}]
  {"images":["https:\/\/eg.jumia.is\/unsafe\/fit-in\/150x150\/filters:fill(white)\/product\/95\/041322\/3.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/150x150\/filters:fill(white)\/product\/95\/041322\/4.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/95\/041322\/1.jpg?0530","https:\/\/eg.jumia.is\/unsafe\/fit-in\/500x500\/filters:fill(white)\/product\/95\/041322\/5.jpg?0530"],"price":580.0,"stores":["1","2"],"name":"Standard GM014","description":"Standard Headphone Gaming ST Standard GM014","id":4,"category":"Headset"},
-
-        ProductDataBase db = new ProductDataBase();
+*/
+     /*   ProductDatabase db = new ProductDatabase();
         JSONObject ob0 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"images\":[\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/43\\/890632\\/1.jpg?8665\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/43\\/890632\\/2.jpg?8665\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/43\\/890632\\/4.jpg?8665\"],\"price\":139.99,\"stores\":[\"1\",\"2\"],\"name\":\"Aula S602\",\"description\":\"Aula S602 - Computer Gaming Headset RGB - Surround Sound - Microphone - Black\",\"id\":3,\"category\":\"Headset\"}");
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"images\":[\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/150x150\\/filters:fill(white)\\/product\\/95\\/041322\\/3.jpg?0530\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/150x150\\/filters:fill(white)\\/product\\/95\\/041322\\/4.jpg?0530\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/95\\/041322\\/1.jpg?0530\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/95\\/041322\\/5.jpg?0530\"],\"price\":580.0,\"stores\":[\"1\",\"2\"],\"name\":\"Standard GM014\",\"description\":\"Standard Headphone Gaming ST Standard GM014\",\"id\":4,\"category\":\"Headset\"}");
         JSONObject ob2 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"images\":[\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/26\\/696112\\/1.jpg?3946\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/26\\/696112\\/2.jpg?7495\",\"https:\\/\\/eg.jumia.is\\/unsafe\\/fit-in\\/500x500\\/filters:fill(white)\\/product\\/26\\/696112\\/5.jpg?7495\"],\"price\":198.0,\"stores\":[\"1\",\"5\"],\"name\":\"GIGAHERTZ M9RGB\",\"description\":\"GIGAHERTZ 7.1 RGB USB Surround Gaming Headset With Noise Cancelling Mic - M9RGB For PC\\/Laptop\",\"id\":6,\"category\":\"Headset\"}");
@@ -64,16 +64,16 @@ class ProductdataBaseTest {
 
 
         Product p0 = new Product(ob0);
-        p.addProduct(p0);
+        db.addProduct(p0);
 
         Product p1 = new Product(ob1);
-        p.addProduct(p1);
+        db.addProduct(p1);
 
         Product p2 = new Product(ob2);
-        p.addProduct(p2);
+        db.addProduct(p2);
 
         Product p3 = new Product(ob3);
-        p.addProduct(p3);
+        db.addProduct(p3);
 
         Product p4 = new Product(ob4);
         p.addProduct(p4);
@@ -129,7 +129,7 @@ class ProductdataBaseTest {
         array1.add(ob12);
         array1.add(ob13);
         array1.add(ob14);
-        assertEquals(db.getListByCategory(1,"Headset"),array1);
+        assertEquals(db.g(1,"Headset"),array1);
 
 
     }
@@ -160,6 +160,5 @@ class ProductdataBaseTest {
         p.deleteProduct("1");
         p.deleteProduct("2");
         assertEquals(p.getListByCategory(1,"Smart TV"),array1);
-    }
-*/
+    }*/
 }

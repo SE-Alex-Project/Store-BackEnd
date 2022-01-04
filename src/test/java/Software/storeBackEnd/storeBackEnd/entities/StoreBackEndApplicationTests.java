@@ -1,4 +1,4 @@
-package Software.storeBackEnd.storeBackEnd;
+package Software.storeBackEnd.storeBackEnd.entities;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
