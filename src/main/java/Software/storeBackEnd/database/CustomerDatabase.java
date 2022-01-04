@@ -4,6 +4,7 @@ import Software.storeBackEnd.entities.Cart;
 import Software.storeBackEnd.entities.ProductQuantity;
 import Software.storeBackEnd.parser.ProductParser;
 import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,8 +112,16 @@ public class CustomerDatabase {
         for (ProductQuantity p : a) {
             ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT c.productId,p.price,p.productName,c.quantity FROM ( ProductInCart AS c JOIN Product AS p ON c.productId=p.productId)"
                     + " WHERE cartId='" + cart_id + "' AND c.productId='" + p.getProduct_id() + "';");
-            if (resultSet.next())
-                array.add(ProductParser.parseProductInCart(resultSet));
+            if (resultSet.next()) {
+            	int q = 0 ;
+                JSONObject ob = ProductParser.parseProductInCart(resultSet);
+                ResultSet resultSet2= dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE storeId ='1' AND productId ='"+p.getProduct_id()+"';");
+                if (resultSet2.next()) {
+                	q = Integer.parseInt(resultSet.getString("quantity"));
+                }
+                ob.put("Product_quantity", q );
+            	array.add(ob);
+            }
         }
         return array;
     }
