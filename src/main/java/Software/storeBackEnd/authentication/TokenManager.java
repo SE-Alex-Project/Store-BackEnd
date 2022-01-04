@@ -17,7 +17,7 @@ public class TokenManager {
         return instance;
     }
 
-    private TokenManager() {
+    public TokenManager() {
         Active = new HashMap<>();
         Thread t = new Thread(() -> {
             synchronized (this) {
