@@ -25,7 +25,7 @@ public class StoreController {
     */
     @PostMapping("/add")
     public ResponseEntity<String> addStore(@RequestBody JSONObject store) {
-        try {
+        try {// validate Employee or Manager
             storeDataBase.add(store.getAsString("name"), store.getAsString("location"));
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {

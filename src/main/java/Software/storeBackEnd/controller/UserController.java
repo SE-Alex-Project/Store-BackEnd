@@ -64,7 +64,6 @@ public class UserController {
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody JSONObject signUpJson) {
         try {
-            //// validate email first
             String password = (String) signUpJson.get("password");
             password = password.hashCode() + "";
             if(Authentication.getUserType(signUpJson.getAsString("email")) != UserType.Customer) {

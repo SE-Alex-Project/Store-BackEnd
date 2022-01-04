@@ -1,6 +1,6 @@
--- drop SCHEMA storeDB;
--- CREATE SCHEMA storeDB;
--- use storeDB;
+drop SCHEMA storeDB;
+CREATE SCHEMA storeDB;
+use storeDB;
 
 CREATE TABLE Cart(
 	cartId INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
