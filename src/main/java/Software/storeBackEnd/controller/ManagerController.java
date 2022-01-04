@@ -31,7 +31,7 @@ public class ManagerController {
     @PostMapping("/addEmployee")
     public ResponseEntity<String> addEmployee(@RequestBody JSONObject employee) {
         try {
-            UserType user = Authentication.getUserType(tokenManager.getUser(employee.getAsString("token")));
+            UserType user = Authentication.tokenUserType(employee.getAsString("token"));
             if (user == UserType.Manager) {
                 if (Authentication.isEmployeeEmail(employee.getAsString("email")))
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This Email Have an Account!!!\n");
@@ -41,7 +41,7 @@ public class ManagerController {
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Owner Access\n");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
         }
     }
 

@@ -53,7 +53,7 @@ public class UserController {
                     .body(tokenManager.generateToken(logInJson.getAsString("email")));
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error While Fetch Data From DataBase\n");
+                    .body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ public class UserController {
                     .body(tokenManager.generateToken(signUpJson.getAsString("email")));
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error While Fetch Data From DataBase\n");
+                    .body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
 
@@ -107,7 +107,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error While Fetch Data From DataBase\n");
+                    .body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
 
     }
@@ -124,9 +124,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(userDataBase.getUserInfo(userEmail));
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error While Fetch Data From DataBase\n");
+                    .body("Error While Fetch Data From DataBase\n"+e.getMessage());
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
         }
     }
 
