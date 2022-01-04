@@ -67,6 +67,10 @@ public class UserController {
             //// validate email first
             String password = (String) signUpJson.get("password");
             password = password.hashCode() + "";
+            if(Authentication.getUserType(signUpJson.getAsString("email")) != UserType.Customer) {
+            	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Not an customer account.\n");
+            }
             boolean exist = Authentication.isCustomerEmail(signUpJson.getAsString("email"));
             if (exist)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
