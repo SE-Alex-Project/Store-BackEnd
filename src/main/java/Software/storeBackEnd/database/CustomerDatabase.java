@@ -56,7 +56,7 @@ public class CustomerDatabase {
                 q = quantity - q;
                 p.setQuantity(q);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated And Quantity not avalible");
             }
         }
         for (ProductQuantity p : a) {
@@ -87,7 +87,7 @@ public class CustomerDatabase {
         dataBase.getStatement().execute("update Customer set cartId = '" + id + "' where email ='" + email + "';");
     }
 
-    public String addToCart(int product_id, int cart_id) throws SQLException {
+    public ResponseEntity<String> addToCart(int product_id, int cart_id) throws SQLException {
     	
     	// get quantity
     	int q = 0 ;
@@ -102,17 +102,17 @@ public class CustomerDatabase {
             quantity++;
             if(q>=quantity) {
             	dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
-            	return "OK";
+            	 return ResponseEntity.status(HttpStatus.OK).body(null);
             }else {
-            	return "Quantity not avalible";
+            	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantity not avalible");
             }
         } else {
         	if(q>=1) {
         		dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
-        		return "OK";
+        		 return ResponseEntity.status(HttpStatus.OK).body(null);
         	}else {
-        		return "Quantity not avalible";
-        	}
+        		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantity not avalible");
+             }
         }
     }
 
@@ -127,7 +127,7 @@ public class CustomerDatabase {
                 q = quantity - q;
                 p.setQuantity(q);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated And Quantity not avalible");
             }
         }
     	dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE cartId ='" + cart_id + "';");
