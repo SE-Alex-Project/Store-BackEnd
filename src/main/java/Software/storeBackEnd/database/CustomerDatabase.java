@@ -102,14 +102,14 @@ public class CustomerDatabase {
             quantity++;
             if(q>=quantity) {
             	dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
-            	 return ResponseEntity.status(HttpStatus.OK).body(null);
+            	 return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
             }else {
             	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantity not avalible");
             }
         } else {
         	if(q>=1) {
         		dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
-        		 return ResponseEntity.status(HttpStatus.OK).body(null);
+        		 return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
         	}else {
         		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantity not avalible");
              }
@@ -131,7 +131,7 @@ public class CustomerDatabase {
         for (ProductQuantity p : cart) {
             dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','" + p.getQuantity() + "') ;");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
     }
 
     public JSONArray getCartInfo(Cart cart) throws SQLException, ParseException {
