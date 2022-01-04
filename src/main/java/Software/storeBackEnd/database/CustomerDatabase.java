@@ -116,11 +116,25 @@ public class CustomerDatabase {
         }
     }
 
-    public void modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
-        dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE cartId ='" + cart_id + "';");
+    public ResponseEntity<String> modify(int cart_id, ArrayList<ProductQuantity> cart) throws SQLException {
+        for (ProductQuantity p : cart) {
+            int id = p.getProduct_id();
+            int q = p.getQuantity();
+            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
+            resultSet.next();
+            int quantity = Integer.parseInt(resultSet.getString("quantity"));
+            if (q <= quantity) {
+                q = quantity - q;
+                p.setQuantity(q);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated");
+            }
+        }
+    	dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE cartId ='" + cart_id + "';");
         for (ProductQuantity p : cart) {
             dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','" + p.getQuantity() + "') ;");
         }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     public JSONArray getCartInfo(Cart cart) throws SQLException, ParseException {

@@ -131,8 +131,7 @@ public class CustomerController {
                         Integer.parseInt((String)ob.getOrDefault("quantity", 0)));
                 cart.add(p);
             }
-            customerDataBase.modify(Integer.parseInt(cartId), cart);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+            return customerDataBase.modify(Integer.parseInt(cartId), cart);
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
