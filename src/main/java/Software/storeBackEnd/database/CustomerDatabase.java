@@ -123,10 +123,7 @@ public class CustomerDatabase {
             ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
             resultSet.next();
             int quantity = Integer.parseInt(resultSet.getString("quantity"));
-            if (q <= quantity) {
-                q = quantity - q;
-                p.setQuantity(q);
-            } else {
+            if (q > quantity) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated And Quantity not avalible");
             }
         }
