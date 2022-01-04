@@ -69,7 +69,7 @@ public class CustomerDatabase {
         updateBuyTime(cart.getId(), formatter.format(date));
         int newCart = createCartByEmail(cart.getEmail());
         updateCustomerCart(newCart, cart.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
     }
 
     private void updateBuyTime(int id, String date) throws SQLException {
