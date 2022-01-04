@@ -30,11 +30,16 @@ public class UserDatabase {
                 "' ,lname = '" + data.get("lastName") + "' WHERE email = '" + UserEmail + "'");
     }
 
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     public JSONObject getUserInfo(String UserEmail) throws SQLException, ParseException {
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Customer WHERE email = '" + UserEmail + "';");
         resultSet.next();
-        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":" + resultSet.getString("fName") + ",\"lastName\":"
-                + resultSet.getString("lName") + ",\"email\":" + resultSet.getString("email") + ",\"password\":" + resultSet.getString("passW") + "}");
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":'" + resultSet.getString("fName") + "',\"lastName\":'"
+                + resultSet.getString("lName") + "',\"email\":'" + resultSet.getString("email") + "',\"password\":'" + resultSet.getString("passW") + "'}");
     }
 
     public int createCart() throws SQLException {
