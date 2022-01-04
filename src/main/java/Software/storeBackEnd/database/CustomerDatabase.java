@@ -87,14 +87,32 @@ public class CustomerDatabase {
         dataBase.getStatement().execute("update Customer set cartId = '" + id + "' where email ='" + email + "';");
     }
 
-    public void addToCart(int product_id, int cart_id) throws SQLException {
+    public String addToCart(int product_id, int cart_id) throws SQLException {
+    	
+    	// get quantity
+    	int q = 0 ;
+    	ResultSet resultSet_q = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + product_id + "' AND storeId ='1' ;");
+    	if(resultSet_q.next()) {
+    		q = Integer.parseInt(resultSet_q.getString("quantity"));
+    	}
+        
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInCart WHERE productId = '" + product_id + "' AND cartId = '" + cart_id + "' ;");
         if (resultSet.next()) {
             int quantity = Integer.parseInt(resultSet.getString("quantity"));
             quantity++;
-            dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
+            if(q>=quantity) {
+            	dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
+            	return "OK";
+            }else {
+            	return "Quantity not avalible";
+            }
         } else {
-            dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
+        	if(q>=1) {
+        		dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
+        		return "OK";
+        	}else {
+        		return "Quantity not avalible";
+        	}
         }
     }
 
@@ -117,7 +135,7 @@ public class CustomerDatabase {
                 JSONObject ob = ProductParser.parseProductInCart(resultSet);
                 ResultSet resultSet2= dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE storeId ='1' AND productId ='"+p.getProduct_id()+"';");
                 if (resultSet2.next()) {
-                	q = Integer.parseInt(resultSet.getString("quantity"));
+                	q = Integer.parseInt(resultSet2.getString("quantity"));
                 }
                 ob.put("Product_quantity", q );
             	array.add(ob);

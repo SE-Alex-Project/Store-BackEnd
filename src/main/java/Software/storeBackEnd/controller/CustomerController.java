@@ -88,7 +88,10 @@ public class CustomerController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             String cartId = customerDataBase.getCart(email);
             String product_id = addToCartJson.getAsString("product");
-            customerDataBase.addToCart(Integer.parseInt(product_id), Integer.parseInt(cartId));
+            String s = customerDataBase.addToCart(Integer.parseInt(product_id), Integer.parseInt(cartId));
+            if(!s.equalsIgnoreCase("OK")) {
+            	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(s);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
