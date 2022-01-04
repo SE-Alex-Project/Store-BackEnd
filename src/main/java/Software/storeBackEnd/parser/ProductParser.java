@@ -24,16 +24,16 @@ public class ProductParser {
      */
 
     public static JSONObject parseProduct(ResultSet resultSet) throws SQLException, ParseException {
-        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("productId") + ",\"name\":"
-                + resultSet.getString("productName") + ",\"price\":" + resultSet.getString("price") + ",\"category\":" +
-                resultSet.getString("categoryName") + ",\"description\":" + resultSet.getString("descripe") + "}");
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":'" + resultSet.getString("productId") + "',\"name\":'"
+                + resultSet.getString("productName") + "',\"price\":'" + resultSet.getString("price") + "',\"category\":'" +
+                resultSet.getString("categoryName") + "',\"description\":'" + resultSet.getString("descripe") + "'}");
     }
 
     public static JSONArray parseProductInStore(ResultSet resultSet) throws SQLException, ParseException {
         JSONArray stores = new JSONArray();
         while (resultSet.next()) {
-            stores.add(new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("storeId") + ",\"name\":"
-                    + resultSet.getString("storeName") + ",\"quantity\":" + resultSet.getString("quantity") + "}"));
+            stores.add(new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":'" + resultSet.getString("storeId") + "',\"name\":'"
+                    + resultSet.getString("storeName") + "',\"quantity\":'" + resultSet.getString("quantity") + "'}"));
         }
         resultSet.close();
         return stores;
@@ -49,9 +49,9 @@ public class ProductParser {
     }
     
     public static JSONObject parseProductInCart(ResultSet resultSet) throws SQLException, ParseException {
-        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("productId") + ",\"name\":"
-                + resultSet.getString("productName") + ",\"price\":" + resultSet.getString("price") 
-                + ",\"quantity\":" + resultSet.getString("quantity")+"}");
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":'" + resultSet.getString("productId") + "',\"name\":'"
+                + resultSet.getString("productName") + "',\"price\":'" + resultSet.getString("price")
+                + "',\"quantity\":'" + resultSet.getString("quantity")+"'}");
 	}
 
 }
