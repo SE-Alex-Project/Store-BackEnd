@@ -100,6 +100,7 @@ public class ProductController {
     @PostMapping("/product_list")
     public ResponseEntity<?> getProductList(@RequestBody int page) {
         try {
+            System.out.println("list 1");
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getList(page));
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());

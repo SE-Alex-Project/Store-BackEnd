@@ -22,9 +22,9 @@ public class Product {
 	public Product(JSONObject product) {
         this();
         this.setCategory(product.getAsString("category").toLowerCase(Locale.ROOT));
-        this.setName(product.getAsString("name"));
+        this.setName(product.getAsString("name").toLowerCase(Locale.ROOT));
         this.setPrice(Double.parseDouble(product.getAsString("price")));
-        this.setDescription(product.getAsString("description"));
+        this.setDescription(product.getAsString("description").toLowerCase(Locale.ROOT));
         this.setAddedBy(product.getAsString("addedBy"));
         ArrayList<String> images = (ArrayList<String>) product.get("images");
         for (String s : images)
