@@ -126,8 +126,9 @@ public class CustomerController {
             ArrayList<LinkedHashMap> products = (ArrayList<LinkedHashMap>) modifyJson.get("products");
             ArrayList<ProductQuantity> cart = new ArrayList<>();
             for (LinkedHashMap ob : products) {
-                ProductQuantity p = new ProductQuantity((Integer) ob.getOrDefault("product", 0),
-                        (Integer)ob.getOrDefault("quantity", 0));
+                ProductQuantity p = new ProductQuantity(
+                		Integer.parseInt((String)ob.getOrDefault("product", 0)),
+                        Integer.parseInt((String)ob.getOrDefault("quantity", 0)));
                 cart.add(p);
             }
             customerDataBase.modify(Integer.parseInt(cartId), cart);
