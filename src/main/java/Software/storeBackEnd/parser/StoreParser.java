@@ -19,7 +19,7 @@ public class StoreParser {
    }
      */
     public static JSONObject parseStore(ResultSet resultSet) throws SQLException, ParseException {
-        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":" + resultSet.getString("storeId") + ",\"name\":"
-                + resultSet.getString("storeName") + ",\"location\":" + resultSet.getString("location") + "}");
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"id\":'" + resultSet.getString("storeId") + "',\"name\":'"
+                + resultSet.getString("storeName") + "',\"location\":'" + resultSet.getString("location") + "'}");
     }
 }
