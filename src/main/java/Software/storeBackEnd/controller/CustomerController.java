@@ -32,11 +32,8 @@ public class CustomerController {
             String email = tokenManager.getUser(token);
             if (email == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
-            System.out.println(1);
             String cartId = customerDataBase.getCart(email);
-            System.out.println(2);
             Cart cart = customerDataBase.getProductInCart(cartId, email);
-            System.out.println(3);
             return customerDataBase.buyCart(cart);
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
