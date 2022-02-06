@@ -134,7 +134,7 @@ public class UserController {
     }
 
     /*
-     * return json object same as signup object
+     * return logged out As String
      */
     @PostMapping("/delete")
     public ResponseEntity<?> deleteMyAccount(@RequestBody String userToken) {
@@ -157,4 +157,31 @@ public class UserController {
                     .body("Error While Fetch Data From DataBase\n"+e.getMessage());
         } 
     }
+    
+    /*
+     * {
+     * "token":userToken
+     * "email":deleted email
+     */
+    public ResponseEntity<?> removeAccount(@RequestBody JSONObject removeJson) {
+    	try {
+	    	String userToken = removeJson.getAsString("token");
+	    	String deleted = removeJson.getAsString("email");
+	    	UserType user = Authentication.tokenUserType(userToken);
+	    	UserType d = Authentication.getUserType(deleted);
+	    	if(user == UserType.Customer) {
+	    		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "this account can't delete any account.\n");
+	    	}else if(user == UserType.Employee) {
+	    		if(d != UserType.Customer) {
+	    			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Can't delete this account\n");
+	    		}   		
+	    	}
+	    	userDataBase.deleteAccount(deleted, d);
+	    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    	} catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error While Fetch Data From DataBase\n"+e.getMessage());
+        } 
+    }
+    
 }
