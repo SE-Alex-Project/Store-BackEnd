@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
+import Software.storeBackEnd.entities.UserType;
+
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 public class UserDatabase {
@@ -51,5 +53,23 @@ public class UserDatabase {
 
     public void updateCart(String email, int id) throws SQLException {
         dataBase.getStatement().execute("update Cart set userEmail='" + email + "' where cartId='" + id + "';");
+    }
+    
+    public String deleteAccount(String email,UserType user) throws SQLException {
+    	if (user == UserType.Manager) {
+    		dataBase.getStatement().execute("DELETE Manager where email='" + email + "';");
+    	}else if (user == UserType.Employee) {
+    		dataBase.getStatement().execute("DELETE Employee where email='" + email + "';");
+    	}else if (user == UserType.Customer) {
+    		dataBase.getStatement().execute("DELETE Customer where email='" + email + "';");
+    	}
+    	return "Logged Out";
+    	
+    } 
+    
+    public int numberOfManagers() throws SQLException {
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT COUNT(*) FROM Manager");
+    	resultSet.next();
+        return Integer.parseInt(resultSet.getString("COUNT(*)"));
     }
 }

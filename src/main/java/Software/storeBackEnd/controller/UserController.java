@@ -133,4 +133,28 @@ public class UserController {
         }
     }
 
+    /*
+     * return json object same as signup object
+     */
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteMyAccount(@RequestBody String userToken) {
+        try {
+            String userEmail = tokenManager.getUser(userToken);
+            if (userEmail == null)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+            UserType user = Authentication.tokenUserType(userToken);
+            if (user == UserType.Manager) {
+                int n = userDataBase.numberOfManagers();
+                if (n == 1) {
+                	throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Can't delete last Manager\n");
+                }
+            }
+            String temp = userDataBase.deleteAccount(userEmail,user);
+            logOut(userToken);
+            return ResponseEntity.status(HttpStatus.OK).body(temp);
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error While Fetch Data From DataBase\n"+e.getMessage());
+        } 
+    }
 }
