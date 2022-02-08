@@ -104,5 +104,16 @@ public class ManagerController {
     public ResponseEntity<?> topCustomers() {
         return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
     }
+    
+    @GetMapping("/totalSales")
+    public ResponseEntity<?> totalsales(int page) {
+        try {
+			return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
+		}  catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+        }  catch (ParseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
+        }
+    }
 
 }
