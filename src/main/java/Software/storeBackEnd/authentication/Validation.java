@@ -23,7 +23,7 @@ public class Validation {
     }
 
     public static void validate_email(String email) {
-        if (email == null || email.length() < 8 || email.length() > 40 || email.contains("','") || email.contains("' '") || !email.contains("'.'") || !email.contains("'@'"))
+        if (email == null || email.length() < 8 || email.length() > 40 || email.contains(",") || email.contains(" ") || !email.contains(".") || !email.contains("@"))
             throw new RuntimeException("Invalid email format");
     }
 
