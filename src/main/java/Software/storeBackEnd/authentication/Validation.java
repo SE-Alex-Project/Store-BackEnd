@@ -28,7 +28,8 @@ public class Validation {
     }
 
     public static void validate_store(String store) {
-        if (store != "1" || store == null)
+        validate_value(store);
+        if (store == null)
             throw new RuntimeException("Invalid store");
 
     }
@@ -83,7 +84,7 @@ public class Validation {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void validate_modifyCart(JSONObject obj) {
         validate_token(obj.getAsString("token"));
-        ArrayList< LinkedHashMap > products = (ArrayList<LinkedHashMap>) obj.get("products");
+        ArrayList<LinkedHashMap> products = (ArrayList<LinkedHashMap>) obj.get("products");
         for (LinkedHashMap ob : products) {
             validate_value((String) ob.getOrDefault("product", 0));
             validate_value((String) ob.getOrDefault("quantity", 0));
@@ -131,79 +132,85 @@ public class Validation {
  }
   */
     public static void validate_product1(JSONObject product) {
-    validate_token(product.getAsString("addedBy"));
-    validate_name(product.getAsString("name"));
-    validate_price(product.getAsString("price"));
-    validate_name(product.getAsString("category"));
-    validate_name(product.getAsString("description"));
+        validate_token(product.getAsString("addedBy"));
+        validate_name(product.getAsString("name"));
+        validate_price(product.getAsString("price"));
+        validate_name(product.getAsString("category"));
+        validate_name(product.getAsString("description"));
     }
-     /*product json format
-    {
-    "id":"product_id"
-    "addedBy":"user token",
-    "name": "name",
-    "price":"12.5",
-    "category" : "product category",
-    "description" : "hello products",
-    "stores": ["ID:1","2","2","4"],
-    "images": ["product image 1 (main image)", "product image 2" , "product image 3"]
+
+    /*product json format
+   {
+   "id":"product_id"
+   "addedBy":"user token",
+   "name": "name",
+   "price":"12.5",
+   "category" : "product category",
+   "description" : "hello products",
+   "stores": ["ID:1","2","2","4"],
+   "images": ["product image 1 (main image)", "product image 2" , "product image 3"]
+   }
+    */
+    public static void validate_product2(JSONObject product) {
+        validate_value(product.getAsString("id"));
+        validate_product1(product);
     }
-     */
-     public static void validate_product2(JSONObject product) {
-         validate_value(product.getAsString("id"));
-         validate_product1(product);
-     }
-       /*
-    {
-    "page" : "1",
-    "category" : "category name"
-    }
-     */
-    public static void validate_page(JSONObject product){
+
+    /*
+ {
+ "page" : "1",
+ "category" : "category name"
+ }
+  */
+    public static void validate_page(JSONObject product) {
         validate_value(product.getAsString("page"));
         validate_name(product.getAsString("category"));
     }
-     /*store json format
-   {
-   "name": "name",
-   "location":"location"
-   }
-    */
-     public static void validate_addstore(JSONObject store){
-         validate_name(store.getAsString("name"));
-         validate_name(store.getAsString("location"));
-         validate_token(store.getAsString("token"));
-         if (Authentication.tokenUserType(store.getAsString("token")) == UserType.Customer)
+
+    /*store json format
+  {
+  "name": "name",
+  "location":"location"
+  }
+   */
+    public static void validate_addstore(JSONObject store) {
+        validate_name(store.getAsString("name"));
+        validate_name(store.getAsString("location"));
+        validate_token(store.getAsString("token"));
+        if (Authentication.tokenUserType(store.getAsString("token")) == UserType.Customer)
             throw new RuntimeException("UnAuthorized Access");
-     }
+    }
+
     /*
      * log in json format {
      *  "email":user email,
      * "password": user hashed password }
      */
-    public static void validate_login(JSONObject obj){
+    public static void validate_login(JSONObject obj) {
         validate_email(obj.getAsString("email"));
         validate_password(obj.getAsString("password"));
     }
+
     /*
      * sign up json format { "email":user email
      * "firstName": user first name
      * "lastName": user last name
      *  "password": user hashed password }
      */
-    public static void validate_signup(JSONObject obj){
+    public static void validate_signup(JSONObject obj) {
         validate_email(obj.getAsString("email"));
         validate_name(obj.getAsString("firstName"));
         validate_name(obj.getAsString("lastName"));
         validate_password(obj.getAsString("password"));
     }
+
     /*
      * modify info json format {
      *  "id": user token
      * "data": { "password": new password
      * "firstName": user name "lastName": user last name } }
      */
-    public static void validate_modify(JSONObject obj){
+    public static void validate_modify(JSONObject obj) {
         validate_token(obj.getAsString("id"));
         JSONObject data = (JSONObject) obj.get("data");
         validate_password(data.getAsString("password"));
@@ -211,4 +218,4 @@ public class Validation {
         validate_name(data.getAsString("lastName"));
     }
 
-    }
+}
