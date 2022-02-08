@@ -17,14 +17,15 @@ public class EmployeeDatabase {
     }
 
     public void insertEmployee(Employee E) throws SQLException {
-        dataBase.execute("INSERT INTO Employee VALUES ('" + E.getEmail()
-                + "','" + E.getFirstname() + "','" + E.getLastname() + "','" + E.getStoreId() + "','" + E.getHashedPassword() + "');");
+        dataBase.getStatement().execute("INSERT INTO Employee VALUES ('" + E.getEmail()
+                + "','" + E.getFirstname() + "','" + E.getLastname() + "','" +E.getRole()+ "','" + E.getStoreId() +
+                "','" + E.getHashedPassword() + "','" + E.getSalary() +"');");
     }
     
     public JSONArray getEmployees() throws SQLException, ParseException {
         JSONArray array = new JSONArray();
         JSONObject Emp;
-        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Employee;");
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee;");
         while (resultSet.next()) {
         	Emp = EmployeeParser.parseEmployee(resultSet);
             array.add(Emp);
@@ -34,14 +35,15 @@ public class EmployeeDatabase {
     }
     
     public JSONObject getEmployee(String email)throws SQLException, ParseException {
-    	ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
         resultSet.next();
     	return EmployeeParser.parseEmployee(resultSet);
     }
     
     public void modifyEmployee(Employee emp) throws SQLException {
-    	dataBase.execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
-    			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' "
+    	dataBase.getStatement().execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
+    			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' ,"
+    			+ "erole = '"+emp.getRole()+"', salary = '"+emp.getSalary()+"' "
     					+ " WHERE email = '"+emp.getEmail()+"';");
     }
 }
