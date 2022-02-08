@@ -86,6 +86,6 @@ CREATE TABLE Manager(
     passW VARCHAR(30) NOT NULL
 );
 
-INSERT INTO Manager VALUES('software@manager.com','-1113294952');
-
-
+INSERT INTO Manager VALUES('software@manager.com','-1861353340');
+-- double hash -1113294952
+-- single hash -1861353340
