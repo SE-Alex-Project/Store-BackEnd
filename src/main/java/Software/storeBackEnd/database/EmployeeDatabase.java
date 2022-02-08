@@ -21,11 +21,13 @@ public class EmployeeDatabase {
                 + "','" + E.getFirstname() + "','" + E.getLastname() + "','" + E.getStoreId() + "','" + E.getHashedPassword() + "');");
     }
     
-    public JSONArray getEmployees() throws SQLException {
+    public JSONArray getEmployees() throws SQLException, ParseException {
         JSONArray array = new JSONArray();
+        JSONObject Emp;
         ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee;");
         while (resultSet.next()) {
-            array.add(resultSet.getString("email"));
+        	Emp = EmployeeParser.parseEmployee(resultSet);
+            array.add(Emp);
         }
         resultSet.close();
         return array;
