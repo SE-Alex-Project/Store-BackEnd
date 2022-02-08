@@ -141,12 +141,12 @@ public class UserController {
         try {
             String userEmail = tokenManager.getUser(userToken);
             if (userEmail == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             UserType user = Authentication.tokenUserType(userToken);
             if (user == UserType.Manager) {
                 int n = userDataBase.numberOfManagers();
                 if (n == 1) {
-                	throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Can't delete last Manager\n");
+                	return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't delete last Manager\n");
                 }
             }
             String temp = userDataBase.deleteAccount(userEmail,user);
@@ -170,10 +170,10 @@ public class UserController {
 	    	UserType user = Authentication.tokenUserType(userToken);
 	    	UserType d = Authentication.getUserType(deleted);
 	    	if(user == UserType.Customer) {
-	    		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "this account can't delete any account.\n");
+	    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("this account can't delete any account.\n");
 	    	}else if(user == UserType.Employee) {
 	    		if(d != UserType.Customer) {
-	    			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Can't delete this account\n");
+	    			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't delete this account\n");
 	    		}   		
 	    	}
 	    	userDataBase.deleteAccount(deleted, d);
