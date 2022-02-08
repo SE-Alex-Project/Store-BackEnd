@@ -158,4 +158,15 @@ public class ProductDatabase {
         dataBase.getStatement().execute("DELETE FROM Product WHERE productId = '" + product_id + "'");
     }
 
+
+    public JSONArray searchProduct(String searchWord,int page) throws SQLException, ParseException {
+        String Query = "SELECT DISTINCT * "+
+                "FROM Product "+
+                "WHERE categoryName LIKE '%"+searchWord+"%' OR price LIKE '%"+searchWord+"%' OR descripe LIKE '%"+
+                searchWord+"%' OR productName LIKE '%"+searchWord+"%' OR addedBy LIKE '%"+searchWord+"%' GROUP BY productId"
+                + "' limit 50 offset " + ((page - 1) * 50);
+        return getProducts(Query);
+    }
+
+
 }
