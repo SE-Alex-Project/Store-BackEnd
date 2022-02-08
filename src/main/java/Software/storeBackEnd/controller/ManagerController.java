@@ -81,5 +81,21 @@ public class ManagerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
         }
     }
-
+    
+    
+    @PostMapping("/Modify Employee")
+    public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee){
+    	try {
+    		Employee emp = new Employee();
+    		emp.setEmail(employee.getAsString("email"));
+    		emp.setFirstname(employee.getAsString("fName"));
+    		emp.setLastname(employee.getAsString("lastName"));
+            emp.setStoreId(employee.getAsString("store"));
+            employeeDatabase.modifyEmployee(emp);
+            return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+        }
+    }
+    
 }

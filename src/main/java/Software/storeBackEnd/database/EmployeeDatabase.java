@@ -38,4 +38,10 @@ public class EmployeeDatabase {
         resultSet.next();
     	return EmployeeParser.parseEmployee(resultSet);
     }
+    
+    public void modifyEmployee(Employee emp) throws SQLException {
+    	dataBase.getStatement().execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
+    			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' "
+    					+ " WHERE email = '"+emp.getEmail()+"';");
+    }
 }

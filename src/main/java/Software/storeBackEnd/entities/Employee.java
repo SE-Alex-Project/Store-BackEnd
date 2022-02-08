@@ -20,7 +20,13 @@ public class Employee {
         this.storeId = employee.getAsString("store");
     }
 
-    public String getFirstname() {
+    public Employee() {
+		super();
+	}
+
+
+
+	public String getFirstname() {
         return firstname;
     }
 
