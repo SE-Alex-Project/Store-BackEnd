@@ -1,5 +1,8 @@
 package Software.storeBackEnd.database;
 
+import Software.storeBackEnd.entities.UserType;
+import Software.storeBackEnd.parser.UserParser;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -7,8 +10,6 @@ import net.minidev.json.parser.ParseException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
-
-import Software.storeBackEnd.entities.UserType;
 
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
@@ -71,5 +72,13 @@ public class UserDatabase {
     	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT COUNT(*) FROM Manager");
     	resultSet.next();
         return Integer.parseInt(resultSet.getString("COUNT(*)"));
+    }
+
+    public JSONArray UserCart(String Email) throws SQLException, ParseException {
+        JSONArray Carts = new JSONArray();
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Cart WHERE buyDate IS NOT NULL AND userEmail = '"+Email+"';");
+        while (resultSet.next())
+            Carts.add(UserParser.parseUserCart(resultSet));
+        return Carts;
     }
 }

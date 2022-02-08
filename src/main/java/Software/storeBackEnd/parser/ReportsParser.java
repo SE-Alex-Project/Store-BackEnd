@@ -14,4 +14,8 @@ public class ReportsParser {
         return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"userEmail\":'" + resultSet.getString("userEmail") + "',\"totalPrice\":'"
                 + resultSet.getString("totalPrice") + "'}");
     }
+    public static JSONObject parseTopSale(ResultSet resultSet) throws SQLException, ParseException {
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"productName\":'" + resultSet.getString("productName") + "',\"price\":'"
+                + resultSet.getString("price") + "',\"totalSales\":'" + resultSet.getString("totalSales")+"'}");
+    }
 }

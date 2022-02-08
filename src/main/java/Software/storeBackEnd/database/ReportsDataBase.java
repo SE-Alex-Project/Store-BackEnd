@@ -25,4 +25,16 @@ public class ReportsDataBase {
             top10.add(ReportsParser.parseTopCustomer(resultSet));
         return top10;
     }
+
+    public JSONArray topSalesLast3M() throws SQLException, ParseException {
+        JSONArray top10 = new JSONArray();
+        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT P.productName ,P.price ,SUM(quantity) AS totalSales\n" +
+                "FROM Cart NATURAL JOIN ProductInCart NATURAL JOIN Product AS P\n" +
+                "WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-90 DAY)\n" +
+                "GROUP BY P.productId\n" +
+                "ORDER BY totalSales DESC LIMIT 10;");
+        while (resultSet.next())
+            top10.add(ReportsParser.parseTopSale(resultSet));
+        return top10;
+    }
 }
