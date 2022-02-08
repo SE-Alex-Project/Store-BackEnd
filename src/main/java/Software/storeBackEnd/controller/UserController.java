@@ -123,7 +123,7 @@ public class UserController {
         try {
             String userEmail = tokenManager.getUser(userToken);
             if (userEmail == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User Not Signed In\nSign In first\n");
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             return ResponseEntity.status(HttpStatus.OK).body(userDataBase.getUserInfo(userEmail));
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
