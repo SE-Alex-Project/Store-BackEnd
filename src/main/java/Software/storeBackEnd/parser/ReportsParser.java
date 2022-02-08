@@ -20,5 +20,8 @@ public class ReportsParser {
                 + resultSet.getString("productId") + "',\"quantity\":'" + resultSet.getString("number") + "',\"price\":'" +
                 resultSet.getString("price") + "'}");
     }
-
+    public static JSONObject parseTopSale(ResultSet resultSet) throws SQLException, ParseException {
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"productName\":'" + resultSet.getString("productName") + "',\"price\":'"
+                + resultSet.getString("price") + "',\"totalSales\":'" + resultSet.getString("totalSales")+"'}");
+    }
 }

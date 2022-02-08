@@ -162,6 +162,7 @@ public class UserController {
      * "token":userToken
      * "email":deleted email
      */
+    @PostMapping("/removeAccount")
     public ResponseEntity<?> removeAccount(@RequestBody JSONObject removeJson) {
     	try {
 	    	String userToken = removeJson.getAsString("token");
@@ -181,6 +182,22 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error While Fetch Data From DataBase\n"+e.getMessage());
         } 
+    }
+
+    @PostMapping("/userCart_token")
+    public ResponseEntity<?> userCart_token(@RequestBody String userToken) {
+            return userCart_Email(tokenManager.getUser(userToken));
+    }
+
+    @PostMapping("/userCart_Email")
+    public ResponseEntity<?> userCart_Email(@RequestBody String userEmail) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userDataBase.UserCart(userEmail));
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+        } catch (ParseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
+        }
     }
     
 }
