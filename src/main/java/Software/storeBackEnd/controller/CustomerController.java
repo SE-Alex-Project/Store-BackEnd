@@ -136,4 +136,27 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
+
+
+
+
+
+    /// this part for testing
+
+//    private class test{
+//        int id =1 ;
+//        int ss = 5;
+//
+//        @Override
+//        public String toString() {
+//            return "{" +
+//                    "id=" + id +
+//                    ", ss=" + ss +
+//                    '}';
+//        }
+//    }
+//    @PostMapping("/test")
+//    public ResponseEntity<?> test(){
+//        return ResponseEntity.status(HttpStatus.OK).body(new test().toString());
+//    }
 }

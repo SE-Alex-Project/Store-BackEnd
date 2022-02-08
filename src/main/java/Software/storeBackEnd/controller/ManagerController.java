@@ -3,6 +3,7 @@ package Software.storeBackEnd.controller;
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.database.EmployeeDatabase;
+import Software.storeBackEnd.database.ReportsDataBase;
 import Software.storeBackEnd.entities.Employee;
 import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 public class ManagerController {
 
     EmployeeDatabase employeeDatabase = new EmployeeDatabase();
+    ReportsDataBase reportsDataBase = new ReportsDataBase();
     TokenManager tokenManager = TokenManager.getInstance();
 
     /*{
@@ -46,22 +48,22 @@ public class ManagerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
         }
     }
-    
+
     @PostMapping("/getEmployees")
     public ResponseEntity<?> getEmployees(@RequestBody String token) {
-    	try {
-	    	UserType user = Authentication.tokenUserType(token);
-	        if (user == UserType.Manager) {
-	        	return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployees());
-	        }
-    	} catch (SQLException e) {
-    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
-        } catch (ParseException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can't parse Datan" + e.getMessage());
+        try {
+            UserType user = Authentication.tokenUserType(token);
+            if (user == UserType.Manager) {
+                return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployees());
             }
-    	return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't get Emplyees from not manager account\n");
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+        } catch (ParseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can't parse Datan" + e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't get Emplyees from not manager account\n");
     }
-    
+
     /*
      * {
      * "email":emp-email
@@ -70,32 +72,37 @@ public class ManagerController {
      * "storeId":id
      * }
      */
-    
+
     @PostMapping("/getEmployeeInfo")
-    public ResponseEntity<?> getEmployeeInfo(@RequestBody String email ){
-    	try {
+    public ResponseEntity<?> getEmployeeInfo(@RequestBody String email) {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployee(email));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
         }
     }
-    
-    
+
+
     @PostMapping("/Modify Employee")
-    public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee){
-    	try {
-    		Employee emp = new Employee();
-    		emp.setEmail(employee.getAsString("email"));
-    		emp.setFirstname(employee.getAsString("fName"));
-    		emp.setLastname(employee.getAsString("lastName"));
+    public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee) {
+        try {
+            Employee emp = new Employee();
+            emp.setEmail(employee.getAsString("email"));
+            emp.setFirstname(employee.getAsString("fName"));
+            emp.setLastname(employee.getAsString("lastName"));
             emp.setStoreId(employee.getAsString("store"));
             employeeDatabase.modifyEmployee(emp);
             return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
         }
     }
-    
+
+    @GetMapping("/top10Customers")
+    public ResponseEntity<?> topCustomers() {
+        return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
+    }
+
 }
