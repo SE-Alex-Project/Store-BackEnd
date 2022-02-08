@@ -90,11 +90,7 @@ public class ManagerController {
     @PostMapping("/modifyEmployee")
     public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee) {
         try {
-            Employee emp = new Employee();
-            emp.setEmail(employee.getAsString("email"));
-            emp.setFirstname(employee.getAsString("fName"));
-            emp.setLastname(employee.getAsString("lastName"));
-            emp.setStoreId(employee.getAsString("store"));
+            Employee emp = new Employee(employee);
             employeeDatabase.modifyEmployee(emp);
             return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
         } catch (SQLException e) {
@@ -115,7 +111,7 @@ public class ManagerController {
 
     
     @GetMapping("/totalSales")
-    public ResponseEntity<?> totalsales(int page) {
+    public ResponseEntity<?> totalSales(int page) {
         try {
 			return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
 		}  catch (SQLException e) {
