@@ -39,4 +39,25 @@ public class Employee {
     public String getStoreId() {
         return storeId;
     }
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public void setHashedPassword(String hashedPassword) {
+		this.hashedPassword = hashedPassword;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
+    
 }

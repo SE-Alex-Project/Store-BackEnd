@@ -1,7 +1,10 @@
 package Software.storeBackEnd.database;
 
 import Software.storeBackEnd.entities.Employee;
+import Software.storeBackEnd.parser.EmployeeParser;
 import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.ParseException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,5 +29,11 @@ public class EmployeeDatabase {
         }
         resultSet.close();
         return array;
+    }
+    
+    public JSONObject getEmployee(String email)throws SQLException, ParseException {
+    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
+        resultSet.next();
+    	return EmployeeParser.parseEmployee(resultSet);
     }
 }
