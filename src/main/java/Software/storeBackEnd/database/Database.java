@@ -1,9 +1,6 @@
 package Software.storeBackEnd.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Database {
 
@@ -32,7 +29,7 @@ public class Database {
     }
 
 
-    public Statement getStatement() throws SQLException {
+    private Statement getStatement() throws SQLException {
         if (!con.isValid(10000)) {
             System.out.println("reconnect Database");
             connect();
@@ -40,5 +37,11 @@ public class Database {
         return con.createStatement();
     }
 
+    public ResultSet executeQuery(String Query) throws SQLException {
+        return getStatement().executeQuery(Query);
+    }
 
+    public void execute(String Query) throws SQLException {
+        getStatement().execute(Query);
+    }
 }

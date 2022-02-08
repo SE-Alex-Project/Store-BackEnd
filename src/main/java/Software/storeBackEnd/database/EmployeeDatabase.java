@@ -17,14 +17,14 @@ public class EmployeeDatabase {
     }
 
     public void insertEmployee(Employee E) throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO Employee VALUES ('" + E.getEmail()
+        dataBase.execute("INSERT INTO Employee VALUES ('" + E.getEmail()
                 + "','" + E.getFirstname() + "','" + E.getLastname() + "','" + E.getStoreId() + "','" + E.getHashedPassword() + "');");
     }
     
     public JSONArray getEmployees() throws SQLException, ParseException {
         JSONArray array = new JSONArray();
         JSONObject Emp;
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee;");
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Employee;");
         while (resultSet.next()) {
         	Emp = EmployeeParser.parseEmployee(resultSet);
             array.add(Emp);
@@ -34,13 +34,13 @@ public class EmployeeDatabase {
     }
     
     public JSONObject getEmployee(String email)throws SQLException, ParseException {
-    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
+    	ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
         resultSet.next();
     	return EmployeeParser.parseEmployee(resultSet);
     }
     
     public void modifyEmployee(Employee emp) throws SQLException {
-    	dataBase.getStatement().execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
+    	dataBase.execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
     			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' "
     					+ " WHERE email = '"+emp.getEmail()+"';");
     }

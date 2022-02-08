@@ -117,9 +117,9 @@ public class ManagerController {
         try {
 			return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
 		}  catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
         }  catch (ParseException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
+        	return Controller.ParserEx(e);
         }
     }
     
@@ -128,9 +128,9 @@ public class ManagerController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.topSalesLast3M());
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
+        	return Controller.ParserEx(e);
         }
     }
 

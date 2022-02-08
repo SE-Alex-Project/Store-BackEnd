@@ -29,7 +29,7 @@ public class StoreController {
             storeDataBase.add(store.getAsString("name"), store.getAsString("location"));
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -38,9 +38,9 @@ public class StoreController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(storeDataBase.getList());
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 
@@ -49,9 +49,9 @@ public class StoreController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(storeDataBase.get(store_id));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 

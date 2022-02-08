@@ -28,21 +28,21 @@ public class ProductDatabase {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date(System.currentTimeMillis());
             String d = formatter.format(date);
-            dataBase.getStatement().execute("START TRANSACTION;");
-            dataBase.getStatement().execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
+            dataBase.execute("START TRANSACTION;");
+            dataBase.execute("INSERT INTO Product(categoryName,price,descripe,productName,addedBy,added_date) VALUES ('" + p.getCategory()
                     + "','" + p.getPrice() + "','" + p.getDescription() + "','" + p.getName() + "','" + p.getAddedBy() + "','" + d + "');");
 
-            ResultSet s = dataBase.getStatement().executeQuery("SELECT LAST_INSERT_ID();");
+            ResultSet s = dataBase.executeQuery("SELECT LAST_INSERT_ID();");
             s.next();
             int productId = s.getInt(1);
             s.close();
             addProductStores(productId, p.getStores());
             addProductImages(productId, p.getImagesURL());
-            dataBase.getStatement().execute("COMMIT;");
+            dataBase.execute("COMMIT;");
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (SQLException e) {
             System.out.println(e.getMessage());
-            dataBase.getStatement().execute("ROLLBACK;");
+            dataBase.execute("ROLLBACK;");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
@@ -52,35 +52,35 @@ public class ProductDatabase {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date(System.currentTimeMillis());
             String d = formatter.format(date);
-            dataBase.getStatement().execute("START TRANSACTION;");
-            dataBase.getStatement().execute("UPDATE Product SET categoryName = '"+p.getCategory()+"' , price = '"+p.getPrice()+"' , descripe = '"+p.getDescription()+"' "
+            dataBase.execute("START TRANSACTION;");
+            dataBase.execute("UPDATE Product SET categoryName = '"+p.getCategory()+"' , price = '"+p.getPrice()+"' , descripe = '"+p.getDescription()+"' "
             		+ ", productName = '"+p.getName()+"' , addedBy = '"+p.getAddedBy()+"' ,added_date = '"+ d +"'" + 
             		"WHERE ProductId = '"+id+"';");
             deleteProductStores(id);
             deleteProductImages(id);
             addProductStores(id, p.getStores());
             addProductImages(id, p.getImagesURL());
-            dataBase.getStatement().execute("COMMIT;");
+            dataBase.execute("COMMIT;");
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (SQLException e) {
             System.out.println(e.getMessage());
-            dataBase.getStatement().execute("ROLLBACK;");
+            dataBase.execute("ROLLBACK;");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
     }
     
     private void deleteProductStores(int productID) throws SQLException { 
-            dataBase.getStatement().execute("DELETE FROM ProductInStore WHERE ProductId = '"+productID+"';");
+            dataBase.execute("DELETE FROM ProductInStore WHERE ProductId = '"+productID+"';");
     }
 
     private void deleteProductImages(int productID) throws SQLException {
-            dataBase.getStatement().execute("DELETE FROM ProductImage WHERE ProductId = '"+productID+"';");
+            dataBase.execute("DELETE FROM ProductImage WHERE ProductId = '"+productID+"';");
 
     }
 
     private void addProductStores(int productID, ArrayList<Product.productStore> productStores) throws SQLException {
         for (Product.productStore p : productStores) {
-            dataBase.getStatement().execute("INSERT INTO ProductInStore VALUES ('" + productID
+            dataBase.execute("INSERT INTO ProductInStore VALUES ('" + productID
                     + "','" + p.getStoreID() + "','" + p.getQuantity() + "');");
         }
     }
@@ -88,12 +88,12 @@ public class ProductDatabase {
     private void addProductImages(int productID, ArrayList<String> productImages) throws SQLException {
         System.out.println(productImages.toString());
         for (String s : productImages)
-            dataBase.getStatement().execute("INSERT INTO ProductImage VALUES ('" + productID + "','" + s + "');");
+            dataBase.execute("INSERT INTO ProductImage VALUES ('" + productID + "','" + s + "');");
 
     }
 
     public JSONObject getProduct(String product_id) throws SQLException, ParseException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Product WHERE productId = '" + product_id + "'");
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Product WHERE productId = '" + product_id + "'");
         resultSet.next();
         JSONObject product = ProductParser.parseProduct(resultSet);
         resultSet.close();
@@ -103,18 +103,18 @@ public class ProductDatabase {
     }
 
     private JSONArray getProductStores(String product_id) throws SQLException, ParseException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT storeId,storeName,quantity FROM (ProductInStore NATURAL JOIN Store) WHERE productId = '" + product_id + "'");
+        ResultSet resultSet = dataBase.executeQuery("SELECT storeId,storeName,quantity FROM (ProductInStore NATURAL JOIN Store) WHERE productId = '" + product_id + "'");
         return ProductParser.parseProductInStore(resultSet);
     }
 
     private JSONArray getProductImages(String product_id) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductImage WHERE productId = '" + product_id + "'");
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM ProductImage WHERE productId = '" + product_id + "'");
         return ProductParser.parseProductImage(resultSet);
     }
 
     public JSONArray getCategories() throws SQLException {
         JSONArray array = new JSONArray();
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Category;");
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Category;");
         while (resultSet.next()) {
             array.add(resultSet.getString("categoryName"));
         }
@@ -123,7 +123,7 @@ public class ProductDatabase {
     }
 
     public void addCategory(String categoryName) throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO Category VALUES('" + categoryName + "');");
+        dataBase.execute("INSERT INTO Category VALUES('" + categoryName + "');");
     }
 
 
@@ -143,7 +143,7 @@ public class ProductDatabase {
         ResultSet resultSet;
         JSONArray array = new JSONArray();
         JSONObject product;
-        resultSet = dataBase.getStatement().executeQuery(Query);
+        resultSet = dataBase.executeQuery(Query);
         while (resultSet.next()) {
             product = ProductParser.parseProduct(resultSet);
             product.put("stores", getProductStores(product.getAsString("id")));
@@ -155,7 +155,7 @@ public class ProductDatabase {
     }
 
     public void deleteProduct(String product_id) throws SQLException {
-        dataBase.getStatement().execute("DELETE FROM Product WHERE productId = '" + product_id + "'");
+        dataBase.execute("DELETE FROM Product WHERE productId = '" + product_id + "'");
     }
 
 

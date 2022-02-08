@@ -36,7 +36,7 @@ public class CustomerController {
             Cart cart = customerDataBase.getProductInCart(cartId, email);
             return customerDataBase.buyCart(cart);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -68,9 +68,9 @@ public class CustomerController {
             JSONArray array = customerDataBase.getCartInfo(cart);
             return ResponseEntity.status(HttpStatus.OK).body(array);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 
@@ -89,12 +89,8 @@ public class CustomerController {
             String cartId = customerDataBase.getCart(email);
             String product_id = addToCartJson.getAsString("product");
             return customerDataBase.addToCart(Integer.parseInt(product_id), Integer.parseInt(cartId));
-            // if(!s.equalsIgnoreCase("OK")) {
-            // 	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(s);
-            // }
-            // return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -133,30 +129,8 @@ public class CustomerController {
             }
             return customerDataBase.modify(Integer.parseInt(cartId), cart);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
-
-
-
-
-    /// this part for testing
-
-//    private class test{
-//        int id =1 ;
-//        int ss = 5;
-//
-//        @Override
-//        public String toString() {
-//            return "{" +
-//                    "id=" + id +
-//                    ", ss=" + ss +
-//                    '}';
-//        }
-//    }
-//    @PostMapping("/test")
-//    public ResponseEntity<?> test(){
-//        return ResponseEntity.status(HttpStatus.OK).body(new test().toString());
-//    }
 }

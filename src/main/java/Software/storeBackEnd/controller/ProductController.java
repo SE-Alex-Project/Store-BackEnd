@@ -46,7 +46,7 @@ public class ProductController {
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -75,7 +75,7 @@ public class ProductController {
              }
              return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
          } catch (SQLException e) {
-             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+             return Controller.SqlEx(e);
          }
      }
 
@@ -88,9 +88,9 @@ public class ProductController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getProduct(product_id));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 
@@ -102,9 +102,9 @@ public class ProductController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getList(page));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 
@@ -120,9 +120,9 @@ public class ProductController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category")));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 
@@ -131,7 +131,7 @@ public class ProductController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getCategories());
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -154,7 +154,7 @@ public class ProductController {
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -176,7 +176,7 @@ public class ProductController {
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         }
     }
 
@@ -191,9 +191,9 @@ public class ProductController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.searchProduct(search.getAsString("searchWord"), (Integer) search.getAsNumber("page")));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n"+e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 }

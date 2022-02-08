@@ -14,4 +14,8 @@ public class UserParser {
         return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"cartId\":'" + resultSet.getString("cartId") +
                 "',\"userEmail\":'" + resultSet.getString("userEmail") + "',\"buyDate\":'" + resultSet.getString("buyDate") + "'}");
     }
+    public static JSONObject parseUser(ResultSet resultSet) throws SQLException, ParseException {
+        return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"firstName\":'" + resultSet.getString("fName") + "',\"lastName\":'"
+                + resultSet.getString("lName") + "',\"email\":'" + resultSet.getString("email") + "',\"password\":'" + resultSet.getString("passW") + "'}");
+    }
 }

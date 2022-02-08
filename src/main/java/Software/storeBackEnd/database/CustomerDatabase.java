@@ -25,13 +25,13 @@ public class CustomerDatabase {
 
 
     public String getCart(String email) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Customer WHERE email = '" + email + "'");
+        ResultSet resultSet = dataBase.executeQuery("SELECT cartId FROM Customer WHERE email = '" + email + "'");
         resultSet.next();
         return resultSet.getString("cartId");
     }
 
     public Cart getProductInCart(String cart_id, String email) throws SQLException {
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM ProductInCart WHERE cartId = '" + cart_id + "'");
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM ProductInCart WHERE cartId = '" + cart_id + "'");
         Cart c = new Cart();
         c.setId(Integer.parseInt(cart_id));
         c.setEmail(email);
@@ -49,7 +49,7 @@ public class CustomerDatabase {
         for (ProductQuantity p : a) {
             int id = p.getProduct_id();
             int q = p.getQuantity();
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
+            ResultSet resultSet = dataBase.executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
             resultSet.next();
             int quantity = Integer.parseInt(resultSet.getString("quantity"));
             if (q <= quantity) {
@@ -62,7 +62,7 @@ public class CustomerDatabase {
         for (ProductQuantity p : a) {
             int id = p.getProduct_id();
             int q = p.getQuantity();
-            dataBase.getStatement().execute("UPDATE ProductInStore SET quantity = '" + q + "' WHERE productId = '" + id + "' AND storeId = '1' ;");
+            dataBase.execute("UPDATE ProductInStore SET quantity = '" + q + "' WHERE productId = '" + id + "' AND storeId = '1' ;");
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
@@ -73,42 +73,42 @@ public class CustomerDatabase {
     }
 
     private void updateBuyTime(int id, String date) throws SQLException {
-        dataBase.getStatement().execute("update Cart set buyDate='" + date + "' where cartId='" + id + "';");
+        dataBase.execute("update Cart set buyDate='" + date + "' where cartId='" + id + "';");
     }
 
     private int createCartByEmail(String email) throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO Cart(userEmail) values ('" + email + "');");
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT cartId FROM Cart ORDER BY cartID DESC LIMIT 1;");
+        dataBase.execute("INSERT INTO Cart(userEmail) values ('" + email + "');");
+        ResultSet resultSet = dataBase.executeQuery("SELECT cartId FROM Cart ORDER BY cartID DESC LIMIT 1;");
         resultSet.next();
         return Integer.parseInt(resultSet.getString("cartID"));
     }
 
     private void updateCustomerCart(int id, String email) throws SQLException {
-        dataBase.getStatement().execute("update Customer set cartId = '" + id + "' where email ='" + email + "';");
+        dataBase.execute("update Customer set cartId = '" + id + "' where email ='" + email + "';");
     }
 
     public ResponseEntity<String> addToCart(int product_id, int cart_id) throws SQLException {
     	
     	// get quantity
     	int q = 0 ;
-    	ResultSet resultSet_q = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + product_id + "' AND storeId ='1' ;");
+    	ResultSet resultSet_q = dataBase.executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + product_id + "' AND storeId ='1' ;");
     	if(resultSet_q.next()) {
     		q = Integer.parseInt(resultSet_q.getString("quantity"));
     	}
         
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInCart WHERE productId = '" + product_id + "' AND cartId = '" + cart_id + "' ;");
+        ResultSet resultSet = dataBase.executeQuery("SELECT quantity FROM ProductInCart WHERE productId = '" + product_id + "' AND cartId = '" + cart_id + "' ;");
         if (resultSet.next()) {
             int quantity = Integer.parseInt(resultSet.getString("quantity"));
             quantity++;
             if(q>=quantity) {
-            	dataBase.getStatement().execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
+            	dataBase.execute("UPDATE ProductInCart set quantity = '" + quantity + "' where cartId ='" + cart_id + "' AND productId = '" + product_id + "';");
             	 return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
             }else {
             	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantity not avalible");
             }
         } else {
         	if(q>=1) {
-        		dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
+        		dataBase.execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + product_id + "','1') ;");
         		 return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
         	}else {
         		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantity not avalible");
@@ -120,16 +120,16 @@ public class CustomerDatabase {
         for (ProductQuantity p : cart) {
             int id = p.getProduct_id();
             int q = p.getQuantity();
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
+            ResultSet resultSet = dataBase.executeQuery("SELECT quantity FROM ProductInStore WHERE productId = '" + id + "' AND storeId = '1' ;");
             resultSet.next();
             int quantity = Integer.parseInt(resultSet.getString("quantity"));
             if (q > quantity) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't do this Operation because Database Updated And Quantity not avalible");
             }
         }
-    	dataBase.getStatement().execute("DELETE FROM ProductInCart WHERE cartId ='" + cart_id + "';");
+    	dataBase.execute("DELETE FROM ProductInCart WHERE cartId ='" + cart_id + "';");
         for (ProductQuantity p : cart) {
-            dataBase.getStatement().execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','" + p.getQuantity() + "') ;");
+            dataBase.execute("INSERT INTO ProductInCart(cartId,productId,quantity) values ('" + cart_id + "','" + p.getProduct_id() + "','" + p.getQuantity() + "') ;");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Operation Done !!");
     }
@@ -139,12 +139,12 @@ public class CustomerDatabase {
         int cart_id = cart.getId();
         ArrayList<ProductQuantity> a = cart.getProducts();
         for (ProductQuantity p : a) {
-            ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT c.productId,p.price,p.productName,c.quantity FROM ( ProductInCart AS c JOIN Product AS p ON c.productId=p.productId)"
+            ResultSet resultSet = dataBase.executeQuery("SELECT c.productId,p.price,p.productName,c.quantity FROM ( ProductInCart AS c JOIN Product AS p ON c.productId=p.productId)"
                     + " WHERE cartId='" + cart_id + "' AND c.productId='" + p.getProduct_id() + "';");
             if (resultSet.next()) {
             	int q = 0 ;
                 JSONObject ob = ProductParser.parseProductInCart(resultSet);
-                ResultSet resultSet2= dataBase.getStatement().executeQuery("SELECT quantity FROM ProductInStore WHERE storeId ='1' AND productId ='"+p.getProduct_id()+"';");
+                ResultSet resultSet2= dataBase.executeQuery("SELECT quantity FROM ProductInStore WHERE storeId ='1' AND productId ='"+p.getProduct_id()+"';");
                 if (resultSet2.next()) {
                 	q = Integer.parseInt(resultSet2.getString("quantity"));
                 }
