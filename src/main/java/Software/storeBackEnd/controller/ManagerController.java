@@ -32,7 +32,7 @@ public class ManagerController {
         "password": "user hashed password",
         "store":"1",
         "erole":role,
-       "salary":salary
+        "salary":salary
     }*/
     @PostMapping("/addEmployee")
     public ResponseEntity<String> addEmployee(@RequestBody JSONObject employee) {
@@ -87,7 +87,7 @@ public class ManagerController {
     }
 
 
-    @PostMapping("/Modify Employee")
+    @PostMapping("/modifyEmployee")
     public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee) {
         try {
             Employee emp = new Employee();
