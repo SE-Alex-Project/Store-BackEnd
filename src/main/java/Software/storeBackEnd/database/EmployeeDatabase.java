@@ -17,33 +17,33 @@ public class EmployeeDatabase {
     }
 
     public void insertEmployee(Employee E) throws SQLException {
-        dataBase.getStatement().execute("INSERT INTO Employee VALUES ('" + E.getEmail()
-                + "','" + E.getFirstname() + "','" + E.getLastname() + "','" +E.getRole()+ "','" + E.getStoreId() +
-                "','" + E.getHashedPassword() + "','" + E.getSalary() +"');");
+        dataBase.execute("INSERT INTO Employee VALUES ('" + E.getEmail()
+                + "','" + E.getFirstname() + "','" + E.getLastname() + "','" + E.getRole() + "','" + E.getStoreId() +
+                "','" + E.getHashedPassword() + "','" + E.getSalary() + "');");
     }
-    
+
     public JSONArray getEmployees() throws SQLException, ParseException {
         JSONArray array = new JSONArray();
         JSONObject Emp;
-        ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee;");
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Employee;");
         while (resultSet.next()) {
-        	Emp = EmployeeParser.parseEmployee(resultSet);
+            Emp = EmployeeParser.parseEmployee(resultSet);
             array.add(Emp);
         }
         resultSet.close();
         return array;
     }
-    
-    public JSONObject getEmployee(String email)throws SQLException, ParseException {
-    	ResultSet resultSet = dataBase.getStatement().executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
+
+    public JSONObject getEmployee(String email) throws SQLException, ParseException {
+        ResultSet resultSet = dataBase.executeQuery("SELECT * FROM Employee WHERE email = '" + email + "'");
         resultSet.next();
-    	return EmployeeParser.parseEmployee(resultSet);
+        return EmployeeParser.parseEmployee(resultSet);
     }
-    
+
     public void modifyEmployee(Employee emp) throws SQLException {
-    	dataBase.getStatement().execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
-    			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' ,"
-    			+ "erole = '"+emp.getRole()+"', salary = '"+emp.getSalary()+"' "
-    					+ " WHERE email = '"+emp.getEmail()+"';");
+        dataBase.execute("UPDATE Employee SET fName = '" + emp.getFirstname() + "', "
+                + "lName = '" + emp.getLastname() + "', storeId = '" + emp.getStoreId() + "' ,"
+                + "eRole = '" + emp.getRole() + "', salary = '" + emp.getSalary() + "' "
+                + " WHERE email = '" + emp.getEmail() + "';");
     }
 }
