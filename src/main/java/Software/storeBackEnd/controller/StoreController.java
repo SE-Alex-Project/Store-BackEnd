@@ -1,5 +1,6 @@
 package Software.storeBackEnd.controller;
 
+import Software.storeBackEnd.authentication.Validation;
 import Software.storeBackEnd.database.StoreDatabase;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
@@ -19,6 +20,7 @@ public class StoreController {
 
     /*store json format
    {
+   "token": token
    "name": "name",
    "location":"location"
    }
@@ -26,10 +28,13 @@ public class StoreController {
     @PostMapping("/add")
     public ResponseEntity<String> addStore(@RequestBody JSONObject store) {
         try {// validate Employee or Manager
+            Validation.validate_addstore(store);
             storeDataBase.add(store.getAsString("name"), store.getAsString("location"));
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

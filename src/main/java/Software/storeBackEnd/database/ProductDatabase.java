@@ -164,7 +164,7 @@ public class ProductDatabase {
                 "FROM Product "+
                 "WHERE categoryName LIKE '%"+searchWord+"%' OR price LIKE '%"+searchWord+"%' OR descripe LIKE '%"+
                 searchWord+"%' OR productName LIKE '%"+searchWord+"%' OR addedBy LIKE '%"+searchWord+"%' GROUP BY productId"
-                + "' limit 50 offset " + ((page - 1) * 50);
+                + " limit 50 offset " + ((page - 1) * 50);
         return getProducts(Query);
     }
 

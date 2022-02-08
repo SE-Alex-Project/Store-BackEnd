@@ -1,14 +1,13 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.Authentication;
-import Software.storeBackEnd.authentication.TokenManager;
+import Software.storeBackEnd.authentication.Validation;
 import Software.storeBackEnd.database.EmployeeDatabase;
 import Software.storeBackEnd.database.ReportsDataBase;
 import Software.storeBackEnd.entities.Employee;
 import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,6 @@ public class ManagerController {
 
     EmployeeDatabase employeeDatabase = new EmployeeDatabase();
     ReportsDataBase reportsDataBase = new ReportsDataBase();
-    TokenManager tokenManager = TokenManager.getInstance();
 
     /*{
         "token" : "token",
@@ -34,9 +32,10 @@ public class ManagerController {
         "erole":role,
         "salary":salary
     }*/
-    @PostMapping("/addEmployee")
+    @PostMapping("/addEmployee")//validate_employee
     public ResponseEntity<String> addEmployee(@RequestBody JSONObject employee) {
         try {
+            Validation.validate_employee(employee);
             UserType user = Authentication.tokenUserType(employee.getAsString("token"));
             if (user == UserType.Manager) {
                 if (Authentication.isEmployeeEmail(employee.getAsString("email")))
@@ -47,7 +46,9 @@ public class ManagerController {
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Owner Access\n");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -55,19 +56,21 @@ public class ManagerController {
     public ResponseEntity<?> getEmployees(@RequestBody String token) {
         try {
             UserType user = Authentication.tokenUserType(token);
-            if (user == UserType.Manager) {
-                return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployees());
-            }
+            if (user != UserType.Manager)
+                throw new RuntimeException("Can't get Employees from not manager account\n");
+            return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployees());
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can't parse Datan" + e.getMessage());
+            return Controller.ParserEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't get Emplyees from not manager account\n");
     }
 
     /*
      * {
+     * "token": token
      * "email":emp-email
      * "fName":emp-fname
      * "lName":emp-lname
@@ -76,13 +79,16 @@ public class ManagerController {
      */
 
     @PostMapping("/getEmployeeInfo")
-    public ResponseEntity<?> getEmployeeInfo(@RequestBody String email) {
+    public ResponseEntity<?> getEmployeeInfo(@RequestBody JSONObject getEmp) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployee(email));
+            Validation.validate_getEmployee(getEmp);
+            return ResponseEntity.status(HttpStatus.OK).body(employeeDatabase.getEmployee(getEmp.getAsString("email")));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
+            return Controller.ParserEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
@@ -90,11 +96,14 @@ public class ManagerController {
     @PostMapping("/modifyEmployee")
     public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee) {
         try {
+            Validation.validate_employee(employee);
             Employee emp = new Employee(employee);
             employeeDatabase.modifyEmployee(emp);
             return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -103,24 +112,24 @@ public class ManagerController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.topCustomersLast3M());
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n" + e.getMessage());
+            return Controller.SqlEx(e);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error IN Parsing JsonObject\n" + e.getMessage());
+            return Controller.ParserEx(e);
         }
     }
 
-    
+
     @GetMapping("/totalSales")
     public ResponseEntity<?> totalSales(int page) {
         try {
-			return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
-		}  catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
+        } catch (SQLException e) {
             return Controller.SqlEx(e);
-        }  catch (ParseException e) {
-        	return Controller.ParserEx(e);
+        } catch (ParseException e) {
+            return Controller.ParserEx(e);
         }
     }
-    
+
     @GetMapping("/top10Sales")
     public ResponseEntity<?> topSales() {
         try {
@@ -128,7 +137,7 @@ public class ManagerController {
         } catch (SQLException e) {
             return Controller.SqlEx(e);
         } catch (ParseException e) {
-        	return Controller.ParserEx(e);
+            return Controller.ParserEx(e);
         }
     }
 

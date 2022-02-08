@@ -51,7 +51,7 @@ public class TokenManager {
             } else
                 Active.remove(token);
         }
-        return null;
+        throw new RuntimeException("Invalid Token , Log In First");
     }
 
     public String generateToken(String email) {

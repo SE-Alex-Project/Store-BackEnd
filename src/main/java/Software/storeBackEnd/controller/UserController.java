@@ -2,6 +2,7 @@ package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.authentication.TokenManager;
+import Software.storeBackEnd.authentication.Validation;
 import Software.storeBackEnd.database.UserDatabase;
 import Software.storeBackEnd.entities.UserType;
 import net.minidev.json.JSONObject;
@@ -27,6 +28,7 @@ public class UserController {
     @PostMapping("/logIn")
     public ResponseEntity<String> logIn(@RequestBody JSONObject logInJson) {
         try {
+            Validation.validate_login(logInJson);
             String password = (String) logInJson.get("password");
             password = password.hashCode() + "";
             UserType userType = Authentication.getUserType(logInJson.getAsString("email"));
@@ -52,6 +54,8 @@ public class UserController {
                     .body(tokenManager.generateToken(logInJson.getAsString("email")));
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -62,6 +66,7 @@ public class UserController {
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody JSONObject signUpJson) {
         try {
+            Validation.validate_signup(signUpJson);
             String password = (String) signUpJson.get("password");
             password = password.hashCode() + "";
             if(Authentication.getUserType(signUpJson.getAsString("email")) != UserType.Customer) {
@@ -83,6 +88,8 @@ public class UserController {
                     .body(tokenManager.generateToken(signUpJson.getAsString("email")));
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -99,6 +106,7 @@ public class UserController {
     @PostMapping("/modifyInfo")
     public ResponseEntity<String> modifyInfo(@RequestBody JSONObject modifyJson) {
         try {
+
             String userEmail = tokenManager.getUser(modifyJson.getAsString("id"));
             if (userEmail == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
@@ -106,9 +114,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * return json object same as signup object
@@ -121,8 +134,10 @@ public class UserController {
             	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not Signed In\nSign In first\n");
             return ResponseEntity.status(HttpStatus.OK).body(userDataBase.getUserInfo(userEmail));
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return Controller.SqlEx(e);
         } catch (ParseException e) {
+            System.out.println(e.getMessage());
             return Controller.ParserEx(e);
         }
     }

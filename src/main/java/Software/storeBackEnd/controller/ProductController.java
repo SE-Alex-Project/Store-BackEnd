@@ -2,6 +2,7 @@ package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.Authentication;
 import Software.storeBackEnd.authentication.TokenManager;
+import Software.storeBackEnd.authentication.Validation;
 import Software.storeBackEnd.database.ProductDatabase;
 import Software.storeBackEnd.entities.Product;
 import Software.storeBackEnd.entities.UserType;
@@ -37,6 +38,7 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(@RequestBody JSONObject product) {
         try {
+            Validation.validate_product1(product);
             String userMail = token.getUser(product.getAsString("addedBy"));
             UserType userType = Authentication.getUserType(userMail);
             product.put("addedBy", userMail);
@@ -47,6 +49,8 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -62,35 +66,41 @@ public class ProductController {
     "images": ["product image 1 (main image)", "product image 2" , "product image 3"]
     }
      */
-     @PostMapping("/edit")
-     public ResponseEntity<String> editProduct(@RequestBody JSONObject product) {
-         try {
-             String userMail = token.getUser(product.getAsString("addedBy"));
-             UserType userType = Authentication.getUserType(userMail);
-             product.put("addedBy", userMail);
-             int product_id = Integer.parseInt(product.getAsString("id"));
-             if (userType == UserType.Employee || userType == UserType.Manager) {
-                 Product p = new Product(product);
-                 return productDataBase.editProduct(p, product_id);
-             }
-             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
-         } catch (SQLException e) {
-             return Controller.SqlEx(e);
-         }
-     }
+    @PostMapping("/edit")
+    public ResponseEntity<String> editProduct(@RequestBody JSONObject product) {
+        try {
+            Validation.validate_product2(product);
+            String userMail = token.getUser(product.getAsString("addedBy"));
+            UserType userType = Authentication.getUserType(userMail);
+            product.put("addedBy", userMail);
+            int product_id = Integer.parseInt(product.getAsString("id"));
+            if (userType == UserType.Employee || userType == UserType.Manager) {
+                Product p = new Product(product);
+                return productDataBase.editProduct(p, product_id);
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
+        } catch (SQLException e) {
+            return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
-     
+
     /*
     return product json object
      */
     @GetMapping("/get")
     public ResponseEntity<?> getProduct(@RequestParam("pId") String product_id) {
         try {
+            Validation.validate_value(product_id);
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getProduct(product_id));
         } catch (SQLException e) {
             return Controller.SqlEx(e);
         } catch (ParseException e) {
             return Controller.ParserEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -100,11 +110,14 @@ public class ProductController {
     @PostMapping("/product_list")
     public ResponseEntity<?> getProductList(@RequestBody int page) {
         try {
+            Validation.validate_value(page + "");
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getList(page));
         } catch (SQLException e) {
             return Controller.SqlEx(e);
         } catch (ParseException e) {
             return Controller.ParserEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -118,11 +131,14 @@ public class ProductController {
     @PostMapping("/product_list_category")
     public ResponseEntity<?> getCategoryList(@RequestBody JSONObject productCategory) {
         try {
+            Validation.validate_page(productCategory);
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getListByCategory(Integer.parseInt(productCategory.getAsString("page")), productCategory.getAsString("category")));
         } catch (SQLException e) {
             return Controller.SqlEx(e);
         } catch (ParseException e) {
             return Controller.ParserEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -132,6 +148,8 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.OK).body(productDataBase.getCategories());
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -155,6 +173,8 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Access\n");
         } catch (SQLException e) {
             return Controller.SqlEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
