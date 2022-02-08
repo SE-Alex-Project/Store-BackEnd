@@ -3,7 +3,7 @@ package Software.storeBackEnd.entities;
 import net.minidev.json.JSONObject;
 
 public class Employee {
-    String firstname, lastname, hashedPassword, email, storeId;
+    String firstname, lastname, hashedPassword, email, storeId, role, salary;
 
     /*{
        "email":user email
@@ -11,6 +11,8 @@ public class Employee {
        "lastName": user last name
        "password": user hashed password
        "store":"storeId"
+       "erole":role
+       "salary":salary
    }*/
     public Employee(JSONObject employee) {
         this.email = employee.getAsString("email");
@@ -18,13 +20,14 @@ public class Employee {
         this.lastname = employee.getAsString("lastName");
         this.hashedPassword = employee.getAsString("password").hashCode() + "";
         this.storeId = employee.getAsString("store");
+        this.role = employee.getAsString("erole");
+        this.salary = employee.getAsString("salary");
     }
-
+    
     public Employee() {
 		super();
 	}
-
-
+    
 
 	public String getFirstname() {
         return firstname;
@@ -45,6 +48,14 @@ public class Employee {
     public String getStoreId() {
         return storeId;
     }
+    
+    public String getRole() {
+		return role;
+	}
+
+	public String getSalary() {
+		return salary;
+	}
 
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
@@ -64,6 +75,14 @@ public class Employee {
 
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
+	}
+	
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public void setSalary(String salary) {
+		this.salary = salary;
 	}
     
 }

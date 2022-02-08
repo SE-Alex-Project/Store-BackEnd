@@ -30,7 +30,9 @@ public class ManagerController {
         "firstName": "user first name",
         "lastName": "user last name",
         "password": "user hashed password",
-        "store":"1"
+        "store":"1",
+        "erole":role,
+       "salary":salary
     }*/
     @PostMapping("/addEmployee")
     public ResponseEntity<String> addEmployee(@RequestBody JSONObject employee) {

@@ -18,7 +18,8 @@ public class EmployeeDatabase {
 
     public void insertEmployee(Employee E) throws SQLException {
         dataBase.getStatement().execute("INSERT INTO Employee VALUES ('" + E.getEmail()
-                + "','" + E.getFirstname() + "','" + E.getLastname() + "','" + E.getStoreId() + "','" + E.getHashedPassword() + "');");
+                + "','" + E.getFirstname() + "','" + E.getLastname() + "','" +E.getRole()+ "','" + E.getStoreId() +
+                "','" + E.getHashedPassword() + "','" + E.getSalary() +"');");
     }
     
     public JSONArray getEmployees() throws SQLException, ParseException {
@@ -41,7 +42,8 @@ public class EmployeeDatabase {
     
     public void modifyEmployee(Employee emp) throws SQLException {
     	dataBase.getStatement().execute("UPDATE Employee SET fName = '"+ emp.getFirstname() +"', "
-    			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' "
+    			+ "lName = '"+emp.getLastname()+"', storeId = '"+emp.getStoreId()+"' ,"
+    			+ "erole = '"+emp.getRole()+"', salary = '"+emp.getSalary()+"' "
     					+ " WHERE email = '"+emp.getEmail()+"';");
     }
 }
