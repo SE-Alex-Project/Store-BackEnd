@@ -49,12 +49,13 @@ public class UserDatabase {
     }
     
     public String deleteAccount(String email,UserType user) throws SQLException {
+    	System.out.println(email+" "+user);
     	if (user == UserType.Manager) {
-    		dataBase.execute("DELETE Manager where email='" + email + "';");
+    		dataBase.execute("DELETE From Manager where email='" + email + "'");
     	}else if (user == UserType.Employee) {
-    		dataBase.execute("DELETE Employee where email='" + email + "';");
+    		dataBase.execute("DELETE From Employee where email='" + email + "'");
     	}else if (user == UserType.Customer) {
-    		dataBase.execute("DELETE Customer where email='" + email + "';");
+    		dataBase.execute("DELETE From Customer where email='" + email + "'");
     	}
     	return "Logged Out";
     	
