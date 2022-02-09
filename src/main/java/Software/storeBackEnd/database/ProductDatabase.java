@@ -41,7 +41,6 @@ public class ProductDatabase {
             dataBase.execute("COMMIT;");
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (SQLException e) {
-            System.out.println(e.getMessage());
             dataBase.execute("ROLLBACK;");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Fetch Data From DataBase\n"+e.getMessage());
         }
@@ -86,7 +85,6 @@ public class ProductDatabase {
     }
 
     private void addProductImages(int productID, ArrayList<String> productImages) throws SQLException {
-        System.out.println(productImages.toString());
         for (String s : productImages)
             dataBase.execute("INSERT INTO ProductImage VALUES ('" + productID + "','" + s + "');");
 
