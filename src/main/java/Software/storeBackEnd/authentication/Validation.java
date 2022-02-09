@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 
 public class Validation {
     public static void validate_token(String token) {
-        if (token.length() != 54 || token == null)
+        if (token.length() != 52 || token == null)
             throw new RuntimeException("Invalid token");
     }
 
