@@ -23,7 +23,7 @@ public class UserController {
     TokenManager tokenManager = TokenManager.getInstance();
 
     /*
-     * log in json format { "email":user email, "password": user hashed password }
+     * log in json format { "email":user email, "password": user password }
      */
     @PostMapping("/logIn")
     public ResponseEntity<String> logIn(@RequestBody JSONObject logInJson) {
@@ -137,8 +137,9 @@ public class UserController {
             System.out.println(e.getMessage());
             return Controller.SqlEx(e);
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
             return Controller.ParserEx(e);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
