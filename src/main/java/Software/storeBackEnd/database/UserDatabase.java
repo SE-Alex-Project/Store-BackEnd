@@ -50,9 +50,7 @@ public class UserDatabase {
     
     public String deleteAccount(String email,UserType user) throws SQLException {
     	System.out.println(email+" "+user);
-    	if (user == UserType.Manager) {
-    		dataBase.execute("DELETE From Manager where email='" + email + "'");
-    	}else if (user == UserType.Employee) {
+        if (user == UserType.Employee || user == UserType.Manager) {
     		dataBase.execute("DELETE From Employee where email='" + email + "'");
     	}else if (user == UserType.Customer) {
     		dataBase.execute("DELETE From Customer where email='" + email + "'");
@@ -62,7 +60,7 @@ public class UserDatabase {
     } 
     
     public int numberOfManagers() throws SQLException {
-    	ResultSet resultSet = dataBase.executeQuery("SELECT COUNT(*) FROM Manager");
+    	ResultSet resultSet = dataBase.executeQuery("SELECT COUNT(*) FROM Employee WHERE email LIKE %@manager.com%");
     	resultSet.next();
         return Integer.parseInt(resultSet.getString("COUNT(*)"));
     }
