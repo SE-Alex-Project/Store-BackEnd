@@ -178,6 +178,15 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/deleteCategory")
+    public ResponseEntity<?> deleteStore(@RequestBody String categoryName) {
+        try {
+            productDataBase.deleteCategory(categoryName);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (SQLException e) {
+            return Controller.SqlEx(e);
+        }
+    }
 
     /*
      * {"token","user token"

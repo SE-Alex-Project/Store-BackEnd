@@ -124,6 +124,9 @@ public class ProductDatabase {
         dataBase.execute("INSERT INTO Category VALUES('" + categoryName + "');");
     }
 
+    public void deleteCategory(String categoryName) throws SQLException {
+        dataBase.execute("DELETE FROM Category WHERE categoryName ='" + categoryName + "';");
+    }
 
     //select * from table order by id asc limit 50 offset 0; -- Returns rows 1-50
 
