@@ -1,6 +1,7 @@
 package Software.storeBackEnd.controller;
 
 import Software.storeBackEnd.authentication.Authentication;
+import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.authentication.Validation;
 import Software.storeBackEnd.database.EmployeeDatabase;
 import Software.storeBackEnd.database.ReportsDataBase;
@@ -21,7 +22,7 @@ public class ManagerController {
 
     EmployeeDatabase employeeDatabase = new EmployeeDatabase();
     ReportsDataBase reportsDataBase = new ReportsDataBase();
-
+    TokenManager tokenManager = TokenManager.getInstance();
     /*{
         "token" : "token",
         "email":"user email",
@@ -72,9 +73,6 @@ public class ManagerController {
      * {
      * "token": token
      * "email":emp-email
-     * "fName":emp-fname
-     * "lName":emp-lname
-     * "storeId":id
      * }
      */
 
@@ -90,6 +88,14 @@ public class ManagerController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+    }
+
+    @PostMapping("/getManagerInfo")
+    public ResponseEntity<?> getEmployeeInfo(@RequestBody String token) {
+        JSONObject j = new JSONObject();
+        j.put("token" , token);
+        j.put("email", tokenManager.getUser(token));
+        return getEmployeeInfo(j);
     }
 
 
