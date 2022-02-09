@@ -175,7 +175,11 @@ public class UserController {
     public ResponseEntity<?> removeAccount(@RequestBody JSONObject removeJson) {
     	try {
 	    	String userToken = removeJson.getAsString("token");
+	    	String email = tokenManager.getUser(userToken);
 	    	String deleted = removeJson.getAsString("email");
+	    	if(email.equalsIgnoreCase(deleted)) {
+	    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't remove yourself.\n");
+	    	}
 	    	UserType user = Authentication.tokenUserType(userToken);
 	    	UserType d = Authentication.getUserType(deleted);
 	    	if(user == UserType.Customer) {
