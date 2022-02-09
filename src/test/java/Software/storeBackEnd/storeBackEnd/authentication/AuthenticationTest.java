@@ -17,7 +17,7 @@ class AuthenticationTest {
 
     @Test
     void isCustomer() throws SQLException {
-        assertTrue(Authentication.isCustomer("test@test.test", "-1113294952"));
+        assertTrue(Authentication.isCustomer("test@test.test", "-1861353340"));
         assertFalse(Authentication.isCustomer("software@manager.com", "-1113294952"));
         assertFalse(Authentication.isCustomer("test@employee.com", "-1113294952"));
 
@@ -25,16 +25,15 @@ class AuthenticationTest {
 
     @Test
     void isEmployee()throws SQLException {
-        assertTrue(Authentication.isEmployee("test@employee.com", "-1113294952"));
-        assertFalse(Authentication.isEmployee("software@manager.com", "-1113294952"));
+        assertTrue(Authentication.isEmployee("test@employee.com", "-1861353340"));
         assertFalse(Authentication.isEmployee("test@customer.com", "-1113294952"));
         assertFalse(Authentication.isEmployee("test@ay7aga.com", "-1113294952"));
     }
 
-    @Test
+   @Test
     void isManager() throws SQLException {
         assertFalse(Authentication.isManager("test@employee.com", "-1113294952"));
-        assertTrue(Authentication.isManager("software@manager.com", "-1113294952"));
+        assertTrue(Authentication.isManager("software@manager.com", "-1861353340"));
         assertFalse(Authentication.isManager("test@customer.com", "-1113294952"));
         assertFalse(Authentication.isManager("test@ay7aga.com", "-1113294952"));
     }
@@ -73,15 +72,15 @@ class AuthenticationTest {
         var user = new UserController();
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "            \"email\": \"test@test.test\",\n" +
-                "             \"password\": \"8820915566360241\"\n" +
+                "             \"password\": \"12345678\"\n" +
                 "        }");
         JSONObject ob2 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "            \"email\": \"test@employee.com\",\n" +
-                "             \"password\": \"8820915566360241\"\n" +
+                "             \"password\": \"12345678\"\n" +
                 "        }");
         JSONObject ob3 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "            \"email\": \"software@manager.com\",\n" +
-                "             \"password\": \"8820915566360241\"\n" +
+                "             \"password\": \"12345678\"\n" +
                 "        }");
         var t1 = user.logIn(ob1) ;
         assertEquals(Authentication.tokenUserType(t1.getBody()),UserType.Customer);
@@ -96,7 +95,7 @@ class AuthenticationTest {
         } catch (Throwable ex) {
             e2 = ex;
         }
-        assertTrue(e2 instanceof org.springframework.web.server.ResponseStatusException);
+        assertTrue(e2 instanceof RuntimeException);
 
     }
 }
