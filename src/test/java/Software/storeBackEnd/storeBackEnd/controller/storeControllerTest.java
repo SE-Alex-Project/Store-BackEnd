@@ -1,6 +1,5 @@
 package Software.storeBackEnd.storeBackEnd.controller;
 
-import Software.storeBackEnd.authentication.TokenManager;
 import Software.storeBackEnd.controller.StoreController;
 import Software.storeBackEnd.controller.UserController;
 import net.minidev.json.JSONObject;
@@ -17,8 +16,6 @@ class storeControllerTest {
 
     @Test
     void addStore() throws ParseException {
-        TokenManager tm = new TokenManager();
-        String mToken = tm.generateToken("ahmed@manager.com");
         UserController uc = new UserController();
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "        \"email\":\"ahmed@manager.com\",\n" +
