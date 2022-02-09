@@ -41,14 +41,14 @@ public class ReportsDataBase {
      *]
      */
     
-    public JSONArray totalSales(int page) throws SQLException, ParseException {
+    public JSONArray totalSales() throws SQLException, ParseException {
     	JSONArray array = new JSONArray();
         JSONObject data;
     	ResultSet resultSet = dataBase.executeQuery("Select P.productName, P.productId , sum(quantity) as number , P.price\n" +
     			"From ProductInCart NATURAL JOIN Product AS P NATURAL JOIN Cart\n" + 
     			"WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-30 DAY)\n" + 
     			"Group by P.productId \r\n" + 
-    			"LIMIT 50 OFFSET "+(page-1)*50 +";");
+    			";");
     	
         while (resultSet.next()) {
         	data = ReportsParser.parseSales(resultSet);
