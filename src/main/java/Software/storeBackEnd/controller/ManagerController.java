@@ -119,10 +119,10 @@ public class ManagerController {
     }
 
 
-    @PostMapping("/totalSales")
-    public ResponseEntity<?> totalSales(@RequestBody String page) {
+    @GetMapping("/totalSales")
+    public ResponseEntity<?> totalSales() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
+            return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales());
         } catch (SQLException e) {
             return Controller.SqlEx(e);
         } catch (ParseException e) {
