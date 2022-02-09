@@ -115,6 +115,8 @@ public class Validation {
 
     public static void validate_getEmployee(JSONObject employee) {
         validate_email(employee.getAsString("email"));
+        if (Authentication.getUserType(employee.getAsString("email")) == UserType.Customer)
+            throw new RuntimeException("InValid Email");
         validate_token(employee.getAsString("token"));
         if (Authentication.tokenUserType(employee.getAsString("token")) != UserType.Manager)
             throw new RuntimeException("Un Authorized Access");

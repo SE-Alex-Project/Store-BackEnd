@@ -17,18 +17,22 @@ class ManagerControllerTest {
         String mToken = tm.generateToken("test@manager.com");
         JSONObject ob1 = (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\n" +
                 "                \"token\" : \""+mToken+"\",\n" +
-//                "                \"token\" : \"token\",\n" +
                 "            \"email\":\"testt@employee.test\",\n" +
                 "                \"firstName\": \"test\",\n" +
                 "                \"lastName\": \"test\",\n" +
                 "                \"password\": \"test\",\n" +
-                "                \"store\":\"1\"\n" +
+                "                \"store\":\"1\",\n" +
+                "                \"erole\":\"tester\",\n" +
+                "                \"salary\":\"100\"\n" +
                 "        }");
         var mc = new ManagerController();
          Throwable e = null;
          try {
              mc.addEmployee(ob1);
+             System.out.println("Heloooooooooooooooossssooooo");
          } catch (Throwable ex) {
+             System.out.println("Helooooooooooooooooooooo");
+             System.out.println(ex.getCause());
              e = ex;
          }
          assertTrue(e instanceof org.springframework.web.server.ResponseStatusException);
@@ -39,7 +43,9 @@ class ManagerControllerTest {
                  "                \"firstName\": \"test\",\n" +
                  "                \"lastName\": \"test\",\n" +
                  "                \"password\": \"test\",\n" +
-                 "                \"store\":\"1\"\n" +
+                 "                \"store\":\"1\",\n" +
+                 "                \"erole\":\"tester\",\n" +
+                 "                \"salary\":\"100\"\n" +
                  "        }");
          var mc2 = new ManagerController();
          Throwable e2 = null;
@@ -48,7 +54,7 @@ class ManagerControllerTest {
          } catch (Throwable ex) {
              e2 = ex;
          }
-         assertTrue(e instanceof org.springframework.web.server.ResponseStatusException);
+         assertTrue(e2 instanceof org.springframework.web.server.ResponseStatusException);
 
      }
 }
