@@ -91,7 +91,7 @@ public class ManagerController {
     }
 
     @PostMapping("/getManagerInfo")
-    public ResponseEntity<?> getEmployeeInfo(@RequestBody String token) {
+    public ResponseEntity<?> getManagerInfo(@RequestBody String token) {
         JSONObject j = new JSONObject();
         j.put("token" , token);
         j.put("email", tokenManager.getUser(token));
