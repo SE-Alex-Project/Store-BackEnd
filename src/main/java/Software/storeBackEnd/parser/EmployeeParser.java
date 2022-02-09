@@ -13,7 +13,7 @@ public class EmployeeParser {
 
 	public static JSONObject parseEmployee(ResultSet resultSet) throws SQLException, ParseException {
         return (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse("{\"email\":'" + resultSet.getString("email") + "',\"fName\":'"
-                + resultSet.getString("fName") + "',\"lName\":'" + resultSet.getString("lName")+ "',\"erole\":'" + resultSet.getString("erole")
+                + resultSet.getString("fName") + "',\"lName\":'" + resultSet.getString("lName")+ "',\"erole\":'" + resultSet.getString("eRole")
                 + "',\"storeId\":'" + resultSet.getString("storeId") + 
                 "',\"salary\":'" + resultSet.getString("salary")+"'}");
     }
