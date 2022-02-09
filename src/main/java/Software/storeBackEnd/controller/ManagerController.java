@@ -119,8 +119,8 @@ public class ManagerController {
     }
 
 
-    @GetMapping("/totalSales")
-    public ResponseEntity<?> totalSales(int page) {
+    @PostMapping("/totalSales")
+    public ResponseEntity<?> totalSales(@RequestBody String page) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(reportsDataBase.totalSales(page));
         } catch (SQLException e) {
