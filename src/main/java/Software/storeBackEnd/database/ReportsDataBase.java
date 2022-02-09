@@ -10,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ReportsDataBase {
-	
-	private final Database dataBase;
+
+    private final Database dataBase;
 
     public ReportsDataBase() {
         dataBase = Database.getInstance();
@@ -21,16 +21,16 @@ public class ReportsDataBase {
     public JSONArray topCustomersLast3M() throws SQLException, ParseException {
         JSONArray top10 = new JSONArray();
         ResultSet resultSet = dataBase.executeQuery("SELECT userEmail,SUM(price * quantity) AS totalPrice "
-               +"FROM Cart NATURAL JOIN ProductInCart NATURAL JOIN Product "
-               +"WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-90 DAY) "
-               +"GROUP BY userEmail "
-               +"ORDER BY totalPrice DESC LIMIT 10;");
+                + "FROM Cart NATURAL JOIN ProductInCart NATURAL JOIN Product "
+                + "WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-90 DAY) "
+                + "GROUP BY userEmail "
+                + "ORDER BY totalPrice DESC LIMIT 10;");
         while (resultSet.next())
             top10.add(ReportsParser.parseTopCustomer(resultSet));
         return top10;
     }
-    
-    
+
+
     /*[
      * {
      * "productName":name,
@@ -40,18 +40,17 @@ public class ReportsDataBase {
      * }
      *]
      */
-    
+
     public JSONArray totalSales() throws SQLException, ParseException {
-    	JSONArray array = new JSONArray();
+        JSONArray array = new JSONArray();
         JSONObject data;
-    	ResultSet resultSet = dataBase.executeQuery("Select P.productName, P.productId , sum(quantity) as number , P.price\n" +
-    			"From ProductInCart NATURAL JOIN Product AS P NATURAL JOIN Cart\n" + 
-    			"WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-30 DAY)\n" + 
-    			"Group by P.productId \r\n" + 
-    			";");
-    	
+        ResultSet resultSet = dataBase.executeQuery("Select P.productName, P.productId , sum(quantity) as number , P.price\n" +
+                "From ProductInCart NATURAL JOIN Product AS P NATURAL JOIN Cart\n" +
+                "WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-30 DAY)\n" +
+                "Group by P.productId ;");
+
         while (resultSet.next()) {
-        	data = ReportsParser.parseSales(resultSet);
+            data = ReportsParser.parseSales(resultSet);
             array.add(data);
         }
         resultSet.close();
@@ -62,10 +61,10 @@ public class ReportsDataBase {
     public JSONArray topSalesLast3M() throws SQLException, ParseException {
         JSONArray top10 = new JSONArray();
         ResultSet resultSet = dataBase.executeQuery("SELECT P.productName ,P.price ,SUM(quantity) AS totalSales "
-                +"FROM Cart NATURAL JOIN ProductInCart NATURAL JOIN Product AS P "
-                +"WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-90 DAY) "
-                +"GROUP BY P.productId "
-                +"ORDER BY totalSales DESC LIMIT 10;");
+                + "FROM Cart NATURAL JOIN ProductInCart NATURAL JOIN Product AS P "
+                + "WHERE buyDate >= DATE_ADD(NOW(),INTERVAL-90 DAY) "
+                + "GROUP BY P.productId "
+                + "ORDER BY totalSales DESC LIMIT 10;");
         while (resultSet.next())
             top10.add(ReportsParser.parseTopSale(resultSet));
         return top10;
