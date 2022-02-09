@@ -92,7 +92,15 @@ public class ManagerController {
         }
     }
 
-
+    /*{
+    "email":user email
+    "firstName": user first name
+    "lastName": user last name
+    "password": user hashed password
+    "store":"storeId"
+    "erole":role
+    "salary":salary
+	}*/
     @PostMapping("/modifyEmployee")
     public ResponseEntity<?> modifyEmployee(@RequestBody JSONObject employee) {
         try {
