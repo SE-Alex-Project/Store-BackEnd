@@ -60,4 +60,15 @@ public class StoreController {
         }
     }
 
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteStore(@RequestBody String store_id) {
+        try {
+            storeDataBase.delete(store_id);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (SQLException e) {
+            return Controller.SqlEx(e);
+        }
+    }
+
+
 }

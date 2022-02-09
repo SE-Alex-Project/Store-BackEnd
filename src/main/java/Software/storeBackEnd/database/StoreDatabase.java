@@ -36,4 +36,8 @@ public class StoreDatabase {
         }
         return array;
     }
+
+    public void delete(String store_id) throws SQLException {
+        dataBase.execute("DELETE FROM Store WHERE storeId ='" + store_id + "';");
+    }
 }
